@@ -1,6 +1,7 @@
 const axios = require('axios');
 const { MAYTA_TOKEN, BASE_MAYTA, MAYTA_PRODUCT_ID, MAYTA_PHONE_ID, ERROR, SUCCESS } = require('../config/constants');
 const Utility = require('./utility.services');
+const rp = require('request-promise-native');
 
 
 class Maytapi {
@@ -42,25 +43,34 @@ class Maytapi {
         let data = {};
     
         try {
-            let config = {
+            // let config = {
+            //     headers: {
+            //       "Content-Type": "application/json",
+            //       "accept": "application/json",
+            //       "x-maytapi-key": MAYTA_TOKEN,
+            //     }
+            // };
+            // let response = await axios.request({
+            //     method: metodo,
+            //     url: url,
+            //     data: JSON.stringify(body),
+            //     config: config,
+            //     timeout: 10000 // set a timeout of 10 seconds
+            // });
+            let response = await rp(url, {
+                method: 'post',
+                json: true,
+                body,
                 headers: {
-                  "Content-Type": "application/json",
-                  "accept": "application/json",
-                  "x-maytapi-key": MAYTA_TOKEN,
-                }
-            };
-            let response = await axios.request({
-                method: metodo,
-                url: url,
-                data: JSON.stringify(body),
-                config: config,
-                timeout: 10000 // set a timeout of 10 seconds
+                    'Content-Type': 'application/json',
+                    'x-maytapi-key': MAYTA_TOKEN,
+                },
             });
-    
+            console.log(response)
             Utility.logs.push("Recuperando respuesta");
             Utility.logs.push(response.data);
     
-            if (response.status >= 200 && response.status < 300) {
+            if (response?.status >= 200 && response?.status < 300) {
                 data.data = response.data;
                 data.mensajes = mensajes;
                 data.tipo = tipo;
