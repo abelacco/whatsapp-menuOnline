@@ -108,7 +108,6 @@ const addMessageFromWebHoook = async (messageComplete) => {
     if (mensajes.length === 0) {
         // Obtengo el ultimo mensaje con respecto al numero
         let lastMessage = await obj.getLastMessageByPhone();
-
         // Existe 1er mensaje
         if (lastMessage !== null && !obj.esMessageReset()) {
             let isUpdate = true;
@@ -325,11 +324,11 @@ const addMessageFromWebHoook = async (messageComplete) => {
             obj.setMessageclient_date(Utility.getFechaHoraActual());
             obj.setMessageclient_textsendwpp(JSON.stringify(objMessageStep));
             if (isUpdate == true) {
-                obj.setMessageclient_id(lastMessage.getMessageclient_id());
+                // obj.setMessageclient_id(lastMessage.getMessageclient_id());
                 datos = await obj.update();
             } else {
-                obj.setMessageclient_id(null);
-                datos = await obj.insert();
+                // obj.setMessageclient_id(null);
+                // datos = await obj.insert();
             }
             Utility.logs.push(objMessageStep);
             Utility.logs.push(await Maytapi.enviarMensajePorWhatsapp(objMessageStep, obj.getMessageclient_phone(), typeMessage));

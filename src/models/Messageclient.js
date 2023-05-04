@@ -36,6 +36,7 @@ const Bitly = require('../services/bitly.services');
 
 class MessageclientModel {
 
+    messageclient_modelId;
     messageclient_id;
     messageclient_phone;
     messageclient_message;
@@ -71,6 +72,7 @@ class MessageclientModel {
     }
 
     setLastMessage(lastMessage) {
+        this.messageclient_modelId = lastMessage?._id || null;
         this.messageclient_id = lastMessage?.messageclient_id || null;
         this.messageclient_phone = lastMessage?.messageclient_phone || null;
         this.messageclient_message = lastMessage?.messageclient_message || null;
@@ -831,7 +833,7 @@ class MessageclientModel {
           }
       
           const result = await MessageClienteSchema.updateOne(
-            { messageclient_id: this.messageclient_id },
+            { _id: this.messageclient_modelId },
             query
           );
       
