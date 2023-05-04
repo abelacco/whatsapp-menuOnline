@@ -110,6 +110,7 @@ const addMessageFromWebHoook = async (messageComplete) => {
         let lastMessage = await obj.getLastMessageByPhone();
         // Existe 1er mensaje
         if (lastMessage !== null && !obj.esMessageReset()) {
+            console.log("obj.esMessageReset()",obj.esMessageReset())
             let isUpdate = true;
             // fn para obtener las propiedades del ultimo mensaje
             obj.copyAttributesFrom(lastMessage);

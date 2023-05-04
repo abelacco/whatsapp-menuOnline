@@ -347,6 +347,7 @@ class MessageclientModel {
 
     esMessageReset() {
         let messageObj = this.getMessageclient_jsonToObj();
+        console.lol(messageObj)
         if (
             messageObj.message &&
             messageObj.message.text &&
