@@ -149,8 +149,8 @@ class MessageclientModel {
         let mensajeValido = false;
 
         let messageArray = this.messageclient_json;
-        
-        if(messageArray["message"].text != 'Pedir'){
+
+        if( messageArray["message"].text && messageArray["message"].text != 'Pedir' &&  !messageArray["message"].payload ){
             return false;
         }
 
