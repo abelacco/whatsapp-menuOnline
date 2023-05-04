@@ -1,3 +1,4 @@
+
 class Security {
 
 
@@ -5,6 +6,18 @@ class Security {
     static deliverygo = 'deliverygo.app';
     static quipuposcom = 'quipupos.com';
     static restpecom = 'restpe.com';
+    static dominio;
+    static  subdominio;
+
+    static  obtenerDominiodeSubdominio(subdominio, dominio) {
+        if(dominio == 'restaurantpe') {
+            this.dominio = this.restaurantpe
+        } else if(dominio == 'quipuposcom') {
+            this.dominio = this.quipuposcom
+        }
+        this.subdominio = subdominio;
+        console.log(this.subdominio + "." + this.dominio)
+    }
 
     static getSubdomain() {
         // const regexParse = new RegExp('[a-z\-0-9]{2,63}\.[a-z\.]{2,5}$');
@@ -17,7 +30,8 @@ class Security {
         //     subdominioretorno = 'demoperu';
         //     }
         // }
-        let subdominioretorno = 'demoperu';
+        
+        let subdominioretorno = this.subdominio == null ? 'demoperu' : this.subdominio;
         return subdominioretorno;
     }
 
@@ -30,7 +44,7 @@ class Security {
         // } else {
         //   hostNameRetorno = this.restaurantpe;
         // }
-        let hostNameRetorno = this.restaurantpe;
+        let hostNameRetorno = this.dominio == null ? this.restaurantpe : this.dominio;
 
         return hostNameRetorno;
       }

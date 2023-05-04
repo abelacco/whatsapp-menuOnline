@@ -173,6 +173,8 @@ module.exports = {
     MESSAGE_STEP_DONTPERMISS: 'No se encuentra en el paso para realizar esta acción.',
     CHOOSE_PRODUCTS: 'OK',
     CHOOSE_PRODUCTS_TXT: 'Escoger mis productos',
-    KEYS_BITLY: { TOKEN: 'bb8b94d6f9f3f09a52ccdde71c668f36cbd4999c', URL: 'https://api-ssl.bitly.com/v4/shorten' }
+    KEYS_BITLY: { TOKEN: 'bb8b94d6f9f3f09a52ccdde71c668f36cbd4999c', URL: 'https://api-ssl.bitly.com/v4/shorten' },
 
+    DOMINIO: "",
+    SUBDOMINIO: "",
 };

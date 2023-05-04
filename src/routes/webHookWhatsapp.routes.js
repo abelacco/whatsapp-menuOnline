@@ -2,12 +2,14 @@ const express = require('express');
 const router = express.Router();
 
 const MessageclientController = require('../controllers/messagecliente.controller');
+const Security = require('../services/security.services');
 
-router.post('/webHookMaytaWhatsapp', async (req, res) => {
-    const obj = req.body;
-    const result = await MessageclientController.addMessageFromWebHoook(obj);
-    console.log(result)
-    res.json(result);
+router.post('/webHookMaytaWhatsapp/:subdominio/:dominio', async (req, res) => {
+  Security.obtenerDominiodeSubdominio(req.params.subdominio, req.params.dominio);  
+  const obj = req.body;
+  const result = await MessageclientController.addMessageFromWebHoook(obj);
+  console.log(result)
+  res.json(result);
 });
 
 router.post('/messageLatLngDateClient', async (req, res) => {
