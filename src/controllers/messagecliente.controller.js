@@ -336,8 +336,11 @@ const addMessageFromWebHoook = async (messageComplete) => {
             mensajes.push('Mensaje enviado exitosamente.');
 
         } else { // send the message to start the conversation
-            if(!obj.validarInicioChat())
-            // Check if I have the client registered in the instance
+            if(!obj.validarInicioChat()){
+                Utility.logs.push('No es un mensaje valido , iniciar chat con Pedir.');
+                mensajes.push('No es un mensaje valido,  iniciar chat con Pedir.');
+            } else {
+                            // Check if I have the client registered in the instance
             typeMessage = CHATBOOT_TYPEMSG_BTN;
             stepNext = CHATBOOT_STEP_START;
             let curlClienteInstance = await Utility.peticionPublica("http://" + Security.getSubdomain() + "." + Security.getDominio() + "/restaurant/m/rest/cliente/clienteByPropertyAndValue/cliente_telefono/" + obj.getMessageclient_phone(), "GET");
@@ -365,6 +368,8 @@ const addMessageFromWebHoook = async (messageComplete) => {
             datos = await obj.insert();
             Utility.logs.push(await Maytapi.enviarMensajePorWhatsapp(objMessageStepOne, obj.getMessageclient_phone(), typeMessage));
             mensajes.push('Mensaje enviado exitosamente.');
+            }
+
         }
     }
 
