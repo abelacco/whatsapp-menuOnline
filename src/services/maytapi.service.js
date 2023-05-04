@@ -43,29 +43,29 @@ class Maytapi {
         let data = {};
     
         try {
-            // let config = {
-            //     headers: {
-            //       "Content-Type": "application/json",
-            //       "accept": "application/json",
-            //       "x-maytapi-key": MAYTA_TOKEN,
-            //     }
-            // };
-            // let response = await axios.request({
-            //     method: metodo,
-            //     url: url,
-            //     data: JSON.stringify(body),
-            //     config: config,
-            //     timeout: 10000 // set a timeout of 10 seconds
-            // });
-            let response = await rp(url, {
-                method: 'post',
-                json: true,
-                body,
+            let config = {
                 headers: {
-                    'Content-Type': 'application/json',
-                    'x-maytapi-key': MAYTA_TOKEN,
-                },
+                  "Content-Type": "application/json",
+                  "accept": "application/json",
+                  "x-maytapi-key": MAYTA_TOKEN,
+                }
+            };
+            let response = await axios.request({
+                method: metodo,
+                url: url,
+                data: JSON.stringify(body),
+                config: config.headers,
+                timeout: 10000 // set a timeout of 10 seconds
             });
+            // let response = await rp(url, {
+            //     method: 'post',
+            //     json: true,
+            //     body,
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'x-maytapi-key': MAYTA_TOKEN,
+            //     },
+            // });
             console.log(response)
             Utility.logs.push("Recuperando respuesta");
             Utility.logs.push(response.data);
