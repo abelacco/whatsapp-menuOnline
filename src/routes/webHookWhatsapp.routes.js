@@ -8,7 +8,6 @@ router.post('/webHookMaytaWhatsapp/:subdominio/:dominio', async (req, res) => {
   Security.obtenerDominiodeSubdominio(req.params.subdominio, req.params.dominio);  
   const obj = req.body;
   const result = await MessageclientController.addMessageFromWebHoook(obj);
-  console.log(result)
   res.json(result);
 });
 
@@ -16,7 +15,6 @@ router.post('/messageLatLngDateClient', async (req, res) => {
     try {
         const obj = req.body;
         const result = await MessageclientController.messageLatLngDateClient(obj);
-        console.log(result);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);

@@ -147,7 +147,6 @@ class Utility {
       result.year = parseInt(date.substring(0, 4));
       result.hour = parseInt(date.substring(11, 13));
       result.minutes = parseInt(date.substring(14, 16));
-      console.log("result",result)
       return result;
     }
     

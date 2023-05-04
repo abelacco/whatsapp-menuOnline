@@ -72,7 +72,9 @@ class MessageclientModel {
     }
 
     setLastMessage(lastMessage) {
+        console.log("asdsadasdsa",lastMessage)
         this.messageclient_modelId = lastMessage?._id || null;
+        console.log("asdsadsad",this.messageclient_modelId)
         this.messageclient_id = lastMessage?.messageclient_id || null;
         this.messageclient_phone = lastMessage?.messageclient_phone || null;
         this.messageclient_message = lastMessage?.messageclient_message || null;
@@ -188,20 +190,14 @@ class MessageclientModel {
 
 
     async getLastMessageByPhone() {
-        // const sql = "SELECT * FROM messageclient WHERE messageclient_status=1 AND  messageclient_phone=:messageclient_phone ORDER BY messageclient_id DESC LIMIT 1";
-        // const stmt = await pdo.prepare(sql);
-        // await stmt.bindParam(':messageclient_phone', this.getMessageclient_phone(), PDO.PARAM_STR);
-        // await stmt.execute();
-        // const row = await stmt.fetch(PDO.ROW_ASSOC);
-        // return row ? new Messageclient(row) : null;
+
         const lastMessage = await MessageClienteSchema.findOne({
             messageclient_status: 1,
             messageclient_phone: this.getMessageclient_phone()
         }).sort({ messageclient_id: -1 }).limit(1);
         return lastMessage ? new MessageclientModel(lastMessage) : null;
 
-        // const lastMessage = await getLastMessageByPhoneDb();
-        // return lastMessage
+
     }
 
     // MESSAGE WPP
@@ -347,7 +343,6 @@ class MessageclientModel {
 
     esMessageReset() {
         let messageObj = this.getMessageclient_jsonToObj();
-        console.lol(messageObj)
         if (
             messageObj.message &&
             messageObj.message.text &&
@@ -499,7 +494,9 @@ class MessageclientModel {
     }
 
     copyAttributesFrom(lastMessage) {
-
+        console.log("lastMessage.getMessageclient_modelId()", lastMessage.getMessageclient_modelId())
+        console.log( this.setMessageclient_modelId(lastMessage.getMessageclient_modelId()))            
+        this.setMessageclient_modelId(lastMessage.getMessageclient_modelId());      
         this.setMessageclient_methodorder(lastMessage.getMessageclient_methodorder());
         this.setMessageclient_phone(lastMessage.getMessageclient_phone());
         this.setMessageclient_fullname(lastMessage.getMessageclient_fullname());
@@ -562,7 +559,15 @@ class MessageclientModel {
         }
     }
 
-    // 
+    //
+    getMessageclient_modelId() {
+        return this.messageclient_modelId;
+    }
+
+    setMessageclient_modelId(messageclient_modelId) {
+        this.messageclient_modelId = messageclient_modelId;
+    }
+
     getMessageclient_id() {
         return this.messageclient_id;
     }
@@ -857,11 +862,14 @@ class MessageclientModel {
           if (this.messageclient_cupondescuentojson) {
             query.messageclient_cupondescuentojson = this.messageclient_cupondescuentojson;
           }
-      
+          
+          console.log("este es",this.messageclient_modelId)
           const result = await MessageClienteSchema.updateOne(
             { _id: this.messageclient_modelId },
             query
           );
+
+          console.log(result)
       
           return result.ok === 1;
         } catch (error) {

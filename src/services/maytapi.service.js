@@ -32,7 +32,7 @@ class Maytapi {
                 buttons: texto.buttons,
             };
         }
-        Utility.logs.push(objEnvio);
+        // Utility.logs.push(objEnvio);
         return this.peticionClientMaytaCurl(`${BASE_MAYTA}${MAYTA_PRODUCT_ID}/${MAYTA_PHONE_ID}/sendMessage`, "POST", objEnvio, -1);
     }
 

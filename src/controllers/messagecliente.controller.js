@@ -306,7 +306,9 @@ const addMessageFromWebHoook = async (messageComplete) => {
             obj.setMessageclient_date(Utility.getFechaHoraActual());
             obj.setMessageclient_textsendwpp(JSON.stringify(objMessageStep));
             if (isUpdate == true) {
+                console.log('update');
                 // obj.setMessageclient_id(lastMessage.getMessageclient_id());
+                console.log("este es",obj)
                 datos = await obj.update();
             } else {
                 // obj.setMessageclient_id(null);
@@ -317,7 +319,8 @@ const addMessageFromWebHoook = async (messageComplete) => {
             mensajes.push('Mensaje enviado exitosamente.');
 
         } else { // send the message to start the conversation
-            if(!obj.validarInicioChat()){
+
+            if(!obj.validarInicioChat() && !obj.esMessageReset()){
                 Utility.logs.push('No es un mensaje valido , iniciar chat con Pedir.');
                 mensajes.push('No es un mensaje valido,  iniciar chat con Pedir.');
             } else {
@@ -325,7 +328,7 @@ const addMessageFromWebHoook = async (messageComplete) => {
             typeMessage = CHATBOOT_TYPEMSG_BTN;
             stepNext = CHATBOOT_STEP_START;
             let curlClienteInstance = await Utility.peticionPublica("http://" + Security.getSubdomain() + "." + Security.getDominio() + "/restaurant/m/rest/cliente/clienteByPropertyAndValue/cliente_telefono/" + obj.getMessageclient_phone(), "GET");
-            console.log(curlClienteInstance)
+            // console.log(curlClienteInstance)
             obj.setMessageclient_status(ACTIVO);
             obj.setMessageclient_fullname("");
             if (
@@ -346,7 +349,10 @@ const addMessageFromWebHoook = async (messageComplete) => {
             }
             obj.setMessageclient_step(stepNext);
             obj.setMessageclient_textsendwpp(JSON.stringify(objMessageStepOne));
+            console.log("antes de datos")
             datos = await obj.insert();
+            console.log("despues de datos")
+
             Utility.logs.push(await Maytapi.enviarMensajePorWhatsapp(objMessageStepOne, obj.getMessageclient_phone(), typeMessage));
             mensajes.push('Mensaje enviado exitosamente.');
             }
