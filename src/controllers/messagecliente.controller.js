@@ -107,7 +107,6 @@ const addMessageFromWebHoook = async (messageComplete) => {
     if (mensajes.length === 0) {
         // Obtengo el ultimo mensaje con respecto al numero
         let lastMessage = await obj.getLastMessageByPhone();
-        console.log("lastMessage", lastMessage)
 
         // Existe 1er mensaje
         if (lastMessage !== null && !obj.esMessageReset()) {
@@ -134,9 +133,7 @@ const addMessageFromWebHoook = async (messageComplete) => {
             obj.setMessageclient_tipopago(lastMessage.getMessageclient_tipopago());
             obj.setMessageclient_status(ACTIVO);
             let step = lastMessage.getMessageclient_step() !== null ? lastMessage.getMessageclient_step() : CHATBOOT_STEP_START;
-            console.log("step", step)
             if (step !== CHATBOOT_STEP_START) {
-                console.log("step2", step)
                 step = obj.getStepCurrentAndValidateMessage(step);
             }
 
@@ -144,7 +141,6 @@ const addMessageFromWebHoook = async (messageComplete) => {
             let typeMessage = CHATBOOT_TYPEMSG_BTN;
             let stepNext = CHATBOOT_STEP_START;
             let messageObj = obj.getMessageclient_jsonToObj();
-            console.log("messageObj", messageObj)
             if (obj.estaDentroDeltiempo(lastMessage.getMessageclient_date()) && !obj.esMessageReset()) {
 
                 switch (step) {
@@ -228,7 +224,6 @@ const addMessageFromWebHoook = async (messageComplete) => {
                         );
                         stepNext = CHATBOOT_STEP_SELECTPRODUCT;
                         typeMessage = CHATBOOT_TYPEMSG_BTN;
-                        // Continuar con el resto del código de este case...
                         if (messageObj.message && messageObj.message.payload) {
                             if (
                                 messageObj.message.payload == DELIVERY_UPDATE_ORDER &&
