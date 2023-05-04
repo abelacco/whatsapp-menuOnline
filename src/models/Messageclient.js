@@ -497,6 +497,31 @@ class MessageclientModel {
         return responseStatusMessage;
     }
 
+    copyAttributesFrom(lastMessage) {
+
+        this.setMessageclient_methodorder(lastMessage.getMessageclient_methodorder());
+        this.setMessageclient_phone(lastMessage.getMessageclient_phone());
+        this.setMessageclient_fullname(lastMessage.getMessageclient_fullname());
+        this.setMessageclient_id(lastMessage.getMessageclient_id());
+        this.setMessageclient_latitude(lastMessage.getMessageclient_latitude());
+        this.setMessageclient_longitude(lastMessage.getMessageclient_longitude());
+        this.setMessageclient_localid(lastMessage.getMessageclient_localid());
+        this.setMessageclient_cupon(lastMessage.getMessageclient_cupon());
+
+        this.setMessageclient_costoenvio(lastMessage.getMessageclient_costoenvio());
+        this.setMessageclient_costoproductos(lastMessage.getMessageclient_costoproductos());
+        this.setMessageclient_descuentocupon(lastMessage.getMessageclient_descuentocupon());
+        this.setMessageclient_productjson(lastMessage.getMessageclient_productjson());
+
+        this.setMessageclient_address(lastMessage.getMessageclient_address());
+        this.setMessageclient_addressreference(lastMessage.getMessageclient_addressreference());
+        this.setMessageclient_total(lastMessage.getMessageclient_total());
+        this.setMessageclient_dateorder(lastMessage.getMessageclient_dateorder());
+        this.setMessageclient_montominimo(lastMessage.getMessageclient_montominimo());
+        this.setMessageclient_tipopago(lastMessage.getMessageclient_tipopago());
+        this.setMessageclient_status(ACTIVO);
+    }
+
     clearDataByStep(step) {
         if (step === CHATBOOT_STEP_START) {
             this.setMessageclient_methodorder(null);

@@ -111,29 +111,10 @@ const addMessageFromWebHoook = async (messageComplete) => {
         // Existe 1er mensaje
         if (lastMessage !== null && !obj.esMessageReset()) {
             let isUpdate = true;
-            // fn para setear variables del obj(x hacer)
-            obj.setMessageclient_methodorder(lastMessage.getMessageclient_methodorder());
-            obj.setMessageclient_phone(lastMessage.getMessageclient_phone());
-            obj.setMessageclient_fullname(lastMessage.getMessageclient_fullname());
-            obj.setMessageclient_id(lastMessage.getMessageclient_id());
-            obj.setMessageclient_latitude(lastMessage.getMessageclient_latitude());
-            obj.setMessageclient_longitude(lastMessage.getMessageclient_longitude());
-            obj.setMessageclient_localid(lastMessage.getMessageclient_localid());
-            obj.setMessageclient_cupon(lastMessage.getMessageclient_cupon());
+            // fn para obtener las propiedades del ultimo mensaje
+            obj.copyAttributesFrom(lastMessage);
 
-            obj.setMessageclient_costoenvio(lastMessage.getMessageclient_costoenvio());
-            obj.setMessageclient_costoproductos(lastMessage.getMessageclient_costoproductos());
-            obj.setMessageclient_descuentocupon(lastMessage.getMessageclient_descuentocupon());
-            obj.setMessageclient_productjson(lastMessage.getMessageclient_productjson());
-
-            obj.setMessageclient_address(lastMessage.getMessageclient_address());
-            obj.setMessageclient_addressreference(lastMessage.getMessageclient_addressreference());
-            obj.setMessageclient_total(lastMessage.getMessageclient_total());
-            obj.setMessageclient_dateorder(lastMessage.getMessageclient_dateorder());
-            obj.setMessageclient_montominimo(lastMessage.getMessageclient_montominimo());
-            obj.setMessageclient_tipopago(lastMessage.getMessageclient_tipopago());
-            obj.setMessageclient_status(ACTIVO);
-            // comentar
+            // obtener el step del ultimo mensaje y si no hay asignarle el step inicial(0)
             let step = lastMessage.getMessageclient_step() !== null ? lastMessage.getMessageclient_step() : CHATBOOT_STEP_START;
             if (step !== CHATBOOT_STEP_START) {
                 step = obj.getStepCurrentAndValidateMessage(step);
