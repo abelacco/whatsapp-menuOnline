@@ -150,10 +150,6 @@ class MessageclientModel {
 
         let messageArray = this.messageclient_json;
 
-        if( messageArray["message"].text && messageArray["message"].text != 'Pedir' &&  !messageArray["message"].payload ){
-            return false;
-        }
-
         if ("message" in messageArray && !("participants" in messageArray) && "type" in messageArray && messageArray["type"] == "message") {
             let message = messageArray["message"];
             if ("fromMe" in message) {
@@ -353,6 +349,18 @@ class MessageclientModel {
             messageObj.message &&
             messageObj.message.text &&
             messageObj.message.text.toUpperCase() === CHATBOOT_MSG_RESET
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    validarInicioChat() {
+        let messageObj = this.getMessageclient_jsonToObj();
+        if (
+            messageObj.message &&
+            messageObj.message.text &&
+            messageObj.message.text ==  'Pedir'
         ) {
             return true;
         }

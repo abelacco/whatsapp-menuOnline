@@ -112,6 +112,7 @@ const addMessageFromWebHoook = async (messageComplete) => {
         // Existe 1er mensaje
         if (lastMessage !== null && !obj.esMessageReset()) {
             let isUpdate = true;
+            // fn para setear variables del obj(x hacer)
             obj.setMessageclient_methodorder(lastMessage.getMessageclient_methodorder());
             obj.setMessageclient_phone(lastMessage.getMessageclient_phone());
             obj.setMessageclient_fullname(lastMessage.getMessageclient_fullname());
@@ -133,6 +134,7 @@ const addMessageFromWebHoook = async (messageComplete) => {
             obj.setMessageclient_montominimo(lastMessage.getMessageclient_montominimo());
             obj.setMessageclient_tipopago(lastMessage.getMessageclient_tipopago());
             obj.setMessageclient_status(ACTIVO);
+            // comentar
             let step = lastMessage.getMessageclient_step() !== null ? lastMessage.getMessageclient_step() : CHATBOOT_STEP_START;
             if (step !== CHATBOOT_STEP_START) {
                 step = obj.getStepCurrentAndValidateMessage(step);
@@ -186,7 +188,7 @@ const addMessageFromWebHoook = async (messageComplete) => {
                         }
                         break;
 
-                    case CHATBOOT_STEP_LOCATION:
+                    case CHATBOOT_STEP_LOCATION:// No se utiliza
                     case CHATBOOT_STEP_RECOJODATE:
                     case CHATBOOT_STEP_SCHEDULEDDATE:
                         // Validar el cupón aquí
@@ -334,7 +336,7 @@ const addMessageFromWebHoook = async (messageComplete) => {
             mensajes.push('Mensaje enviado exitosamente.');
 
         } else { // send the message to start the conversation
-
+            if(!obj.validarInicioChat())
             // Check if I have the client registered in the instance
             typeMessage = CHATBOOT_TYPEMSG_BTN;
             stepNext = CHATBOOT_STEP_START;
