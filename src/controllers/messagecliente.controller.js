@@ -146,10 +146,7 @@ const addMessageFromWebHoook = async (messageComplete) => {
                 switch (step) {
                     case CHATBOOT_STEP_START:
                         console.log("aca empiezo ")
-                        if (
-                            messageObj.message &&
-                            messageObj.message.payload
-                        ) {
+                        if (messageObj.message && messageObj.message.payload) {
                             if (
                                 messageObj.message.payload == DELIVERY_MODALIDAD_INMEDIATA &&
                                 messageObj.message.text == DELIVERY_MODALIDAD_INMEDIATA_TXT
@@ -341,6 +338,7 @@ const addMessageFromWebHoook = async (messageComplete) => {
             typeMessage = CHATBOOT_TYPEMSG_BTN;
             stepNext = CHATBOOT_STEP_START;
             let curlClienteInstance = await Utility.peticionPublica("http://" + Security.getSubdomain() + "." + Security.getDominio() + "/restaurant/m/rest/cliente/clienteByPropertyAndValue/cliente_telefono/" + obj.getMessageclient_phone(), "GET");
+            console.log(curlClienteInstance)
             obj.setMessageclient_status(ACTIVO);
             obj.setMessageclient_fullname("");
             if (
