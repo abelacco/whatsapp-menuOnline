@@ -110,7 +110,6 @@ const addMessageFromWebHoook = async (messageComplete) => {
         let lastMessage = await obj.getLastMessageByPhone();
         // Existe 1er mensaje
         if (lastMessage !== null && !obj.esMessageReset()) {
-            console.log("obj.esMessageReset()",obj.esMessageReset())
             let isUpdate = true;
             // fn para obtener las propiedades del ultimo mensaje
             obj.copyAttributesFrom(lastMessage);
@@ -291,7 +290,7 @@ const addMessageFromWebHoook = async (messageComplete) => {
                         break;
                 }
             }
-
+            // console.log("objMessageStep" , objMessageStep)
             if (objMessageStep == null) {
                 objMessageStep = await MessageclientModel.getMessageStepOne(obj.getMessageclient_phone(), obj.getMessageclient_fullname());
                 if (objMessageStep.buttons.length == 0) {
@@ -306,9 +305,9 @@ const addMessageFromWebHoook = async (messageComplete) => {
             obj.setMessageclient_date(Utility.getFechaHoraActual());
             obj.setMessageclient_textsendwpp(JSON.stringify(objMessageStep));
             if (isUpdate == true) {
-                console.log('update');
+                // console.log('update');
                 // obj.setMessageclient_id(lastMessage.getMessageclient_id());
-                console.log("este es",obj)
+                // console.log("este es",obj)
                 datos = await obj.update();
             } else {
                 // obj.setMessageclient_id(null);
@@ -349,9 +348,9 @@ const addMessageFromWebHoook = async (messageComplete) => {
             }
             obj.setMessageclient_step(stepNext);
             obj.setMessageclient_textsendwpp(JSON.stringify(objMessageStepOne));
-            console.log("antes de datos")
+            // console.log("antes de datos")
             datos = await obj.insert();
-            console.log("despues de datos")
+            // console.log("despues de datos")
 
             Utility.logs.push(await Maytapi.enviarMensajePorWhatsapp(objMessageStepOne, obj.getMessageclient_phone(), typeMessage));
             mensajes.push('Mensaje enviado exitosamente.');

@@ -72,9 +72,9 @@ class MessageclientModel {
     }
 
     setLastMessage(lastMessage) {
-        console.log("asdsadasdsa",lastMessage)
+        // console.log("asdsadasdsa",lastMessage)
         this.messageclient_modelId = lastMessage?._id || null;
-        console.log("asdsadsad",this.messageclient_modelId)
+        // console.log("asdsadsad",this.messageclient_modelId)
         this.messageclient_id = lastMessage?.messageclient_id || null;
         this.messageclient_phone = lastMessage?.messageclient_phone || null;
         this.messageclient_message = lastMessage?.messageclient_message || null;
@@ -494,8 +494,7 @@ class MessageclientModel {
     }
 
     copyAttributesFrom(lastMessage) {
-        console.log("lastMessage.getMessageclient_modelId()", lastMessage.getMessageclient_modelId())
-        console.log( this.setMessageclient_modelId(lastMessage.getMessageclient_modelId()))            
+
         this.setMessageclient_modelId(lastMessage.getMessageclient_modelId());      
         this.setMessageclient_methodorder(lastMessage.getMessageclient_methodorder());
         this.setMessageclient_phone(lastMessage.getMessageclient_phone());

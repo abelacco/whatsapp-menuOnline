@@ -57,6 +57,7 @@ class Maytapi {
             //     config: config,
             //     timeout: 10000 // set a timeout of 10 seconds
             // });
+            console.log("body", body )
             let response = await rp(url, {
                 method: 'post',
                 json: true,
@@ -66,8 +67,8 @@ class Maytapi {
                     'x-maytapi-key': MAYTA_TOKEN,
                 },
             });
+
             return response;
-            console.log(response)
             Utility.logs.push("Recuperando respuesta");
             Utility.logs.push(response.data);
     
