@@ -196,7 +196,6 @@ class MessageclientModel {
             messageclient_status: 1,
             messageclient_phone: this.getMessageclient_phone()
         }).sort({ messageclient_id: -1 }).limit(1);
-        console.log('lastMessage', lastMessage);
         return lastMessage ? new MessageclientModel(lastMessage) : null;
 
         // const lastMessage = await getLastMessageByPhoneDb();
@@ -212,16 +211,16 @@ class MessageclientModel {
         return messageObjWpp;
     }
 
-    static getMessageStepDeliveryInmediato(phone, clienteName = null) {
-        return `${clienteName ? `${clienteName}\n` : ''}Envía tu ubicación o direccion a tra vez del siguiente link para encontrar el restaurante más cercano \n ${Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/map-boot-select?phone=${phone}`)} ! \n`;
+    static async getMessageStepDeliveryInmediato(phone, clienteName = null) {
+        return  `${clienteName ? `${clienteName}\n` : ''}Envía tu ubicación o direccion a tra vez del siguiente link para encontrar el restaurante más cercano \n ${ await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/map-boot-select?phone=${phone}`)} ! \n`;
     }
 
-    static getMessageStepDeliveryRecojoTienda(phone, clienteName = null) {
-        return `${clienteName ? `${clienteName}\n` : ''}Para seleccionar tu fecha de recojo, por favor, accede al siguiente enlace: \n${Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/inicio?deliveryMethod=2&phone=${phone}`)}`;
+    static async getMessageStepDeliveryRecojoTienda(phone, clienteName = null) {
+        return `${clienteName ? `${clienteName}\n` : ''}Para seleccionar tu fecha de recojo, por favor, accede al siguiente enlace: \n${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/inicio?deliveryMethod=2&phone=${phone}`)}`;
     }
 
-    static getMessageStepDeliveryProgramado(phone, clienteName = null) {
-        return `${clienteName ? `${clienteName}\n` : ''}Envía tu ubicación o direccion a tra vez del siguiente link para encontrar el restaurante más cercano \n ${Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/map-boot-select?phone=${phone}&deliveryMethod=3`)} ! \n`;
+    static async getMessageStepDeliveryProgramado(phone, clienteName = null) {
+        return `${clienteName ? `${clienteName}\n` : ''}Envía tu ubicación o direccion a tra vez del siguiente link para encontrar el restaurante más cercano \n ${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/map-boot-select?phone=${phone}&deliveryMethod=3`)} ! \n`;
     }
 
     static getMessageStepThree(phone, clienteName = null) {

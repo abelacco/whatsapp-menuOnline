@@ -6,6 +6,7 @@ const MessageclientController = require('../controllers/messagecliente.controlle
 router.post('/webHookMaytaWhatsapp', async (req, res) => {
     const obj = req.body;
     const result = await MessageclientController.addMessageFromWebHoook(obj);
+    console.log(result)
     res.json(result);
 });
 

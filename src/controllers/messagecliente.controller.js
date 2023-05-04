@@ -341,7 +341,6 @@ const addMessageFromWebHoook = async (messageComplete) => {
             typeMessage = CHATBOOT_TYPEMSG_BTN;
             stepNext = CHATBOOT_STEP_START;
             let curlClienteInstance = await Utility.peticionPublica("http://" + Security.getSubdomain() + "." + Security.getDominio() + "/restaurant/m/rest/cliente/clienteByPropertyAndValue/cliente_telefono/" + obj.getMessageclient_phone(), "GET");
-            console.log(curlClienteInstance)
             obj.setMessageclient_status(ACTIVO);
             obj.setMessageclient_fullname("");
             if (
@@ -354,7 +353,6 @@ const addMessageFromWebHoook = async (messageComplete) => {
                 obj.setMessageclient_fullname(clientObj.cliente_nombres);
             }
             let objMessageStepOne = await MessageclientModel.getMessageStepOne(obj.getMessageclient_phone(), obj.getMessageclient_fullname());
-            console.log("objMessageStepOne", objMessageStepOne)
             obj.setMessageclient_date(Utility.getFechaHoraActual());
             if (objMessageStepOne.buttons.length == 0) {
                 stepNext = CHATBOOT_STEP_LINEOUT;
@@ -536,7 +534,6 @@ async function messageProductClient(objParametros) {
     let messageClient = new MessageclientModel();
     messageClient.setMessageclient_phone(objParametros.phone);
     let lastMessage = await messageClient.getLastMessageByPhone();
-    console.log("asdsadsadsadasdsadsad",lastMessage)
 
     if (!objParametros.hasOwnProperty('products')) {
         tipo = ERROR;
