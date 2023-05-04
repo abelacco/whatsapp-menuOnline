@@ -101,6 +101,7 @@ const addMessageFromWebHoook = async (messageComplete) => {
 
 
     if (!obj.mensajeValido()) {
+        Utility.logs.push('No es un mensaje valido.');
         mensajes.push('No es un mensaje valido.');
     }
 
@@ -363,15 +364,14 @@ const addMessageFromWebHoook = async (messageComplete) => {
             Utility.logs.push(await Maytapi.enviarMensajePorWhatsapp(objMessageStepOne, obj.getMessageclient_phone(), typeMessage));
             mensajes.push('Mensaje enviado exitosamente.');
         }
-
-        data.mensajes = mensajes;
-        data.tipo = tipo;
-        data.data = datos;
-        data.logs = Utility.logs;
-        return data;
-
-
     }
+
+    data.mensajes = mensajes;
+    data.tipo = tipo;
+    data.data = datos;
+    data.logs = Utility.logs;
+    return data;
+
 }
 
 async function messageLatLngDateClient(objParametros) {
