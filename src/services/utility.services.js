@@ -105,7 +105,7 @@ class Utility {
 
      static getDiferenciaHoras(dateStart, dateEnd) {
       try {
-        const start = this.sqlInt(dateStart.toISOString());
+        const start = this.sqlInt(dateStart);
         const end = this.sqlInt(dateEnd);
         const difference = end - start;
         return difference / 3600;
