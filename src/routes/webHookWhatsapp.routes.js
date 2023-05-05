@@ -6,6 +6,7 @@ const Security = require('../services/security.services');
 
 router.post('/webHookMaytaWhatsapp/:subdominio/:dominio', async (req, res) => {
   Security.obtenerDominiodeSubdominio(req.params.subdominio, req.params.dominio);  
+  console.log(req.body)
   const obj = req.body;
   const result = await MessageclientController.addMessageFromWebHoook(obj);
   res.json(result);

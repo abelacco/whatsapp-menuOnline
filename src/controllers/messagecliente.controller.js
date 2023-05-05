@@ -554,6 +554,7 @@ async function messageProductClient(objParametros) {
             (lastMessage.getMessageclient_step() == CHATBOOT_STEP_SELECTPRODUCT || lastMessage.getMessageclient_step() == CHATBOOT_STEP_SELECTPAYMENT)
         ) {
             // let messageClient = Object.assign({}, lastMessage);
+            messageClient.setMessageclient_modelId(lastMessage.messageclient_modelId);
             messageClient.setMessageclient_status(ACTIVO);
             messageClient.setMessageclient_step(CHATBOOT_STEP_SELECTPRODUCT);
             messageClient.setMessageclient_date(Utility.getFechaHoraActual());
