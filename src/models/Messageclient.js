@@ -366,14 +366,33 @@ class MessageclientModel {
     }
 
     estaDentroDeltiempo(fechaUltimoMensaje) {
-        console.log(fechaUltimoMensaje)
         console.log(Utility.getFechaHoraActual())
-        let horas = Utility.getDiferenciaHoras(fechaUltimoMensaje, Utility.getFechaHoraActual());
+        const formatDate = this.formatDate(fechaUltimoMensaje);
+        console.log("fechaUltimoMensaje", formatDate)
+
+        let horas = Utility.getDiferenciaHoras(formatDate, Utility.getFechaHoraActual());
         if (horas < CHATBOOT_LIMIT_LASTMESSAGE) {
             return true;
         }
         return false;
     }
+
+     formatDate(dateString) {
+        // Crear un objeto Date a partir de la fecha proporcionada
+        const date = new Date(dateString);
+      
+        // Extraer los componentes de la fecha
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const hour = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
+      
+        // Crear una cadena de texto con el formato deseado
+        const formattedDate = `${year}-${month}-${day} ${hour}:${minutes}:${seconds}`;
+        return formattedDate;
+      }
 
     getMessageclient_productJsonToObj() {
         return JSON.parse(this.getMessageclient_productjson());
