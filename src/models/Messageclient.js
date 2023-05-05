@@ -366,6 +366,8 @@ class MessageclientModel {
     }
 
     estaDentroDeltiempo(fechaUltimoMensaje) {
+        console.log(fechaUltimoMensaje)
+        console.log(Utility.getFechaHoraActual())
         let horas = Utility.getDiferenciaHoras(fechaUltimoMensaje, Utility.getFechaHoraActual());
         if (horas < CHATBOOT_LIMIT_LASTMESSAGE) {
             return true;
