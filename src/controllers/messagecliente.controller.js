@@ -101,15 +101,16 @@ const addMessageFromWebHoook = async (messageComplete) => {
 
 
     if (!obj.mensajeValido()) {
-        Utility.logs.push('No es un mensaje valido.');
+        // Utility.logs.push('No es un mensaje valido.');
         mensajes.push('No es un mensaje valido.');
     }
-
+    console.log("mensajes.length", mensajes.length)
     if (mensajes.length === 0) {
         // Obtengo el ultimo mensaje con respecto al numero
         let lastMessage = await obj.getLastMessageByPhone();
         // Existe 1er mensaje
         if (lastMessage !== null && !obj.esMessageReset()) {
+            console.log("existe 1er mensaje")
             let isUpdate = true;
             // fn para obtener las propiedades del ultimo mensaje
             obj.copyAttributesFrom(lastMessage);
@@ -119,7 +120,7 @@ const addMessageFromWebHoook = async (messageComplete) => {
             if (step !== CHATBOOT_STEP_START) {
                 step = obj.getStepCurrentAndValidateMessage(step);
             }
-
+            console.log("step", step)
             let objMessageStep = null;
             let typeMessage = CHATBOOT_TYPEMSG_BTN;
             let stepNext = CHATBOOT_STEP_START;

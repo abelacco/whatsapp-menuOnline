@@ -57,7 +57,7 @@ class Maytapi {
             //     config: config,
             //     timeout: 10000 // set a timeout of 10 seconds
             // });
-            console.log("body", body )
+            // console.log("body", body )
             let response = await rp(url, {
                 method: 'post',
                 json: true,

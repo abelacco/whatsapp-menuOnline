@@ -862,13 +862,13 @@ class MessageclientModel {
             query.messageclient_cupondescuentojson = this.messageclient_cupondescuentojson;
           }
           
-          console.log("este es",this.messageclient_modelId)
+        //   console.log("este es",this.messageclient_modelId)
           const result = await MessageClienteSchema.updateOne(
             { _id: this.messageclient_modelId },
             query
           );
 
-          console.log(result)
+        //   console.log(result)
       
           return result.ok === 1;
         } catch (error) {
