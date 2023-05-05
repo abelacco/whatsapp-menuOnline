@@ -379,7 +379,11 @@ async function messageLatLngDateClient(objParametros) {
     let messageClient = new MessageclientModel();
     messageClient.setMessageclient_phone(objParametros.phone);
     let lastMessage = await messageClient.getLastMessageByPhone();
-
+    console.log(lastMessage)
+    if(lastMessage == null) {
+        mensajes.push("No se encontró el teléfono ingresado.");
+        tipo = ERROR;
+    }
     if (!objParametros.hasOwnProperty('address_latitude') || !objParametros.hasOwnProperty('address_longitude')) {
         tipo = ERROR;
         mensajes.push("Ingrese coordenadas validas.");
@@ -394,8 +398,12 @@ async function messageLatLngDateClient(objParametros) {
         tipo = ERROR;
         mensajes.push("Ingrese un telefono valido.");
     }
-    if (lastMessage != null && lastMessage.getMessageclient_step() == CHATBOOT_STEP_METHODDELIVERY && lastMessage.getMessageclient_methodorder() != null) 
+
+
+    if (lastMessage != null && lastMessage.getMessageclient_step() == CHATBOOT_STEP_METHODDELIVERY && lastMessage.getMessageclient_methodorder() != null && tipo == SUCCESS) 
     {
+
+
         let objGeo = {
             latitude: objParametros.address_latitude,
             longitude: objParametros.address_longitude,
@@ -411,6 +419,7 @@ async function messageLatLngDateClient(objParametros) {
                 objParametros.messageclient_costoenvio,
                 objParametros.messageclient_montominimo
             );
+            messageClient.setMessageclient_modelId(lastMessage.messageclient_modelId);
             messageClient.setMessageclient_status(ACTIVO);
             messageClient.setMessageclient_step(CHATBOOT_STEP_LOCATION);
             messageClient.setMessageclient_date(Utility.getFechaHoraActual());

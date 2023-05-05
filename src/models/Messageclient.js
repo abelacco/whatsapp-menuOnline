@@ -210,7 +210,7 @@ class MessageclientModel {
     }
 
     static async getMessageStepDeliveryInmediato(phone, clienteName = null) {
-        return  `${clienteName ? `${clienteName}\n` : ''}Envía tu ubicación o direccion a tra vez del siguiente link para encontrar el restaurante más cercano \n ${ await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/map-boot-select?phone=${phone}`)} ! \n`;
+        return  `${clienteName ? `${clienteName}\n` : ''}Envía tu ubicación o dirección a través  del siguiente link para encontrar el restaurante más cercano \n ${ await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/map-boot-select?phone=${phone}`)} ! \n`;
     }
 
     static async getMessageStepDeliveryRecojoTienda(phone, clienteName = null) {
@@ -218,7 +218,7 @@ class MessageclientModel {
     }
 
     static async getMessageStepDeliveryProgramado(phone, clienteName = null) {
-        return `${clienteName ? `${clienteName}\n` : ''}Envía tu ubicación o direccion a tra vez del siguiente link para encontrar el restaurante más cercano \n ${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/map-boot-select?phone=${phone}&deliveryMethod=3`)} ! \n`;
+        return `${clienteName ? `${clienteName}\n` : ''}Envía tu ubicación o dirección a través del siguiente link para encontrar el restaurante más cercano \n ${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/map-boot-select?phone=${phone}&deliveryMethod=3`)} ! \n`;
     }
 
     static getMessageStepThree(phone, clienteName = null) {
@@ -277,16 +277,16 @@ class MessageclientModel {
         return messageObjWpp;
     }
 
-    static getMessageStepFour(phone, clienteName = null, local_id = null) {
-        return `${clienteName != null ? clienteName + "\n" : ""}Encuentra todos los productos que necesitas en nuestro catálogo en línea.\n Haz clic en este enlace para comenzar a seleccionar tus productos: \n\n ${Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/tienda/${local_id}?phone=${phone}`)}\n\n Gracias por elegirnos. ¡Estamos emocionados de ser parte de tu experiencia de compra! 🛍️👩‍💻`;
+    static async getMessageStepFour(phone, clienteName = null, local_id = null) {
+        return `${clienteName != null ? clienteName + "\n" : ""}Encuentra todos los productos que necesitas en nuestro catálogo en línea.\n Haz clic en este enlace para comenzar a seleccionar tus productos: \n\n ${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/tienda/${local_id}?phone=${phone}`)}\n\n Gracias por elegirnos. ¡Estamos emocionados de ser parte de tu experiencia de compra! 🛍️👩‍💻`;
     }
 
-    static getMessageStepOrderSeguimiento(phone, id) {
-        return `Tu pedido con codigo #${id} fue creado con exito.😄👍 \nPara seguir el progreso de tu pedido, por favor, accede al siguiente enlace: \n\nhttps://${Security.getSubdomain()}.${Security.getDominio()}/tracking/#/tracking/${id} \n\nGracias por elegirnos. ¡Esperamos que disfrutes de tus productos! 🛍️🚚`;
+    static async getMessageStepOrderSeguimiento(phone, id) {
+        return `Tu pedido con codigo #${id} fue creado con exito.😄👍 \nPara seguir el progreso de tu pedido, por favor, accede al siguiente enlace: \n\nhttps://${ Security.getSubdomain()}.${Security.getDominio()}/tracking/#/tracking/${id} \n\nGracias por elegirnos. ¡Esperamos que disfrutes de tus productos! 🛍️🚚`;
     }
 
-    static getMessageStepOrderRecojoTienda(phone, id, dateOrder) {
-        return `Tu pedido con codigo #${id} fue creado con exito.😄👍 \nPara seguir el progreso de tu pedido, por favor, accede al siguiente enlace: \n\nhttps://${Security.getSubdomain()}.${Security.getDominio()}/tracking/#/tracking/${id} \n\nRecogeras tu pedido el
+    static async getMessageStepOrderRecojoTienda(phone, id, dateOrder) {
+        return `Tu pedido con codigo #${id} fue creado con exito.😄👍 \nPara seguir el progreso de tu pedido, por favor, accede al siguiente enlace: \n\nhttps://${ Security.getSubdomain()}.${Security.getDominio()}/tracking/#/tracking/${id} \n\nRecogeras tu pedido el
     dia: ${dateOrder}\n Gracias por elegirnos. ¡Esperamos que disfrutes de tus productos! 🛍️🚚`;
     }
 
