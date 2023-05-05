@@ -367,7 +367,7 @@ class MessageclientModel {
 
     estaDentroDeltiempo(fechaUltimoMensaje) {
         console.log("getFechaActualFormatoDate",Utility.getFechaActualFormatoDate())
-        console.log("fechaUltimoMensaje", formatDate)
+        console.log("fechaUltimoMensaje", fechaUltimoMensaje)
 
         let horas = Utility.getDiferenciaHoras(fechaUltimoMensaje, Utility.getFechaActualFormatoDate());
         console.log("dif horas", horas)
