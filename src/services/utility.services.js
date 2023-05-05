@@ -92,6 +92,18 @@ class Utility {
       return data;
     }
 
+    static difHoras(dateStart, dateEnd) {
+      try {
+        const start = this.sqlInt(dateStart);
+        const end = this.sqlInt(dateEnd);
+        const difference = end - start;
+        return difference / 3600;
+      } catch (err) {
+        console.log(err);
+      }
+      return 0;
+    }
+
     static getFechaHoraActual() {
       const date = new Date();
       const year = date.getFullYear();
@@ -103,16 +115,23 @@ class Utility {
       return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
     }
 
+    static getFechaActualFormatoDate() {
+      return new Date()
+    }
+
      static getDiferenciaHoras(dateStart, dateEnd) {
-      try {
-        const start = this.sqlInt(dateStart);
-        const end = this.sqlInt(dateEnd);
-        const difference = end - start;
-        return difference / 3600;
-      } catch (err) {
-        console.log(err);
-      }
-      return 0;
+      // try {
+      //   const start = this.sqlInt(dateStart);
+      //   const end = this.sqlInt(dateEnd);
+      //   const difference = end - start;
+      //   return difference / 3600;
+      // } catch (err) {
+      //   console.log(err);
+      // }
+      // return 0;
+      const diffInMilliseconds = Math.abs(dateEnd - dateStart);
+      const hours = diffInMilliseconds / (1000 * 60 * 60);
+      return hours;
     }
     
      static sqlInt(dateAux) {
