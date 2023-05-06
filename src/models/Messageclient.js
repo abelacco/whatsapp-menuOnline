@@ -213,6 +213,7 @@ class MessageclientModel {
 
     static async getTemplateStepOne() {
         let messageObjWpp = new Object();
+        console.log("NAME_TEMPLATE_STEP_ONE", NAME_TEMPLATE_STEP_ONE)
         messageObjWpp.templateName = NAME_TEMPLATE_STEP_ONE;
         // messageObjWpp.type = CHATBOOT_TYPEMSG_BTN;
         messageObjWpp.buttons = await Establishment.getEstablishmentButtonsMetodoDelivery();
