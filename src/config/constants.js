@@ -177,4 +177,8 @@ module.exports = {
 
     DOMINIO: "",
     SUBDOMINIO: "",
+
+    // VARIBLES DE META
+    NAME_TEMPLATE_STEP_ONE: "bienvenida",
+    TOKEN_PARA_META: "873215"
 };

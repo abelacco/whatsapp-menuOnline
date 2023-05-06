@@ -210,6 +210,10 @@ class MessageclientModel {
         return messageObjWpp;
     }
 
+    static async getTemplateStepOne() {
+        return NAME_TEMPLATE_STEP_ONE
+    }
+
     static async getMessageStepDeliveryInmediato(phone, clienteName = null) {
         return  `${clienteName ? `${clienteName}\n` : ''}Envía tu ubicación o dirección a través  del siguiente link para encontrar el restaurante más cercano \n ${ await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/map-boot-select?phone=${phone}`)} ! \n`;
     }
