@@ -46,7 +46,7 @@ router.post('/webHookMetaWhatsapp/:subdominio/:dominio', async (req, res) => {
   const obj = req.body;
   console.log(obj)
   // const result = await MessageclientMetaController.addMessageFromWebHoookMeta(obj);
-  res.json(result);
+  res.json(obj);
 });
 
 router.get('/webHookMetaWhatsapp/:subdominio/:dominio', async (req, res) => {
