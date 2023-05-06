@@ -52,7 +52,6 @@ router.get('/webHookMetaWhatsapp/:subdominio/:dominio', async (req, res) => {
   const mode = req.query['hub.mode'];
   const challenge = req.query['hub.challenge'];
   const token = req.query['hub.verify_token'];
-console.log("pruebas")
   if (mode === 'subscribe' && token === TOKEN_PARA_META) {
     console.log('Webhook verified');
     res.status(200).send(challenge);

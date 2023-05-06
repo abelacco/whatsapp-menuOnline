@@ -20,11 +20,11 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
     // seteamos la propiedades de messageclient segun el messagecomplete
     obj.setMessageclient_json(messageComplete);
 
-
-    if (!obj.mensajeValido()) {
-        // Utility.logs.push('No es un mensaje valido.');
-        mensajes.push('No es un mensaje valido.');
-    }
+    console.log(messageComplete)
+    // if (!obj.mensajeValido()) {
+    //     // Utility.logs.push('No es un mensaje valido.');
+    //     mensajes.push('No es un mensaje valido.');
+    // }
     console.log("mensajes.length", mensajes.length)
     if (mensajes.length === 0) {
         // Obtengo el ultimo mensaje con respecto al numero
