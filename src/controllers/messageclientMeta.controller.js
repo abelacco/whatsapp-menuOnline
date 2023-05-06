@@ -18,7 +18,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
     let obj = new MessageclientModel();
 
     // seteamos la propiedades de messageclient segun el messagecomplete
-    obj.setMessageclient_json(messageComplete);
+    obj.setMessageclient_json("messageComplete", messageComplete);
 
     console.log(messageComplete)
     // if (!obj.mensajeValido()) {
@@ -242,10 +242,12 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
         } else { // send the message to start the conversation
 
             if(!obj.validarInicioChat() && !obj.esMessageReset()){
+                console.log("No es un mensaje valido , iniciar chat con Pedir.")
                 Utility.logs.push('No es un mensaje valido , iniciar chat con Pedir.');
                 mensajes.push('No es un mensaje valido,  iniciar chat con Pedir.');
             } else {
-                            // Check if I have the client registered in the instance
+            // Check if I have the client registered in the instance
+            console.log("entre a 1er mensaje")
             typeMessage = TYPE_TEMPLATE;
             stepNext = CHATBOOT_STEP_START;
             let curlClienteInstance = await Utility.peticionPublica("http://" + Security.getSubdomain() + "." + Security.getDominio() + "/restaurant/m/rest/cliente/clienteByPropertyAndValue/cliente_telefono/" + obj.getMessageclient_phone(), "GET");
