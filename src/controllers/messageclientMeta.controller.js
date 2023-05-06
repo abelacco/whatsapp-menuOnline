@@ -246,7 +246,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                 mensajes.push('No es un mensaje valido,  iniciar chat con Pedir.');
             } else {
                             // Check if I have the client registered in the instance
-            typeMessage = CHATBOOT_TYPEMSG_BTN;
+            typeMessage = TYPE_TEMPLATE;
             stepNext = CHATBOOT_STEP_START;
             let curlClienteInstance = await Utility.peticionPublica("http://" + Security.getSubdomain() + "." + Security.getDominio() + "/restaurant/m/rest/cliente/clienteByPropertyAndValue/cliente_telefono/" + obj.getMessageclient_phone(), "GET");
             // console.log(curlClienteInstance)
@@ -261,7 +261,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                 obj.setMessageclient_id(clientObj.cliente_id);
                 obj.setMessageclient_fullname(clientObj.cliente_nombres);
             }
-            let objMessageStepOne = await MessageclientModel.getMessageStepOne(obj.getMessageclient_phone(), obj.getMessageclient_fullname());
+            let objMessageStepOne = await MessageclientModel.getTemplateStepOne();
             obj.setMessageclient_date(Utility.getFechaHoraActual());
             if (objMessageStepOne.buttons.length == 0) {
                 stepNext = CHATBOOT_STEP_LINEOUT;
@@ -274,7 +274,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
             datos = await obj.insert();
             // console.log("despues de datos")
 
-            Utility.logs.push(await MetaApi.enviarMensajePorWhatsapp(obj.getMessageclient_phone(),"" , typeMessage , "", objMessageStepOne));
+            Utility.logs.push(await MetaApi.enviarWhatsAppPorApiOficial(obj.getMessageclient_phone(),"" , typeMessage , "", objMessageStepOne.templateName));
             mensajes.push('Mensaje enviado exitosamente.');
             }
 

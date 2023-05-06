@@ -211,7 +211,11 @@ class MessageclientModel {
     }
 
     static async getTemplateStepOne() {
-        return NAME_TEMPLATE_STEP_ONE
+        let messageObjWpp = new Object();
+        messageObjWpp.templateName = NAME_TEMPLATE_STEP_ONE;
+        // messageObjWpp.type = CHATBOOT_TYPEMSG_BTN;
+        messageObjWpp.buttons = await Establishment.getEstablishmentButtonsMetodoDelivery();
+        return messageObjWpp;
     }
 
     static async getMessageStepDeliveryInmediato(phone, clienteName = null) {
