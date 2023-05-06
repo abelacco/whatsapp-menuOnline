@@ -29,6 +29,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
     if (mensajes.length === 0) {
         // Obtengo el ultimo mensaje con respecto al numero
         let lastMessage = await obj.getLastMessageByPhone();
+        console.log("lastMessage", lastMessage)
         // Existe 1er mensaje
         if (lastMessage !== null && !obj.esMessageReset()) {
             console.log("existe 1er mensaje")
@@ -240,6 +241,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
             mensajes.push('Mensaje enviado exitosamente.');
 
         } else { // send the message to start the conversation
+            console.log("entre a  caso donde no hay mensajes")
 
             if(!obj.validarInicioChat() && !obj.esMessageReset()){
                 console.log("No es un mensaje valido , iniciar chat con Pedir.")
@@ -247,7 +249,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                 mensajes.push('No es un mensaje valido,  iniciar chat con Pedir.');
             } else {
             // Check if I have the client registered in the instance
-            console.log("entre a 1er mensaje")
+            console.log("pase la validacion de inicio de chat")
             typeMessage = TYPE_TEMPLATE;
             stepNext = CHATBOOT_STEP_START;
             let curlClienteInstance = await Utility.peticionPublica("http://" + Security.getSubdomain() + "." + Security.getDominio() + "/restaurant/m/rest/cliente/clienteByPropertyAndValue/cliente_telefono/" + obj.getMessageclient_phone(), "GET");
