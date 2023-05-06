@@ -24,7 +24,8 @@ const {
     CHATBOOT_STEP_LOCATION,
     CHATBOOT_STEP_RECOJODATE,
     CHATBOOT_STEP_SCHEDULEDDATE,
-    CHATBOOT_STEP_SELECTPRODUCT
+    CHATBOOT_STEP_SELECTPRODUCT,
+    NAME_TEMPLATE_STEP_ONE
 } = require('../config/constants');
 const MessageClienteSchema = require('../schemas/messageCliente.schema');
 const Security = require('../services/security.services')
