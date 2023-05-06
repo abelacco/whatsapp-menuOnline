@@ -16,11 +16,11 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
     let datos = '';
     let logs = [];
     let obj = new MessageclientModel();
-
+    console.log("Aca empezamos controller")
     // seteamos la propiedades de messageclient segun el messagecomplete
-    obj.setMessageclient_json("messageComplete", messageComplete);
+    obj.setMessageclient_json( messageComplete);
 
-    console.log(messageComplete)
+    console.log("messageComplete",messageComplete)
     // if (!obj.mensajeValido()) {
     //     // Utility.logs.push('No es un mensaje valido.');
     //     mensajes.push('No es un mensaje valido.');
