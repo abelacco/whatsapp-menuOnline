@@ -180,5 +180,5 @@ module.exports = {
 
     // VARIBLES DE META
     NAME_TEMPLATE_STEP_ONE: "bienvenida",
-    TOKEN_PARA_META: "873215"
+    TOKEN_PARA_META: "793550265525818"
 };
