@@ -22,6 +22,8 @@ class MetaApi {
                 }
             }
         };
+
+        
         return await this.peticionClientWhatsAppBusiness(objEnvio);
     }
 
@@ -41,6 +43,9 @@ class MetaApi {
                 },
                 body: JSON.stringify(body),
             });
+
+            console.log("response", response)
+            console.log("response", response.status)
             const http_status = response.status;
             // const response = await axios.post(`https://graph.facebook.com/v16.0/${META_PHONE_ID}/messages`, body, {
             //     headers: {

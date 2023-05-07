@@ -277,7 +277,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
             obj.setMessageclient_step(stepNext);
             obj.setMessageclient_textsendwpp(JSON.stringify(objMessageStepOne));
             // console.log("antes de datos")
-            datos = await obj.insert();
+            // datos = await obj.insert();
             // console.log("despues de datos")
 
             Utility.logs.push(await MetaApi.enviarWhatsAppPorApiOficial(obj.getMessageclient_phone(),"" , typeMessage , "", objMessageStepOne.templateName));
