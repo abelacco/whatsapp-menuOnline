@@ -51,20 +51,20 @@ class MetaApi {
 
             // Utility.logs.push(`http_status ${http_status}`);
 
-            if (http_status !== 200) {
-                tipo = ERROR;
+            // if (http_status !== 200) {
+            //     tipo = ERROR;
 
-                const responseJSON = await response.json();
+            //     const responseJSON = await response.json();
 
-                let mensaje = "No se envio el Whatsapp";
+            //     let mensaje = "No se envio el Whatsapp";
 
-                if (responseJSON.message) {
-                    mensaje += ` Whatsapp respondio codigo ${http_status}`;
-                }
-                mensajes.push(mensaje);
-            } else {
-                mensajes.push("Enviado");
-            }
+            //     if (responseJSON.message) {
+            //         mensaje += ` Whatsapp respondio codigo ${http_status}`;
+            //     }
+            //     mensajes.push(mensaje);
+            // } else {
+            //     mensajes.push("Enviado");
+            // }
         } catch (e) {
             console.log("falla en el envio de whatsapp")
             Utility.logs.push(`Ups, problemas en la petición (02). ${e}`);
