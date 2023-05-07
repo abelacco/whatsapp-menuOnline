@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { MAYTA_TOKEN, BASE_MAYTA, MAYTA_PRODUCT_ID, MAYTA_PHONE_ID, ERROR, SUCCESS, PHONE_ID } = require('../config/constants');
+const { MAYTA_TOKEN, BASE_MAYTA, MAYTA_PRODUCT_ID, MAYTA_PHONE_ID, ERROR, SUCCESS, PHONE_ID, META_PHONE_ID } = require('../config/constants');
 const Utility = require('./utility.services');
 const rp = require('request-promise-native');
 
@@ -69,9 +69,9 @@ class MetaApi {
             console.log("falla en el envio de whatsapp", e)
             Utility.logs.push(`Ups, problemas en la petición (02). ${e}`);
 
-            if (response) {
-                Utility.logs.push(response.body.getContents());
-            }
+            // if (response) {
+            //     Utility.logs.push(response.body.getContents());
+            // }
 
             mensajes.push(`Ups, problemas en la petición (002). ${e}`);
             tipo = ERROR;
