@@ -33,11 +33,11 @@ class MetaApi {
 
         try {
             console.log("empieza peticion")
-            const response = await fetch("https://graph.facebook.com/v16.0/109658868771088/messages", {
+            const response = await fetch("https://graph.facebook.com/v16.0/108695265534016/messages", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Bearer EAADh9hg0X1oBAGeL27F6J5n4DxND9ITEIfEZCHqhDn3p6e45eDvqu5PcZBnti3pN66tPZCZBSICWroKvJF5nE1zMsTDJMKQrqtpjQBqa2ZARwGBy87GoEHDjp8p15PSqqpORCbySZBhfh4KgwDsZCMBV93ZCRTFYE0CzBpC1ZCuAZBLW3ZB6yTUM8FX4pJ1VrAtDC8k3iZBaQZA9RWwZDZD"
+                    "Authorization": "Bearer EAALRutGwJjoBAIIoDfvgywPztobwowXVy10lqUBRIdtwBahAqZBc8UZA3AmTRRLtSZBOBBN25a65UpyyCOnaNBSZCveKVk4Cbb8HUy0P2YauvK3yYh3ZBaVzD9gHlsQcdB3zUNQZBASM1ToBIeeEQscQsse7MereDJ5yHU1WgSkApKYWzgyr1lV7oJBJKkjcGS8iqN4CyldA7cvLyvqPh5"
                 },
                 body: JSON.stringify(body),
             });
