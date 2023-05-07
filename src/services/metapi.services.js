@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { MAYTA_TOKEN, BASE_MAYTA, MAYTA_PRODUCT_ID, MAYTA_PHONE_ID, ERROR, SUCCESS } = require('../config/constants');
+const { MAYTA_TOKEN, BASE_MAYTA, MAYTA_PRODUCT_ID, MAYTA_PHONE_ID, ERROR, SUCCESS, PHONE_ID } = require('../config/constants');
 const Utility = require('./utility.services');
 const rp = require('request-promise-native');
 
@@ -33,17 +33,23 @@ class MetaApi {
 
         try {
             console.log("empieza peticion")
-            const response = await fetch("https://graph.facebook.com/v16.0/108695265534016/messages", {
-                method: "POST",
+            // const response = await fetch(`https://graph.facebook.com/v16.0/${META_PHONE_ID}/messages` , {
+            //     method: "POST",
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //         "Authorization": "Bearer EAALRutGwJjoBAIIoDfvgywPztobwowXVy10lqUBRIdtwBahAqZBc8UZA3AmTRRLtSZBOBBN25a65UpyyCOnaNBSZCveKVk4Cbb8HUy0P2YauvK3yYh3ZBaVzD9gHlsQcdB3zUNQZBASM1ToBIeeEQscQsse7MereDJ5yHU1WgSkApKYWzgyr1lV7oJBJKkjcGS8iqN4CyldA7cvLyvqPh5"
+            //     },
+            //     body: JSON.stringify(body),
+            // });
+            // const http_status = response.status;
+            const response = await axios.post(`https://graph.facebook.com/v16.0/${META_PHONE_ID}/messages`, body, {
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer EAALRutGwJjoBAIIoDfvgywPztobwowXVy10lqUBRIdtwBahAqZBc8UZA3AmTRRLtSZBOBBN25a65UpyyCOnaNBSZCveKVk4Cbb8HUy0P2YauvK3yYh3ZBaVzD9gHlsQcdB3zUNQZBASM1ToBIeeEQscQsse7MereDJ5yHU1WgSkApKYWzgyr1lV7oJBJKkjcGS8iqN4CyldA7cvLyvqPh5"
-                },
-                body: JSON.stringify(body),
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer EAALRutGwJjoBAIIoDfvgywPztobwowXVy10lqUBRIdtwBahAqZBc8UZA3AmTRRLtSZBOBBN25a65UpyyCOnaNBSZCveKVk4Cbb8HUy0P2YauvK3yYh3ZBaVzD9gHlsQcdB3zUNQZBASM1ToBIeeEQscQsse7MereDJ5yHU1WgSkApKYWzgyr1lV7oJBJKkjcGS8iqN4CyldA7cvLyvqPh5'
+                }
             });
-            const http_status = response.status;
 
-            Utility.logs.push(`http_status ${http_status}`);
+            // Utility.logs.push(`http_status ${http_status}`);
 
             if (http_status !== 200) {
                 tipo = ERROR;

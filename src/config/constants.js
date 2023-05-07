@@ -181,6 +181,7 @@ module.exports = {
     // VARIBLES DE META
     NAME_TEMPLATE_STEP_ONE: "bienvenida",
     TOKEN_PARA_META: "793550265525818",
+    META_PHONE_ID: "108695265534016",
 
     // TIPO DE MENSAJE META
     TYPE_TEMPLATE: 'template',
