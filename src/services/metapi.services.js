@@ -66,7 +66,7 @@ class MetaApi {
             //     mensajes.push("Enviado");
             // }
         } catch (e) {
-            console.log("falla en el envio de whatsapp")
+            console.log("falla en el envio de whatsapp", e)
             Utility.logs.push(`Ups, problemas en la petición (02). ${e}`);
 
             if (response) {
