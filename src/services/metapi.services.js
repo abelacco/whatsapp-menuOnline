@@ -2,7 +2,7 @@ const axios = require('axios');
 const { MAYTA_TOKEN, BASE_MAYTA, MAYTA_PRODUCT_ID, MAYTA_PHONE_ID, ERROR, SUCCESS, PHONE_ID, META_PHONE_ID } = require('../config/constants');
 const Utility = require('./utility.services');
 const rp = require('request-promise-native');
-
+const fetch = require('node-fetch');
 
 class MetaApi {
 
