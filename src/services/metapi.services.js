@@ -32,6 +32,7 @@ class MetaApi {
         let data = {};
 
         try {
+            console.log("empieza peticion")
             const response = await fetch("https://graph.facebook.com/v16.0/109658868771088/messages", {
                 method: "POST",
                 headers: {
@@ -59,6 +60,7 @@ class MetaApi {
                 mensajes.push("Enviado");
             }
         } catch (e) {
+            console.log("falla en el envio de whatsapp")
             Utility.logs.push(`Ups, problemas en la petición (02). ${e}`);
 
             if (response) {
