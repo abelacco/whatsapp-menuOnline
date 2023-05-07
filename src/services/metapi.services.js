@@ -33,21 +33,21 @@ class MetaApi {
 
         try {
             console.log("empieza peticion")
-            // const response = await fetch(`https://graph.facebook.com/v16.0/${META_PHONE_ID}/messages` , {
-            //     method: "POST",
-            //     headers: {
-            //         "Content-Type": "application/json",
-            //         "Authorization": "Bearer EAALRutGwJjoBAIIoDfvgywPztobwowXVy10lqUBRIdtwBahAqZBc8UZA3AmTRRLtSZBOBBN25a65UpyyCOnaNBSZCveKVk4Cbb8HUy0P2YauvK3yYh3ZBaVzD9gHlsQcdB3zUNQZBASM1ToBIeeEQscQsse7MereDJ5yHU1WgSkApKYWzgyr1lV7oJBJKkjcGS8iqN4CyldA7cvLyvqPh5"
-            //     },
-            //     body: JSON.stringify(body),
-            // });
-            // const http_status = response.status;
-            const response = await axios.post(`https://graph.facebook.com/v16.0/${META_PHONE_ID}/messages`, body, {
+            const response = await fetch(`https://graph.facebook.com/v16.0/${META_PHONE_ID}/messages` , {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer EAALRutGwJjoBAIIoDfvgywPztobwowXVy10lqUBRIdtwBahAqZBc8UZA3AmTRRLtSZBOBBN25a65UpyyCOnaNBSZCveKVk4Cbb8HUy0P2YauvK3yYh3ZBaVzD9gHlsQcdB3zUNQZBASM1ToBIeeEQscQsse7MereDJ5yHU1WgSkApKYWzgyr1lV7oJBJKkjcGS8iqN4CyldA7cvLyvqPh5'
-                }
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer EAALRutGwJjoBAIIoDfvgywPztobwowXVy10lqUBRIdtwBahAqZBc8UZA3AmTRRLtSZBOBBN25a65UpyyCOnaNBSZCveKVk4Cbb8HUy0P2YauvK3yYh3ZBaVzD9gHlsQcdB3zUNQZBASM1ToBIeeEQscQsse7MereDJ5yHU1WgSkApKYWzgyr1lV7oJBJKkjcGS8iqN4CyldA7cvLyvqPh5"
+                },
+                body: JSON.stringify(body),
             });
+            const http_status = response.status;
+            // const response = await axios.post(`https://graph.facebook.com/v16.0/${META_PHONE_ID}/messages`, body, {
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'Authorization': 'Bearer EAALRutGwJjoBAIIoDfvgywPztobwowXVy10lqUBRIdtwBahAqZBc8UZA3AmTRRLtSZBOBBN25a65UpyyCOnaNBSZCveKVk4Cbb8HUy0P2YauvK3yYh3ZBaVzD9gHlsQcdB3zUNQZBASM1ToBIeeEQscQsse7MereDJ5yHU1WgSkApKYWzgyr1lV7oJBJKkjcGS8iqN4CyldA7cvLyvqPh5'
+            //     }
+            // });
 
             // Utility.logs.push(`http_status ${http_status}`);
 
