@@ -154,7 +154,6 @@ class MessageclientModel {
         let mensajeValido = false;
 
         let messageArray = this.messageclient_json;
-        console.log("messageArray", messageArray)
         if ("message" in messageArray && !("participants" in messageArray) && "type" in messageArray && messageArray["type"] == "message") {
             let message = messageArray["message"];
             if ("fromMe" in message) {
@@ -168,6 +167,7 @@ class MessageclientModel {
             mensajeValido = false;
         }
 
+          
         return mensajeValido;
     }
 
@@ -189,6 +189,49 @@ class MessageclientModel {
         this.setMessageclient_json(JSON.stringify(this.messageclient_json));
 
     }
+
+    mensajeValidoMeta() {
+        let mensajeValido = false;
+
+        let messageArray = this.messageclient_json.entry[0].changes[0].value;
+        console.log("messageArray", messageArray)
+
+        if ("messages" in messageArray && messageArray["messages"].length > 0) {
+            let message = messageArray["messages"][0];
+            if (message["from"] !== "me") {
+              this.setearValoresPrincipalesFromMessageJsonMeta();
+              mensajeValido = true;
+            }
+          } else {
+            console.log("false");
+            mensajeValido = false;
+          }
+          
+        return mensajeValido;
+    }
+
+    setearValoresPrincipalesFromMessageJsonMeta() {
+
+        let messageArray = this.messageclient_json.entry[0].changes[0].value;
+        console.log("messageArray", messageArray)
+        let message = messageArray["messages"][0]
+
+        this.setMessageclient_message(message["text"].body);
+
+        // if ("user" in messageArray) {
+
+        //     let user = messageArray["user"];
+
+        //     this.setMessageclient_phone(user["phone"]);
+        // }
+        this.setMessageclient_phone(message["from"]);
+
+
+        this.setMessageclient_json(JSON.stringify(this.messageclient_json));
+
+    }
+
+
 
 
     async getLastMessageByPhone() {
