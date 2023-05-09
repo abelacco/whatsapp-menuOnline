@@ -50,11 +50,14 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
             console.log("yyyyyyyyyyy", obj.estaDentroDeltiempo(lastMessage.getMessageclient_date()))
             console.log("ooooooooooo",!obj.esMessageResetMeta())
             if (obj.estaDentroDeltiempo(lastMessage.getMessageclient_date()) && !obj.esMessageResetMeta()) {
-
+                console.log("asdasdasd", step)
                 switch (step) {
+                    
                     case CHATBOOT_STEP_START:
                         console.log("aca empiezo ")
                         console.log(messageObj.type)
+                        console.log(messageObj.interactive.type)
+                        console.log(messageObj.interactive.button_reply)
                         if (messageObj.type && messageObj.interactive.type) {
                             console.log("no pase la validacion de chatboot start")
                             if (

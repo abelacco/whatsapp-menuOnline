@@ -258,7 +258,7 @@ class MessageclientModel {
         const lastMessage = await MessageClienteSchema.findOne({
             messageclient_status: 1,
             messageclient_phone: this.getMessageclient_phone()
-        }).sort({ messageclient_id: -1 }).limit(1);
+        }).sort({ _id: -1 }).limit(1);
         return lastMessage ? new MessageclientModel(lastMessage) : null;
 
 
