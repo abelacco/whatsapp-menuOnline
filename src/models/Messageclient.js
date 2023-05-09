@@ -126,7 +126,6 @@ class MessageclientModel {
     }
 
     getMessageclient_methodorderTxt() {
-        console.log("aaaaaaaaaaaaaa", this.getMessageclient_methodorder())
         if (this.getMessageclient_methodorder() === DELIVERY_MODALIDAD_INMEDIATA) {
             return DELIVERY_MODALIDAD_INMEDIATA_TXT;
         } else if (this.getMessageclient_methodorder() === DELIVERY_MODALIDAD_PORRECOGER) {

@@ -10,15 +10,13 @@ class MetaApi {
 
     static async enviarWhatsAppPorApiOficial(telefono, type = "text", texto , buttonActions = "", templateName = "") {
         console.log("enviarWhatsAppPorApiOficial")
-        console.log(telefono , type , texto , buttonActions , templateName)
-        console.log("enviarWhatsAppPorApiOficial2")
+
 
         let objEnvio = {
             messaging_product: "whatsapp",
             to: telefono,
             type: type,
         };
-        console.log("enviarWhatsAppPorApiOficial3", objEnvio)
         // Para Texto
 
         if(type === "text"){

@@ -18,12 +18,10 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
     let obj = new MessageclientModel();
     console.log("Aca empezamos controller")
     // seteamos la propiedades de messageclient segun el messagecomplete
-    console.log("messageComplete", messageComplete)
     obj.setMessageclient_json( messageComplete);
     messageComplete.entry
         ?obj.setMessageclient_proveedorWhastapp(PROVEEDOR_META)
         :obj.setMessageclient_proveedorWhastapp(PROVEEDOR_MAYTAPI);
-    console.log("asasdsaddsa",obj.getMessageclient_proveedorWhastapp())
     if (!obj.mensajeValidoMeta()) {
         // Utility.logs.push('No es un mensaje valido.');
         mensajes.push('No es un mensaje valido.');
@@ -50,19 +48,17 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
             let typeMessageToSend = TYPE_MESSAGE_META_SEND_INTERACTIVE;
             let stepNext = CHATBOOT_STEP_START;
             let messageObj = obj.getMessageclient_jsonToObjMeta();
-            console.log("messageObj", messageObj)
             if (obj.estaDentroDeltiempo(lastMessage.getMessageclient_date()) && !obj.esMessageReset()) {
 
                 switch (step) {
                     case CHATBOOT_STEP_START:
                         console.log("aca empiezo ")
                         if (messageObj.button && messageObj.button.payload) {
-
+                            console.log("no pase la validacion de chatboot start")
                             if (
                                 messageObj.button.payload == DELIVERY_MODALIDAD_INMEDIATA &&
                                 messageObj.button.text == DELIVERY_MODALIDAD_INMEDIATA_TXT_META
                             ) {
-                                console.log("entre para enviar template de mod inmeadiato")
                                 objMessageStep = await MessageclientModel.getMessageStepDeliveryInmediatoMeta(
                                     obj.getMessageclient_phone(),
                                     obj.getMessageclient_fullname()
@@ -171,7 +167,6 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                         stepNext = CHATBOOT_STEP_SELECTPAYMENT;
                         typeMessageToSend = TYPE_MESSAGE_META_SEND_INTERACTIVE;
                         if (messageObj.button && messageObj.button.payload) {
-                            console.log("aquiiiii llegue") 
 
                             if (
                                 (messageObj.button.payload == DELIVERY_PAYMENT_CE &&
@@ -179,14 +174,11 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                                 (messageObj.button.payload == DELIVERY_PAYMENT_CP &&
                                     messageObj.button.text == DELIVERY_PAYMENT_CP_TXT_META)
                             ) {
-                                console.log("aquiiiii llegue2") 
 
                                 obj.setMessageclient_tipopago(messageObj.button.payload);
                                 let products = obj.getMessageclient_productJsonToObj();
-console.log("asdsadasdsadsadasdasddsad",products)
                                 if (products && Array.isArray(products) && products.length > 0) {
                                     // create order
-                                    console.log("entra a genear pedido")
                                     let orderObj = obj.createOrderObj();
                                     let url =    Utility.urlAgregarDelivery()
                                         console.log(url)
@@ -196,23 +188,19 @@ console.log("asdsadasdsadsadasdasddsad",products)
                                         'POST',
                                         orderObj
                                     );
-                                    console.log("asdsayyyyyyyyyy",curlOrderInstance)
                                     Utility.logs.push(curlOrderInstance);
                                     if (
                                         curlOrderInstance.tipo &&
                                         curlOrderInstance.data &&
                                         curlOrderInstance.tipo == SUCCESS
                                     ) {
-                                        console.log("entra a genear pedido final")
                                         if (obj.getMessageclient_methodorder() == DELIVERY_MODALIDAD_PORRECOGER) {
-                                            console.log("aca es recojo tiendad ")
                                             objMessageStep = await MessageclientModel.getMessageStepOrderRecojoTiendaMeta(
                                                 obj.getMessageclient_phone(),
                                                 curlOrderInstance.data,
                                                 obj.getMessageclient_dateorder()
                                             );
                                         } else {
-                                            console.log("aca es delivery ")
 
                                             objMessageStep = await MessageclientModel.getMessageStepOrderSeguimientoMeta(
                                                 obj.getMessageclient_phone(),
@@ -248,7 +236,6 @@ console.log("asdsadasdsadsadasdasddsad",products)
 
                 datos = await obj.update();
             } 
-            console.log("objMessageStep" , objMessageStep)
             Utility.logs.push(objMessageStep);
             Utility.logs.push(await MetaApi.enviarWhatsAppPorApiOficial(obj.getMessageclient_phone(), typeMessageToSend , objMessageStep.message , objMessageStep.buttons, ""));
             mensajes.push('Mensaje enviado exitosamente.');
@@ -268,7 +255,6 @@ console.log("asdsadasdsadsadasdasddsad",products)
             typeMessageToSend = TYPE_MESSAGE_META_SEND_INTERACTIVE;
             stepNext = CHATBOOT_STEP_START;
             let curlClienteInstance = await Utility.peticionPublica("http://" + Security.getSubdomain() + "." + Security.getDominio() + "/restaurant/m/rest/cliente/clienteByPropertyAndValue/cliente_telefono/" + obj.getMessageclient_phone(), "GET");
-            // console.log(curlClienteInstance)
             obj.setMessageclient_status(ACTIVO);
             obj.setMessageclient_fullname("");
             if (
