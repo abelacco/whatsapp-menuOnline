@@ -30,7 +30,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
         let lastMessage = await obj.getLastMessageByPhone();
         console.log("lastMessage", lastMessage)
         // Existe 1er mensaje
-        if (lastMessage !== null && !obj.esMessageReset()) {
+        if (lastMessage !== null && !obj.esMessageResetMeta()) {
             console.log("existe 1er mensaje")
             let isUpdate = true;
             // fn para obtener las propiedades del ultimo mensaje
@@ -47,7 +47,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
             let stepNext = CHATBOOT_STEP_START;
             let messageObj = obj.getMessageclient_jsonToObjMeta();
             console.log("messageObjxxxxxxxxxxxxxxx", messageObj)
-            if (obj.estaDentroDeltiempo(lastMessage.getMessageclient_date()) && !obj.esMessageReset()) {
+            if (obj.estaDentroDeltiempo(lastMessage.getMessageclient_date()) && !obj.esMessageResetMeta()) {
 
                 switch (step) {
                     case CHATBOOT_STEP_START:
@@ -242,7 +242,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
         } else { // send the message to start the conversation
             console.log("entre a  caso donde no hay mensajes")
 
-            if(!obj.validarInicioChat() && !obj.esMessageReset()){
+            if(!obj.validarInicioChatMeta() && !obj.esMessageResetMeta()){
 
                 console.log("No es un mensaje valido , iniciar chat con Pedir.")
                 Utility.logs.push('No es un mensaje valido , iniciar chat con Pedir.');
