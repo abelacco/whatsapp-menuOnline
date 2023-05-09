@@ -47,6 +47,8 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
             let stepNext = CHATBOOT_STEP_START;
             let messageObj = obj.getMessageclient_jsonToObjMeta();
             console.log("messageObjxxxxxxxxxxxxxxx", messageObj)
+            console.log("yyyyyyyyyyy", obj.estaDentroDeltiempo(lastMessage.getMessageclient_date()))
+            console.log("ooooooooooo",!obj.esMessageResetMeta())
             if (obj.estaDentroDeltiempo(lastMessage.getMessageclient_date()) && !obj.esMessageResetMeta()) {
 
                 switch (step) {
