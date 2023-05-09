@@ -54,12 +54,12 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                 switch (step) {
                     case CHATBOOT_STEP_START:
                         console.log("aca empiezo ")
-                        console.log(messageObj.button)
-                        if (messageObj.button && messageObj.button.payload) {
+                        console.log(messageObj.button_reply)
+                        if (messageObj.button_reply && messageObj.button_reply.id) {
                             console.log("no pase la validacion de chatboot start")
                             if (
-                                messageObj.button.payload == DELIVERY_MODALIDAD_INMEDIATA &&
-                                messageObj.button.text == DELIVERY_MODALIDAD_INMEDIATA_TXT_META
+                                messageObj.button_reply.id == DELIVERY_MODALIDAD_INMEDIATA &&
+                                messageObj.button_reply.text == DELIVERY_MODALIDAD_INMEDIATA_TXT_META
                             ) {
                                 objMessageStep = await MessageclientModel.getMessageStepDeliveryInmediatoMeta(
                                     obj.getMessageclient_phone(),
