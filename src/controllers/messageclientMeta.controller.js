@@ -70,8 +70,8 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                                 typeMessageToSend = TYPE_MESSAGE_META_SEND_TEXT;
                             }
                             else if (
-                                 messageObj.button.payload == DELIVERY_MODALIDAD_PROGRAMADO &&
-                                messageObj.button.text == DELIVERY_MODALIDAD_PROGRAMADO_TXT_META
+                                 messageObj.interactive.button_reply.id == DELIVERY_MODALIDAD_PROGRAMADO &&
+                                messageObj.interactive.button_reply.title == DELIVERY_MODALIDAD_PROGRAMADO_TXT_META
                             ) {
                                 objMessageStep = await MessageclientModel.getMessageStepDeliveryProgramadoMeta(
                                     obj.getMessageclient_phone(),
@@ -81,8 +81,8 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                                 stepNext = CHATBOOT_STEP_METHODDELIVERY;
                                 typeMessageToSend = TYPE_MESSAGE_META_SEND_TEXT;
                             } else if (
-                                 messageObj.button.payload == DELIVERY_MODALIDAD_PORRECOGER &&
-                                messageObj.button.text == DELIVERY_MODALIDAD_PORRECOGER_TXT_META
+                                 messageObj.interactive.button_reply.id == DELIVERY_MODALIDAD_PORRECOGER &&
+                                messageObj.interactive.button_reply.title == DELIVERY_MODALIDAD_PORRECOGER_TXT_META
                             ) {
                                 objMessageStep = await MessageclientModel.getMessageStepDeliveryRecojoTiendaMeta(
                                     obj.getMessageclient_phone(),
@@ -104,9 +104,9 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
 
                         // Validar el cupón aquí
                         if (
-                             messageObj.button.payload &&
-                             messageObj.button.payload == CHOOSE_PRODUCTS &&
-                             messageObj.button.text == CHOOSE_PRODUCTS_TXT
+                             messageObj.interactive.button_reply.id &&
+                             messageObj.interactive.button_reply.id == CHOOSE_PRODUCTS &&
+                             messageObj.interactive.button_reply.title == CHOOSE_PRODUCTS_TXT
                         ) {
                             obj.setMessageclient_cupon("");
                         } else if (messageObj.type == TYPE_MESSAGE_META_RECIVE_TEXT) {
@@ -135,10 +135,10 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                         );
                         stepNext = CHATBOOT_STEP_SELECTPRODUCT;
                         typeMessageToSend = TYPE_MESSAGE_META_SEND_TEXT;
-                        if (messageObj.button && messageObj.button.payload) {
+                        if (messageObj.button && messageObj.interactive.button_reply.id) {
                             if (
-                                messageObj.button.payload == DELIVERY_UPDATE_ORDER &&
-                                messageObj.button.text == DELIVERY_UPDATE_ORDER_TXT_META
+                                messageObj.interactive.button_reply.id == DELIVERY_UPDATE_ORDER &&
+                                messageObj.interactive.button_reply.title == DELIVERY_UPDATE_ORDER_TXT_META
                             ) {
                                 objMessageStep = await MessageclientModel.getMessageStepFourMeta(
                                     obj.getMessageclient_phone(),
@@ -148,8 +148,8 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                                 stepNext = CHATBOOT_STEP_SELECTPRODUCT;
                                 typeMessageToSend = CHATBOOT_TYPEMSG_TEXT;
                             } else if (
-                                messageObj.button.payload == DELIVERY_CONFIRM_ORDER &&
-                                messageObj.button.text == DELIVERY_CONFIRM_ORDER_TXT_META
+                                messageObj.interactive.button_reply.id == DELIVERY_CONFIRM_ORDER &&
+                                messageObj.interactive.button_reply.title == DELIVERY_CONFIRM_ORDER_TXT_META
                             ) {
                                 // create order by crud
                                 objMessageStep = MessageclientModel.getMessageStepConfirmTypePaymentMeta(
@@ -168,16 +168,16 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                         );
                         stepNext = CHATBOOT_STEP_SELECTPAYMENT;
                         typeMessageToSend = TYPE_MESSAGE_META_SEND_INTERACTIVE;
-                        if (messageObj.button && messageObj.button.payload) {
+                        if (messageObj.button && messageObj.interactive.button_reply.id) {
 
                             if (
-                                (messageObj.button.payload == DELIVERY_PAYMENT_CE &&
-                                    messageObj.button.text == DELIVERY_PAYMENT_CE_TXT_META) ||
-                                (messageObj.button.payload == DELIVERY_PAYMENT_CP &&
-                                    messageObj.button.text == DELIVERY_PAYMENT_CP_TXT_META)
+                                (messageObj.interactive.button_reply.id == DELIVERY_PAYMENT_CE &&
+                                    messageObj.interactive.button_reply.title == DELIVERY_PAYMENT_CE_TXT_META) ||
+                                (messageObj.interactive.button_reply.id == DELIVERY_PAYMENT_CP &&
+                                    messageObj.interactive.button_reply.title == DELIVERY_PAYMENT_CP_TXT_META)
                             ) {
 
-                                obj.setMessageclient_tipopago(messageObj.button.payload);
+                                obj.setMessageclient_tipopago(messageObj.interactive.button_reply.id);
                                 let products = obj.getMessageclient_productJsonToObj();
                                 if (products && Array.isArray(products) && products.length > 0) {
                                     // create order
