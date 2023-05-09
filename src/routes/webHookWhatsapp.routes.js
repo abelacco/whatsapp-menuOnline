@@ -9,13 +9,13 @@ const { TOKEN_PARA_META } = require('../config/constants');
 // webHookWhatsapp --> Mayta
 
 
-router.post('/webHookMaytaWhatsapp/:subdominio/:dominio', async (req, res) => {
-  Security.obtenerDominiodeSubdominio(req.params.subdominio, req.params.dominio);  
-  console.log(req.body)
-  const obj = req.body;
-  const result = await MessageclientController.addMessageFromWebHoook(obj);
-  res.json(result);
-});
+// router.post('/webHookMaytaWhatsapp/:subdominio/:dominio', async (req, res) => {
+//   Security.obtenerDominiodeSubdominio(req.params.subdominio, req.params.dominio);  
+//   console.log(req.body)
+//   const obj = req.body;
+//   const result = await MessageclientController.addMessageFromWebHoook(obj);
+//   res.json(result);
+// });
 
 router.post('/messageLatLngDateClient', async (req, res) => {
     try {
