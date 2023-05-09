@@ -135,7 +135,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                         );
                         stepNext = CHATBOOT_STEP_SELECTPRODUCT;
                         typeMessageToSend = TYPE_MESSAGE_META_SEND_TEXT;
-                        if (messageObj.button && messageObj.interactive.button_reply.id) {
+                        if (messageObj.interactive && messageObj.interactive.button_reply.id) {
                             if (
                                 messageObj.interactive.button_reply.id == DELIVERY_UPDATE_ORDER &&
                                 messageObj.interactive.button_reply.title == DELIVERY_UPDATE_ORDER_TXT_META
