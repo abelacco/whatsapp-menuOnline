@@ -504,12 +504,37 @@ class MessageclientModel {
         return false;
     }
 
+    esMessageResetMeta() {
+        let messageObj = this.getMessageclient_jsonToObjMeta();
+        if (
+            messageObj.type == TYPE_MESSAGE_META_RECIVE_TEXT &&
+            messageObj.text &&
+            messageObj.text.body.toUpperCase() === CHATBOOT_MSG_RESET
+
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     validarInicioChat() {
         let messageObj = this.getMessageclient_jsonToObj();
         if (
             messageObj.message &&
             messageObj.message.text &&
-            messageObj.message.text ==  'Pedir'
+            messageObj.message.text ==  'PEDIR'
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    validarInicioChatMeta() {
+        let messageObj = this.getMessageclient_jsonToObjMeta();
+        if (
+            messageObj.type == TYPE_MESSAGE_META_RECIVE_TEXT &&
+            messageObj.text &&
+            messageObj.text.body.toUpperCase() === 'PEDIR'
         ) {
             return true;
         }

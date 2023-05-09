@@ -325,7 +325,7 @@ const addMessageFromWebHoook = async (messageComplete) => {
 
         } else { // send the message to start the conversation
 
-            if(!obj.validarInicioChat() && !obj.esMessageReset()){
+            if(!obj.validarInicioChatMeta() && !obj.esMessageResetMeta()){
                 Utility.logs.push('No es un mensaje valido , iniciar chat con Pedir.');
                 mensajes.push('No es un mensaje valido,  iniciar chat con Pedir.');
             } else {
