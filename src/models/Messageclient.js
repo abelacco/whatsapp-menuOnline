@@ -227,7 +227,6 @@ class MessageclientModel {
     setearValoresPrincipalesFromMessageJsonMeta() {
 
         let messageArray = this.messageclient_json.entry[0].changes[0].value;
-        console.log("messageArray", messageArray)
         let message = messageArray["messages"][0]
 
         // Tipo de variable que llega de META (text, button , etc)

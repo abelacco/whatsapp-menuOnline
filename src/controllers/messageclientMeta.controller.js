@@ -53,6 +53,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                 switch (step) {
                     case CHATBOOT_STEP_START:
                         console.log("aca empiezo ")
+                        console.log(messageObj.button)
                         if (messageObj.button && messageObj.button.payload) {
                             console.log("no pase la validacion de chatboot start")
                             if (
