@@ -1,7 +1,5 @@
-const axios = require('axios');
-const { MAYTA_TOKEN, BASE_MAYTA, MAYTA_PRODUCT_ID, MAYTA_PHONE_ID, ERROR, SUCCESS, PHONE_ID, META_PHONE_ID } = require('../config/constants');
+const {  ERROR, SUCCESS, META_PHONE_ID } = require('../config/constants');
 const Utility = require('./utility.services');
-const rp = require('request-promise-native');
 const fetch = require('node-fetch');
 
 class MetaApi {
@@ -10,18 +8,37 @@ class MetaApi {
     }
 
 
-    static async enviarWhatsAppPorApiOficial(telefono, texto, type = "text", url = "", templateName = "") {
-        const objEnvio = {
+    static async enviarWhatsAppPorApiOficial(telefono, type = "text", texto , buttonActions = "", templateName = "") {
+        console.log("enviarWhatsAppPorApiOficial")
+        console.log(telefono , type , texto , buttonActions , templateName)
+        console.log("enviarWhatsAppPorApiOficial2")
+
+        let objEnvio = {
             messaging_product: "whatsapp",
-            to: "51941590216",
+            to: telefono,
             type: type,
-            template: {
-                name: templateName,
-                language: {
-                    code: "es"
+        };
+        console.log("enviarWhatsAppPorApiOficial3", objEnvio)
+        // Para Texto
+
+        if(type === "text"){
+            objEnvio.text = {
+                body: texto
+            }
+        }
+        // Para botones
+        else if(type === "interactive"){
+            objEnvio.interactive = {
+                type: "button",
+                body: {
+                    text: texto,
+                },
+                action: {
+                    buttons: buttonActions
                 }
             }
-        };
+        }
+
 
         
         return await this.peticionClientWhatsAppBusiness(objEnvio);

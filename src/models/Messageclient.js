@@ -25,7 +25,16 @@ const {
     CHATBOOT_STEP_RECOJODATE,
     CHATBOOT_STEP_SCHEDULEDDATE,
     CHATBOOT_STEP_SELECTPRODUCT,
-    NAME_TEMPLATE_STEP_ONE
+    NAME_TEMPLATE_STEP_ONE,
+    TYPE_MESSAGE_META_RECIVE_TEXT,
+    TYPE_MESSAGE_META_RECIVE_BUTTON,
+    NAME_TEMPLATE_STEP_TWO_INMEDIATO,
+    PROVEEDOR_META,
+    CHOOSE_PRODUCTS_TXT_META,
+    DELIVERY_UPDATE_ORDER_TXT_META,
+    DELIVERY_CONFIRM_ORDER_TXT_META,
+    DELIVERY_PAYMENT_CE_TXT_META,
+    DELIVERY_PAYMENT_CP_TXT_META
 } = require('../config/constants');
 const MessageClienteSchema = require('../schemas/messageCliente.schema');
 const Security = require('../services/security.services')
@@ -64,7 +73,7 @@ class MessageclientModel {
     messageclient_dateorder;
     messageclient_montominimo;
     messageclient_cupondescuentojson;
-
+    messageclient_proveedorWhastapp;
 
     constructor(lastMessage = null) {
         // super();
@@ -102,6 +111,7 @@ class MessageclientModel {
         this.messageclient_dateorder = lastMessage?.messageclient_dateorder || null;
         this.messageclient_montominimo = lastMessage?.messageclient_montominimo || null;
         this.messageclient_cupondescuentojson = lastMessage?.messageclient_cupondescuentojson || null;
+        this.messageclient_proveedorWhastapp = lastMessage?.messageclient_proveedorWhastapp || null;
 
     }
 
@@ -116,6 +126,7 @@ class MessageclientModel {
     }
 
     getMessageclient_methodorderTxt() {
+        console.log("aaaaaaaaaaaaaa", this.getMessageclient_methodorder())
         if (this.getMessageclient_methodorder() === DELIVERY_MODALIDAD_INMEDIATA) {
             return DELIVERY_MODALIDAD_INMEDIATA_TXT;
         } else if (this.getMessageclient_methodorder() === DELIVERY_MODALIDAD_PORRECOGER) {
@@ -128,6 +139,10 @@ class MessageclientModel {
 
     getMessageclient_jsonToObj() {
         return JSON.parse(this.getMessageclient_json());
+    }
+
+    getMessageclient_jsonToObjMeta() {
+        return JSON.parse(this.getMessageclient_json()).entry[0].changes[0].value.messages[0];
     }
 
     clearAttr() {
@@ -216,7 +231,13 @@ class MessageclientModel {
         console.log("messageArray", messageArray)
         let message = messageArray["messages"][0]
 
-        this.setMessageclient_message(message["text"].body);
+        // Tipo de variable que llega de META (text, button , etc)
+
+        if(message.type == TYPE_MESSAGE_META_RECIVE_TEXT && message["text"].body){
+            this.setMessageclient_message(message["text"].body);
+        }else if(message.type == TYPE_MESSAGE_META_RECIVE_BUTTON && message["button"].text) {
+            this.setMessageclient_message(message["button"].text);
+        }
 
         // if ("user" in messageArray) {
 
@@ -254,12 +275,11 @@ class MessageclientModel {
         return messageObjWpp;
     }
 
-    static async getTemplateStepOne() {
+    static async getMessageStepOneMeta() {
         let messageObjWpp = new Object();
-        console.log("NAME_TEMPLATE_STEP_ONE", NAME_TEMPLATE_STEP_ONE)
-        messageObjWpp.templateName = NAME_TEMPLATE_STEP_ONE;
-        // messageObjWpp.type = CHATBOOT_TYPEMSG_BTN;
-        messageObjWpp.buttons = await Establishment.getEstablishmentButtonsMetodoDelivery();
+        messageObjWpp.message = "¡Hola! 👋 ¡Bienvenid@ a nuestro chatbot! Estoy aquí para ayudarte a encontrar los productos que amas y brindarte el mejor servicio. Por favor, escoge una modalidad para comenzar:";
+        messageObjWpp.buttons = await Establishment.getEstablishmentButtonsMetodoDeliveryMeta();
+        console.log("messageObjWpp", messageObjWpp)
         return messageObjWpp;
     }
 
@@ -267,12 +287,32 @@ class MessageclientModel {
         return  `${clienteName ? `${clienteName}\n` : ''}Envía tu ubicación o dirección a través  del siguiente link para encontrar el restaurante más cercano \n ${ await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/map-boot-select?phone=${phone}`)} ! \n`;
     }
 
+    static async getMessageStepDeliveryInmediatoMeta(phone, clienteName = null) {
+        let messageObjWpp = new Object();
+        messageObjWpp.message = `${clienteName ? `${clienteName}\n` : ''} Envía tu ubicación o dirección a través  del siguiente link para encontrar el restaurante más cercano \n ${ await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/map-boot-select?phone=${phone}`)} ! \n`;
+        messageObjWpp.buttons = [];
+        return messageObjWpp;
+    }
+
     static async getMessageStepDeliveryRecojoTienda(phone, clienteName = null) {
         return `${clienteName ? `${clienteName}\n` : ''}Para seleccionar tu fecha de recojo, por favor, accede al siguiente enlace: \n${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/inicio?deliveryMethod=2&phone=${phone}`)}`;
+    }
+    static async getMessageStepDeliveryRecojoTiendaMeta(phone, clienteName = null) {
+        let messageObjWpp = new Object();
+        messageObjWpp.message = `${clienteName ? `${clienteName}\n` : ''}Para seleccionar tu fecha de recojo, por favor, accede al siguiente enlace: \n${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/inicio?deliveryMethod=2&phone=${phone}`)}`;
+        messageObjWpp.buttons = [];
+        return messageObjWpp;
     }
 
     static async getMessageStepDeliveryProgramado(phone, clienteName = null) {
         return `${clienteName ? `${clienteName}\n` : ''}Envía tu ubicación o dirección a través del siguiente link para encontrar el restaurante más cercano \n ${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/map-boot-select?phone=${phone}&deliveryMethod=3`)} ! \n`;
+    }
+
+    static async getMessageStepDeliveryProgramadoMeta(phone, clienteName = null) {
+        let messageObjWpp = new Object();
+        messageObjWpp.message = `${clienteName ? `${clienteName}\n` : ''}Envía tu ubicación o dirección a través del siguiente link para encontrar el restaurante más cercano \n ${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/map-boot-select?phone=${phone}&deliveryMethod=3`)} ! \n`;
+        messageObjWpp.buttons = [];
+        return messageObjWpp;
     }
 
     static getMessageStepThree(phone, clienteName = null) {
@@ -300,14 +340,23 @@ class MessageclientModel {
         return messageObjWpp;
     }
 
-    static getMessageStepRecojoTienda(localname) {
-        let message = `Entrega de ${localname} \nEnviaremos tu pedido de comida saludable directamente a tu hogar u oficina. Aquí están algunos detalles importantes que debes tener en cuenta: \n¿Tienes un código de cupón? Escríbelo ahora y obtén un descuento especial. ✨🎁\n`;
+    static getMessageStepRecojoTienda(localname , proveedor) {
+
         let messageObjWpp = new Object();
-        messageObjWpp.message = message;
-        messageObjWpp.type = CHATBOOT_TYPEMSG_BTN;
-        messageObjWpp.buttons = [];
-        messageObjWpp.buttons.push({ id: CHOOSE_PRODUCTS, text: CHOOSE_PRODUCTS_TXT });
-        return messageObjWpp;
+
+        if(proveedor == PROVEEDOR_META){
+             messageObjWpp.message = `Escogio su pedido para recoger en ${localname} \nAquí están algunos detalles importantes que debes tener en cuenta: \n¿Tienes un código de cupón? Escríbelo ahora y obtén un descuento especial. ✨🎁\n`;
+             messageObjWpp.buttons = [{type:'reply', reply:{ id: CHOOSE_PRODUCTS, title: CHOOSE_PRODUCTS_TXT_META }}];
+        }else{
+        
+            let message = `Escogio su pedido para recoger en ${localname} \nAquí están algunos detalles importantes que debes tener en cuenta: \n¿Tienes un código de cupón? Escríbelo ahora y obtén un descuento especial. ✨🎁\n`;
+            messageObjWpp = {
+                 message: message,
+                 type: CHATBOOT_TYPEMSG_BTN,
+                 buttons: [{ id: CHOOSE_PRODUCTS, text: CHOOSE_PRODUCTS_TXT }]
+             };
+         }
+         return messageObjWpp;
     }
 
 
@@ -321,22 +370,44 @@ class MessageclientModel {
         return messageObjWpp;
     }
 
-    static getMessageStepThreev3(localname, costoenvio, montominimo) {
-        let message = `Entrega de ${localname} \nEnviaremos tu pedido de comida saludable directamente a tu hogar u oficina. Aquí están algunos detalles importantes que debes tener en cuenta: \n*Costo del envío: S/ ${Utility.roundNumber(costoenvio)} 🚚💰 \n*Monto mínimo de compra: S/ ${Utility.roundNumber(montominimo)} 💸 \n¿Tienes un código de cupón? Escríbelo ahora y obtén un descuento especial. ✨🎁   \n`;
-        let messageObjWpp = {
-            message: message,
-            type: CHATBOOT_TYPEMSG_BTN,
-            buttons: [{ id: CHOOSE_PRODUCTS, text: CHOOSE_PRODUCTS_TXT }]
-        };
+    static getMessageStepThreev3(localname, costoenvio, montominimo , proveedor) {
+        let messageObjWpp = new Object();
+
+       if(proveedor == PROVEEDOR_META){
+            messageObjWpp.message = `Entrega de ${localname} \nEnviaremos tu pedido de comida directamente a tu hogar u oficina. Aquí están algunos detalles importantes que debes tener en cuenta: \n*Costo del envío: S/ ${Utility.roundNumber(costoenvio)} 🚚💰 \n*Monto mínimo de compra: S/ ${Utility.roundNumber(montominimo)} 💸 \n¿Tienes un código de cupón? Escríbelo ahora y obtén un descuento especial. ✨🎁   \n`
+            messageObjWpp.buttons = [{type:'reply', reply:{ id: CHOOSE_PRODUCTS, title: CHOOSE_PRODUCTS_TXT_META }}];
+       }else{
+       
+            let message = `Entrega de ${localname} \nEnviaremos tu pedido de comida  directamente a tu hogar u oficina. Aquí están algunos detalles importantes que debes tener en cuenta: \n*Costo del envío: S/ ${Utility.roundNumber(costoenvio)} 🚚💰 \n*Monto mínimo de compra: S/ ${Utility.roundNumber(montominimo)} 💸 \n¿Tienes un código de cupón? Escríbelo ahora y obtén un descuento especial. ✨🎁   \n`;
+            messageObjWpp = {
+                message: message,
+                type: CHATBOOT_TYPEMSG_BTN,
+                buttons: [{ id: CHOOSE_PRODUCTS, text: CHOOSE_PRODUCTS_TXT }]
+            };
+        }
         return messageObjWpp;
     }
+
 
     static async getMessageStepFour(phone, clienteName = null, local_id = null) {
         return `${clienteName != null ? clienteName + "\n" : ""}Encuentra todos los productos que necesitas en nuestro catálogo en línea.\n Haz clic en este enlace para comenzar a seleccionar tus productos: \n\n ${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/tienda/${local_id}?phone=${phone}`)}\n\n Gracias por elegirnos. ¡Estamos emocionados de ser parte de tu experiencia de compra! 🛍️👩‍💻`;
     }
 
+    static async getMessageStepFourMeta(phone, clienteName = null, local_id = null) {
+        let messageObjWpp = new Object();
+        messageObjWpp.message = `${clienteName != null ? clienteName + "\n" : ""}Encuentra todos los productos que necesitas en nuestro catálogo en línea.\n Haz clic en este enlace para comenzar a seleccionar tus productos: \n\n ${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/tienda/${local_id}?phone=${phone}`)}\n\n Gracias por elegirnos. ¡Estamos emocionados de ser parte de tu experiencia de compra! 🛍️👩‍💻`;
+        messageObjWpp.buttons = [];
+        return messageObjWpp;
+    }
+
     static async getMessageStepOrderSeguimiento(phone, id) {
         return `Tu pedido con codigo #${id} fue creado con exito.😄👍 \nPara seguir el progreso de tu pedido, por favor, accede al siguiente enlace: \n\nhttps://${ Security.getSubdomain()}.${Security.getDominio()}/tracking/#/tracking/${id} \n\nGracias por elegirnos. ¡Esperamos que disfrutes de tus productos! 🛍️🚚`;
+    }
+    static async getMessageStepOrderSeguimientoMeta(phone, id) {
+        let messageObjWpp = new Object();
+        messageObjWpp.message = `Tu pedido con codigo #${id} fue creado con exito.😄👍 \nPara seguir el progreso de tu pedido, por favor, accede al siguiente enlace: \n\nhttps://${ Security.getSubdomain()}.${Security.getDominio()}/tracking/#/tracking/${id} \n\nGracias por elegirnos. ¡Esperamos que disfrutes de tus productos! 🛍️🚚`;
+        messageObjWpp.buttons = [];
+        return messageObjWpp;
     }
 
     static async getMessageStepOrderRecojoTienda(phone, id, dateOrder) {
@@ -344,7 +415,15 @@ class MessageclientModel {
     dia: ${dateOrder}\n Gracias por elegirnos. ¡Esperamos que disfrutes de tus productos! 🛍️🚚`;
     }
 
-    static getMessageStepConfirmOrderOrUpdateProducts(phone, productos, totalaPagar, formaEntrega, nombre, direccion, costoenvio, dateOrder) {
+    static async getMessageStepOrderRecojoTiendaMeta(phone, id, dateOrder) {
+        let messageObjWpp = new Object();
+        messageObjWpp.message =  `Tu pedido con codigo #${id} fue creado con exito.😄👍 \nPara seguir el progreso de tu pedido, por favor, accede al siguiente enlace: \n\nhttps://${ Security.getSubdomain()}.${Security.getDominio()}/tracking/#/tracking/${id} \n\nRecogeras tu pedido el
+        dia: ${dateOrder}\n Gracias por elegirnos. ¡Esperamos que disfrutes de tus productos! 🛍️🚚`;
+        messageObjWpp.buttons = [];
+        return messageObjWpp;
+    }
+
+    static getMessageStepConfirmOrderOrUpdateProducts(phone, productos, totalaPagar, formaEntrega, nombre, direccion, costoenvio, dateOrder, proveedor) {
         let txtProductos = "";
         if (productos) {
             let productosJson = JSON.parse(productos);
@@ -354,35 +433,45 @@ class MessageclientModel {
                     txtProductos += `${value.pedido_cantidad} ${value.pedido_productodescripcion} S/ ${Utility.roundNumber(value.pedido_importe)} \n`;
                 });
                 txtProductos += "-----------------------\n";
-                if (costoenvio && formaEntrega !== DELIVERY_MODALIDAD_PORRECOGER) {
+                if (costoenvio && formaEntrega !== DELIVERY_MODALIDAD_PORRECOGER_TXT) {
                     txtProductos += `💰 Costo de envío: S/ ${Utility.roundNumber(costoenvio)} 🚚💰 \n \n`;
                 }
 
                 txtProductos += `💰 Total a pagar: S/ ${Utility.roundNumber(totalaPagar)} 💸 \n \n`;
-
+      
                 txtProductos += `🛵 Forma de entrega solicitada:\n ${formaEntrega}\n \n`;
 
                 txtProductos += "👤 Información de contacto: \n";
-                if (nombre && nombre !== "")
-                    txtProductos += `Nombre: ${nombre}\n`;
-                txtProductos += `Dirección: ${direccion} 🏠📍\n`;
+                if (nombre && nombre !== "") txtProductos += `Nombre: ${nombre}\n`;
+                if (direccion && direccion !== "") txtProductos += `Dirección: ${direccion} 🏠📍\n`;
                 txtProductos += `Número de celular: ${phone} 📱📞\n`;
-                if (formaEntrega !== DELIVERY_MODALIDAD_INMEDIATA && dateOrder) {
+
+                if (formaEntrega !== DELIVERY_MODALIDAD_INMEDIATA_TXT && dateOrder) {
+
+
                     if (formaEntrega === DELIVERY_MODALIDAD_PORRECOGER_TXT) {
-                        txtProductos += `🗓️ Fecha de recogo: ${Utility.obtenerFechaConFormato(dateOrder, "d-m-Y H:i")} \n \n`;
+                        txtProductos += `🗓️ Fecha de recogo: ${Utility.obtenerFechaConFormato(dateOrder)} \n \n`;
                     }
                     if (formaEntrega === DELIVERY_MODALIDAD_PROGRAMADO_TXT) {
-                        txtProductos += `🗓️ Fecha de envío: ${Utility.obtenerFechaConFormato(dateOrder, "d-m-Y H:i")} \n \n`;
+
+                        txtProductos += `🗓️ Fecha de envío: ${Utility.obtenerFechaConFormato(dateOrder)} \n \n`;
                     }
                 }
 
             }
         }
-        let messageObjWpp = {
-            message: `${txtProductos} \n\nEscoge una de las opciones:`,
-            type: CHATBOOT_TYPEMSG_BTN,
-            buttons: [{ id: DELIVERY_UPDATE_ORDER, text: DELIVERY_UPDATE_ORDER_TXT }, { id: DELIVERY_CONFIRM_ORDER, text: DELIVERY_CONFIRM_ORDER_TXT }]
-        };
+        let messageObjWpp = {}
+
+        if(proveedor == PROVEEDOR_META) {
+            messageObjWpp.message = `${txtProductos} \n\nEscoge una de las opciones:`,
+            messageObjWpp.buttons = [{type:'reply', reply:{ id: DELIVERY_UPDATE_ORDER, title: DELIVERY_UPDATE_ORDER_TXT_META }}, {type:'reply', reply:{ id: DELIVERY_CONFIRM_ORDER, title: DELIVERY_CONFIRM_ORDER_TXT_META }}];
+
+        } else {
+            messageObjWpp.message = `${txtProductos} \n\nEscoge una de las opciones:`,
+            messageObjWpp.type = CHATBOOT_TYPEMSG_BTN,
+            messageObjWpp.buttons = [{ id: DELIVERY_UPDATE_ORDER, text: DELIVERY_UPDATE_ORDER_TXT }, { id: DELIVERY_CONFIRM_ORDER, text: DELIVERY_CONFIRM_ORDER_TXT }]
+        }
+
         return messageObjWpp;
     }
 
@@ -392,6 +481,16 @@ class MessageclientModel {
             type: CHATBOOT_TYPEMSG_BTN,
             buttons: [{ id: DELIVERY_PAYMENT_CE, text: DELIVERY_PAYMENT_CE_TXT }, { id: DELIVERY_PAYMENT_CP, text: DELIVERY_PAYMENT_CP_TXT }]
         };
+        return messageObjWpp;
+    }
+
+    static getMessageStepConfirmTypePaymentMeta(phone) {
+        let messageObjWpp = {
+            message: "Tu pedido está casí listo, ahora escoge una de las opciones de pago:",
+            buttons:  [{type:'reply', reply:{ id: DELIVERY_PAYMENT_CE, title: DELIVERY_PAYMENT_CE_TXT_META }}, {type:'reply', reply:{ id: DELIVERY_PAYMENT_CP, title: DELIVERY_PAYMENT_CP_TXT_META }}]
+
+        };
+
         return messageObjWpp;
     }
 
@@ -816,6 +915,13 @@ class MessageclientModel {
         this.messageclient_cupondescuentojson = messageclient_cupondescuentojson;
     }
 
+    getMessageclient_proveedorWhastapp() {
+        return this.messageclient_proveedorWhastapp;
+    }
+    setMessageclient_proveedorWhastapp(messageclient_proveedorWhastapp) {
+        this.messageclient_proveedorWhastapp = messageclient_proveedorWhastapp;
+    }
+
     async insert() {
         try {
             const insertData = {};
@@ -845,6 +951,7 @@ class MessageclientModel {
             if (this.messageclient_dateorder) insertData.messageclient_dateorder = this.messageclient_dateorder;
             if (this.messageclient_montominimo) insertData.messageclient_montominimo = this.messageclient_montominimo;
             if (this.messageclient_cupondescuentojson) insertData.messageclient_cupondescuentojson = this.messageclient_cupondescuentojson;
+            if (this.messageclient_proveedorWhastapp) insertData.messageclient_proveedorWhastapp = this.messageclient_proveedorWhastapp;
             const messageClient = new MessageClienteSchema(insertData);
             messageClient.save();
             if (messageClient) {
@@ -937,13 +1044,13 @@ class MessageclientModel {
             query.messageclient_cupondescuentojson = this.messageclient_cupondescuentojson;
           }
           
-        //   console.log("este es",this.messageclient_modelId)
+          console.log("este es",this.messageclient_modelId)
           const result = await MessageClienteSchema.updateOne(
             { _id: this.messageclient_modelId },
             query
           );
 
-        //   console.log(result)
+          console.log("sadasdsads",result)
       
           return result.ok === 1;
         } catch (error) {

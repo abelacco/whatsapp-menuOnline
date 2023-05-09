@@ -1,4 +1,4 @@
-const { DELIVERY_MODALIDAD_INMEDIATA, DELIVERY_MODALIDAD_PROGRAMADO, DELIVERY_MODALIDAD_PORRECOGER, DELIVERY_MODALIDAD_INMEDIATA_TXT, DELIVERY_MODALIDAD_PROGRAMADO_TXT, DELIVERY_MODALIDAD_PORRECOGER_TXT, PARAM_ESTADO_TODOS, PARAM_TODOS } = require("../config/constants");
+const { DELIVERY_MODALIDAD_INMEDIATA, DELIVERY_MODALIDAD_PROGRAMADO, DELIVERY_MODALIDAD_PORRECOGER, DELIVERY_MODALIDAD_INMEDIATA_TXT, DELIVERY_MODALIDAD_PROGRAMADO_TXT, DELIVERY_MODALIDAD_PORRECOGER_TXT, PARAM_ESTADO_TODOS, PARAM_TODOS, DELIVERY_MODALIDAD_INMEDIATA_TXT_META, DELIVERY_MODALIDAD_PROGRAMADO_TXT_META, DELIVERY_MODALIDAD_PORRECOGER_TXT_META } = require("../config/constants");
 const EstablishmentSchema = require("../schemas/establishment.schema");
 
 class Establishment {
@@ -31,6 +31,39 @@ class Establishment {
     }
     if (estaAbiertoParaRecojo) {
       buttons.push({ id: DELIVERY_MODALIDAD_PORRECOGER, text: DELIVERY_MODALIDAD_PORRECOGER_TXT });
+    }
+
+    return buttons;
+  }
+
+  static async getEstablishmentButtonsMetodoDeliveryMeta() {
+    const buttons = [];
+    const establishments = await this.getAll();
+    let estaAbiertoParaDelivery = false;
+    let estaAbiertoParaProgramarPedidos = false;
+    let estaAbiertoParaRecojo = false;
+
+    establishments.forEach((value) => {
+      const datosLocal = JSON.parse(value.establishment_localjson);
+      if (datosLocal.estaAbiertoParaDelivery) {
+        estaAbiertoParaDelivery = true;
+      }
+      if (datosLocal.estaAbiertoParaProgramarPedidos) {
+        estaAbiertoParaProgramarPedidos = true;
+      }
+      if (datosLocal.estaAbiertoParaRecojo) {
+        estaAbiertoParaRecojo = true;
+      }
+    });
+
+    if (estaAbiertoParaDelivery) {
+      buttons.push({ type: 'reply' , reply: {id: DELIVERY_MODALIDAD_INMEDIATA, title: DELIVERY_MODALIDAD_INMEDIATA_TXT_META }});
+    }
+    if (estaAbiertoParaProgramarPedidos) {
+      buttons.push({ type: 'reply' , reply: {id: DELIVERY_MODALIDAD_PROGRAMADO, title: DELIVERY_MODALIDAD_PROGRAMADO_TXT_META }});
+    }
+    if (estaAbiertoParaRecojo) {
+      buttons.push({ type: 'reply' , reply: {id: DELIVERY_MODALIDAD_PORRECOGER, title: DELIVERY_MODALIDAD_PORRECOGER_TXT_META }});
     }
 
     return buttons;

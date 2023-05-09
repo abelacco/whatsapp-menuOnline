@@ -1,4 +1,5 @@
 const axios = require('axios');
+const Security = require('./security.services');
 
 
 class Utility {
@@ -120,15 +121,7 @@ class Utility {
     }
 
      static getDiferenciaHoras(dateStart, dateEnd) {
-      // try {
-      //   const start = this.sqlInt(dateStart);
-      //   const end = this.sqlInt(dateEnd);
-      //   const difference = end - start;
-      //   return difference / 3600;
-      // } catch (err) {
-      //   console.log(err);
-      // }
-      // return 0;
+
       const diffInMilliseconds = Math.abs(dateEnd - dateStart);
       const hours = diffInMilliseconds / (1000 * 60 * 60);
       return hours;
@@ -190,25 +183,26 @@ class Utility {
       }
     }
 
-    static obtenerFechaConFormato(stringFecha, formato = "DD/MM/YYYY") {
-      if (!stringFecha || stringFecha == null) return "";
-    
-      try {
-        const date = new Date(stringFecha);
-        const options = { 
-          year: 'numeric', 
-          month: '2-digit', 
-          day: '2-digit' 
-        };
-        const formattedDate = new Intl.DateTimeFormat('es-PE', options).format(date);
-        const formattedParts = formattedDate.split('/');
-        const formatted = formato.replace('DD', formattedParts[0]).replace('MM', formattedParts[1]).replace('YYYY', formattedParts[2]);
-        return formatted;
-      } catch (error) {
-        console.error(error);
-        return "";
-      }
+    static obtenerFechaConFormato(dateOrder) {
+      const date = new Date(dateOrder);
+      const day = date.getDate().toString().padStart(2, "0");
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const year = date.getFullYear().toString().substr(-2);
+      let hour = date.getHours().toString().padStart(2, "0");
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+      const ampm = hour >= 12 ? 'PM' : 'AM';
+      hour = hour % 12;
+      hour = hour ? hour : 12;
+      const formattedDate = `${day}/${month}/${year} ${hour}:${minutes} ${ampm}`;
+      return formattedDate
     }
+
+
+    static  urlAgregarDelivery() {
+      const urlAgregar =  'http://' + Security.getSubdomain() + '.' + Security.getDominio() + '/restaurant/facebook/rest/delivery/agregarDeliveryPorIntegracion';
+      return urlAgregar;
+    }
+    
     
     
     

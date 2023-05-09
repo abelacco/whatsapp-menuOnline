@@ -1,10 +1,11 @@
 const MessageclientModel = require('../models/Messageclient'); // Ensure to replace with the correct path to your model
 // const MessageclientStore = require('../store/messagecliente.store'); // Ensure to replace with the correct path to your store
-const { SUCCESS, DANGER, CHATBOOT_TYPEMSG_BTN, CHATBOOT_STEP_START, ACTIVO, CHATBOOT_STEP_LOCATION, CHATBOOT_STEP_RECOJODATE, CHATBOOT_STEP_SCHEDULEDDATE, CHOOSE_PRODUCTS, CHOOSE_PRODUCTS_TXT, CHATBOOT_STEP_SELECTPRODUCT, CHATBOOT_TYPEMSG_TEXT, DELIVERY_PAYMENT_CE, DELIVERY_PAYMENT_CE_TXT, DELIVERY_PAYMENT_CP, DELIVERY_PAYMENT_CP_TXT, DELIVERY_MODALIDAD_INMEDIATA, DELIVERY_MODALIDAD_INMEDIATA_TXT, CHATBOOT_STEP_METHODDELIVERY, DELIVERY_MODALIDAD_PROGRAMADO, DELIVERY_MODALIDAD_PROGRAMADO_TXT, DELIVERY_MODALIDAD_PORRECOGER, DELIVERY_MODALIDAD_PORRECOGER_TXT, CHATBOOT_STEP_LINEOUT, CHATBOOT_STEP_SELECTPAYMENT, ERROR, MESSAGE_STEP_DONTPERMISS, DELIVERY_UPDATE_ORDER, DELIVERY_UPDATE_ORDER_TXT, DELIVERY_CONFIRM_ORDER, DELIVERY_CONFIRM_ORDER_TXT } = require('../config/constants');
+const { SUCCESS, DANGER, CHATBOOT_TYPEMSG_BTN, CHATBOOT_STEP_START, ACTIVO, CHATBOOT_STEP_LOCATION, CHATBOOT_STEP_RECOJODATE, CHATBOOT_STEP_SCHEDULEDDATE, CHOOSE_PRODUCTS, CHOOSE_PRODUCTS_TXT, CHATBOOT_STEP_SELECTPRODUCT, CHATBOOT_TYPEMSG_TEXT, DELIVERY_PAYMENT_CE, DELIVERY_PAYMENT_CE_TXT, DELIVERY_PAYMENT_CP, DELIVERY_PAYMENT_CP_TXT, DELIVERY_MODALIDAD_INMEDIATA, DELIVERY_MODALIDAD_INMEDIATA_TXT, CHATBOOT_STEP_METHODDELIVERY, DELIVERY_MODALIDAD_PROGRAMADO, DELIVERY_MODALIDAD_PROGRAMADO_TXT, DELIVERY_MODALIDAD_PORRECOGER, DELIVERY_MODALIDAD_PORRECOGER_TXT, CHATBOOT_STEP_LINEOUT, CHATBOOT_STEP_SELECTPAYMENT, ERROR, MESSAGE_STEP_DONTPERMISS, DELIVERY_UPDATE_ORDER, DELIVERY_UPDATE_ORDER_TXT, DELIVERY_CONFIRM_ORDER, DELIVERY_CONFIRM_ORDER_TXT, PROVEEDOR_MAYTAPI, PROVEEDOR_META, TYPE_MESSAGE_META_SEND_INTERACTIVE } = require('../config/constants');
 const Utility = require('../services/utility.services');
 const Security = require('../services/security.services');
 const Maytapi = require('../services/maytapi.service');
 const Establishment = require('../services/establishment.services');
+const MetaApi = require('../services/metapi.services');
 
 
 const add = async (req, res) => {
@@ -98,6 +99,10 @@ const addMessageFromWebHoook = async (messageComplete) => {
 
     // seteamos la propiedades de messageclient segun el messagecomplete
     obj.setMessageclient_json(messageComplete);
+    // Verificamos si usa de proveedor Maytapi o Meta
+    messageComplete.entry
+    ?obj.setMessageclient_proveedorWhastapp(PROVEEDOR_META)
+    :obj.setMessageclient_proveedorWhastapp(PROVEEDOR_MAYTAPI);
 
 
     if (!obj.mensajeValido()) {
@@ -402,8 +407,9 @@ async function messageLatLngDateClient(objParametros) {
 
     if (lastMessage != null && lastMessage.getMessageclient_step() == CHATBOOT_STEP_METHODDELIVERY && lastMessage.getMessageclient_methodorder() != null && tipo == SUCCESS) 
     {
+        let proveedor = lastMessage.getMessageclient_proveedorWhastapp();
 
-
+        console.log("entro a casuisticas")
         let objGeo = {
             latitude: objParametros.address_latitude,
             longitude: objParametros.address_longitude,
@@ -412,13 +418,15 @@ async function messageLatLngDateClient(objParametros) {
         };
         // Verify store availability based on address
         if (lastMessage.getMessageclient_methodorder() == DELIVERY_MODALIDAD_INMEDIATA) {
+            console.log("entro a delivery inmediato despues de ingresar coordenadas")
 
-            // let messageClient = Object.assign({}, lastMessage);
             let objMessageStep = MessageclientModel.getMessageStepThreev3(
                 objParametros.local_nombrecomercial,
                 objParametros.messageclient_costoenvio,
-                objParametros.messageclient_montominimo
+                objParametros.messageclient_montominimo,
+                proveedor
             );
+
             messageClient.setMessageclient_modelId(lastMessage.messageclient_modelId);
             messageClient.setMessageclient_status(ACTIVO);
             messageClient.setMessageclient_step(CHATBOOT_STEP_LOCATION);
@@ -433,8 +441,10 @@ async function messageLatLngDateClient(objParametros) {
             messageClient.setMessageclient_montominimo(objParametros.messageclient_montominimo);
             messageClient.setMessageclient_id(lastMessage.getMessageclient_id());
             messageClient.update();
-
-            Utility.logs.push(Maytapi.enviarMensajePorWhatsapp(objMessageStep, messageClient.getMessageclient_phone(), CHATBOOT_TYPEMSG_BTN));
+            
+            proveedor == PROVEEDOR_META
+            ?  Utility.logs.push(MetaApi.enviarWhatsAppPorApiOficial(messageClient.getMessageclient_phone(), TYPE_MESSAGE_META_SEND_INTERACTIVE , objMessageStep.message , objMessageStep.buttons, ""))
+            : Utility.logs.push(Maytapi.enviarMensajePorWhatsapp(objMessageStep, messageClient.getMessageclient_phone(), CHATBOOT_TYPEMSG_BTN));
 
             tipo = SUCCESS;
             mensajes.push("Dirección dentro de la zon de reparto.");
@@ -442,13 +452,15 @@ async function messageLatLngDateClient(objParametros) {
 
         else if (lastMessage.getMessageclient_methodorder() == DELIVERY_MODALIDAD_PROGRAMADO) {
 
-            // let messageClient = Object.assign({}, lastMessage);
+
             let objMessageStep = MessageclientModel.getMessageStepThreev3(
                 objParametros.local_nombrecomercial,
                 objParametros.messageclient_costoenvio,
-                objParametros.messageclient_montominimo
+                objParametros.messageclient_montominimo,
+                proveedor
             );
 
+            messageClient.setMessageclient_modelId(lastMessage.messageclient_modelId);
             messageClient.setMessageclient_status(ACTIVO);
             messageClient.setMessageclient_step(CHATBOOT_STEP_SCHEDULEDDATE);
             messageClient.setMessageclient_date(Utility.getFechaHoraActual());
@@ -462,9 +474,13 @@ async function messageLatLngDateClient(objParametros) {
             messageClient.setMessageclient_montominimo(objParametros.messageclient_montominimo);
             messageClient.setMessageclient_dateorder(objParametros.date);
             messageClient.setMessageclient_id(lastMessage.getMessageclient_id());
+            console.log("comienza update")
             messageClient.update();
 
-            Utility.logs.push(Maytapi.enviarMensajePorWhatsapp(objMessageStep, messageClient.getMessageclient_phone(), CHATBOOT_TYPEMSG_BTN));
+            proveedor == PROVEEDOR_META
+            ?  Utility.logs.push(MetaApi.enviarWhatsAppPorApiOficial(messageClient.getMessageclient_phone(), TYPE_MESSAGE_META_SEND_INTERACTIVE , objMessageStep.message , objMessageStep.buttons, ""))
+            : Utility.logs.push(Maytapi.enviarMensajePorWhatsapp(objMessageStep, messageClient.getMessageclient_phone(), CHATBOOT_TYPEMSG_BTN));
+
             tipo = SUCCESS;
             mensajes.push("Dirección dentro de la zon de reparto.");
         }
@@ -477,8 +493,9 @@ async function messageLatLngDateClient(objParametros) {
 
                     let localEncontrado = JSON.parse(localObj.establishment_localjson);
 
-                    // let messageClient = Object.assign({}, lastMessage);
-                    let objMessageStep = MessageclientModel.getMessageStepRecojoTienda(localEncontrado.local_nombrecomercial);
+                    let objMessageStep = MessageclientModel.getMessageStepRecojoTienda(localEncontrado.local_nombrecomercial , proveedor);
+                   
+                    messageClient.setMessageclient_modelId(lastMessage.messageclient_modelId);
                     messageClient.setMessageclient_status(ACTIVO);
                     messageClient.setMessageclient_step(CHATBOOT_STEP_RECOJODATE);
                     messageClient.setMessageclient_date(Utility.getFechaHoraActual());
@@ -491,9 +508,15 @@ async function messageLatLngDateClient(objParametros) {
                     messageClient.setMessageclient_addressreference(objGeo.addressreference);
                     messageClient.setMessageclient_dateorder(objParametros.date);
                     messageClient.setMessageclient_id(lastMessage.getMessageclient_id());
+                    
+                    console.log("comienza update")
+
                     messageClient.update();
 
-                    Utility.logs.push(Maytapi.enviarMensajePorWhatsapp(objMessageStep, messageClient.getMessageclient_phone(), CHATBOOT_TYPEMSG_BTN));
+                    proveedor == PROVEEDOR_META
+                    ?  Utility.logs.push(MetaApi.enviarWhatsAppPorApiOficial(messageClient.getMessageclient_phone(), TYPE_MESSAGE_META_SEND_INTERACTIVE , objMessageStep.message , objMessageStep.buttons, ""))
+                    : Utility.logs.push(Maytapi.enviarMensajePorWhatsapp(objMessageStep, messageClient.getMessageclient_phone(), CHATBOOT_TYPEMSG_BTN));
+
                     tipo = SUCCESS;
                 }
                 else {
@@ -535,7 +558,7 @@ async function messageProductClient(objParametros) {
     let messageClient = new MessageclientModel();
     messageClient.setMessageclient_phone(objParametros.phone);
     let lastMessage = await messageClient.getLastMessageByPhone();
-
+console.log("lastMessage", lastMessage)
     if (!objParametros.hasOwnProperty('products')) {
         tipo = ERROR;
         mensajes.push("Ingrese productos.");
@@ -546,15 +569,17 @@ async function messageProductClient(objParametros) {
         mensajes.push("Ingrese un telefono valido.");
     }
 
+
     if (mensajes.length === 0) {
-        // let messageAux = new Messageclient();
-        // messageAux.messageclient_phone = objParametros.phone;
-        // let lastMessage = messageAux.getLastMessageByPhone();
+
         if (lastMessage != null &&
             (lastMessage.getMessageclient_step() == CHATBOOT_STEP_SELECTPRODUCT || lastMessage.getMessageclient_step() == CHATBOOT_STEP_SELECTPAYMENT)
         ) {
-            // let messageClient = Object.assign({}, lastMessage);
+            console.log("entro a enviar mensaje")
+            let proveedor = lastMessage.getMessageclient_proveedorWhastapp();
             messageClient.setMessageclient_modelId(lastMessage.messageclient_modelId);
+            messageClient.setMessageclient_dateorder(lastMessage.messageclient_dateorder);
+            messageClient.setMessageclient_methodorder(lastMessage.messageclient_methodorder);
             messageClient.setMessageclient_status(ACTIVO);
             messageClient.setMessageclient_step(CHATBOOT_STEP_SELECTPRODUCT);
             messageClient.setMessageclient_date(Utility.getFechaHoraActual());
@@ -562,10 +587,16 @@ async function messageProductClient(objParametros) {
             messageClient.setMessageclient_costoproductos(objParametros.totalproductos);
             messageClient.setMessageclient_total(messageClient.getMessageclient_costoproductos() + messageClient.getMessageclient_costoenvio());
             messageClient.setMessageclient_id(lastMessage.getMessageclient_id());
-            let objMessageStep = MessageclientModel.getMessageStepConfirmOrderOrUpdateProducts(messageClient.getMessageclient_phone(), messageClient.getMessageclient_productjson(), messageClient.getMessageclient_total(), messageClient.getMessageclient_methodorderTxt(), messageClient.getMessageclient_fullname(), messageClient.getMessageclient_address(), messageClient.getMessageclient_costoenvio(), messageClient.getMessageclient_dateorder());
+            let objMessageStep = MessageclientModel.getMessageStepConfirmOrderOrUpdateProducts(messageClient.getMessageclient_phone(), messageClient.getMessageclient_productjson(), messageClient.getMessageclient_total(), messageClient.getMessageclient_methodorderTxt(), messageClient.getMessageclient_fullname(), messageClient.getMessageclient_address(), messageClient.getMessageclient_costoenvio(), messageClient.getMessageclient_dateorder(), proveedor) ;
             messageClient.setMessageclient_textsendwpp(JSON.stringify(objMessageStep));
             messageClient.update();
-            Utility.logs.push(Maytapi.enviarMensajePorWhatsapp(objMessageStep, messageClient.getMessageclient_phone(), CHATBOOT_TYPEMSG_BTN));
+
+            proveedor == PROVEEDOR_META
+            ?  Utility.logs.push(MetaApi.enviarWhatsAppPorApiOficial(messageClient.getMessageclient_phone(), TYPE_MESSAGE_META_SEND_INTERACTIVE , objMessageStep.message , objMessageStep.buttons, ""))
+            :  Utility.logs.push(Maytapi.enviarMensajePorWhatsapp(objMessageStep, messageClient.getMessageclient_phone(), CHATBOOT_TYPEMSG_BTN));
+
+
+
             tipo = SUCCESS;
             mensajes.push("Productos agregados.");
         } else {

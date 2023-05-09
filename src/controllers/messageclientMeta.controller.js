@@ -1,5 +1,5 @@
 const MessageclientModel = require('../models/Messageclient'); // Ensure to replace with the correct path to your model
-const { SUCCESS, DANGER, CHATBOOT_TYPEMSG_BTN, CHATBOOT_STEP_START, ACTIVO, CHATBOOT_STEP_LOCATION, CHATBOOT_STEP_RECOJODATE, CHATBOOT_STEP_SCHEDULEDDATE, CHOOSE_PRODUCTS, CHOOSE_PRODUCTS_TXT, CHATBOOT_STEP_SELECTPRODUCT, CHATBOOT_TYPEMSG_TEXT, DELIVERY_PAYMENT_CE, DELIVERY_PAYMENT_CE_TXT, DELIVERY_PAYMENT_CP, DELIVERY_PAYMENT_CP_TXT, DELIVERY_MODALIDAD_INMEDIATA, DELIVERY_MODALIDAD_INMEDIATA_TXT, CHATBOOT_STEP_METHODDELIVERY, DELIVERY_MODALIDAD_PROGRAMADO, DELIVERY_MODALIDAD_PROGRAMADO_TXT, DELIVERY_MODALIDAD_PORRECOGER, DELIVERY_MODALIDAD_PORRECOGER_TXT, CHATBOOT_STEP_LINEOUT, CHATBOOT_STEP_SELECTPAYMENT, ERROR, MESSAGE_STEP_DONTPERMISS, DELIVERY_UPDATE_ORDER, DELIVERY_UPDATE_ORDER_TXT, DELIVERY_CONFIRM_ORDER, DELIVERY_CONFIRM_ORDER_TXT, TYPE_TEMPLATE } = require('../config/constants');
+const { SUCCESS, DANGER, CHATBOOT_TYPEMSG_BTN, CHATBOOT_STEP_START, ACTIVO, CHATBOOT_STEP_LOCATION, CHATBOOT_STEP_RECOJODATE, CHATBOOT_STEP_SCHEDULEDDATE, CHOOSE_PRODUCTS, CHOOSE_PRODUCTS_TXT, CHATBOOT_STEP_SELECTPRODUCT, CHATBOOT_TYPEMSG_TEXT, DELIVERY_PAYMENT_CE, DELIVERY_PAYMENT_CE_TXT, DELIVERY_PAYMENT_CP, DELIVERY_PAYMENT_CP_TXT, DELIVERY_MODALIDAD_INMEDIATA, DELIVERY_MODALIDAD_INMEDIATA_TXT, CHATBOOT_STEP_METHODDELIVERY, DELIVERY_MODALIDAD_PROGRAMADO, DELIVERY_MODALIDAD_PROGRAMADO_TXT, DELIVERY_MODALIDAD_PORRECOGER, DELIVERY_MODALIDAD_PORRECOGER_TXT, CHATBOOT_STEP_LINEOUT, CHATBOOT_STEP_SELECTPAYMENT, ERROR, MESSAGE_STEP_DONTPERMISS, DELIVERY_UPDATE_ORDER, DELIVERY_UPDATE_ORDER_TXT, DELIVERY_CONFIRM_ORDER, DELIVERY_CONFIRM_ORDER_TXT, TYPE_TEMPLATE, TYPE_MESSAGE_META_SEND_TEXT, TYPE_MESSAGE_META_SEND_TEMPLATE, DELIVERY_MODALIDAD_INMEDIATA_META, DELIVERY_MODALIDAD_INMEDIATA_TXT_META, TYPE_MESSAGE_META_SEND_INTERACTIVE, DELIVERY_MODALIDAD_PROGRAMADO_TXT_META, DELIVERY_MODALIDAD_PORRECOGER_TXT_META, PROVEEDOR_META, PROVEEDOR_MAYTAPI, TYPE_MESSAGE_META_RECIVE_TEXT, DELIVERY_UPDATE_ORDER_TXT_META, DELIVERY_CONFIRM_ORDER_TXT_META, DELIVERY_PAYMENT_CE_TXT_META, DELIVERY_PAYMENT_CP_TXT_META, CHATBOOT_STEP_CREATEORDER } = require('../config/constants');
 const Utility = require('../services/utility.services');
 const Security = require('../services/security.services');
 // const Maytapi = require('../services/maytapi.service');
@@ -20,7 +20,10 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
     // seteamos la propiedades de messageclient segun el messagecomplete
     console.log("messageComplete", messageComplete)
     obj.setMessageclient_json( messageComplete);
-
+    messageComplete.entry
+        ?obj.setMessageclient_proveedorWhastapp(PROVEEDOR_META)
+        :obj.setMessageclient_proveedorWhastapp(PROVEEDOR_MAYTAPI);
+    console.log("asasdsaddsa",obj.getMessageclient_proveedorWhastapp())
     if (!obj.mensajeValidoMeta()) {
         // Utility.logs.push('No es un mensaje valido.');
         mensajes.push('No es un mensaje valido.');
@@ -44,73 +47,80 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
             }
             console.log("step", step)
             let objMessageStep = null;
-            let typeMessage = CHATBOOT_TYPEMSG_BTN;
+            let typeMessageToSend = TYPE_MESSAGE_META_SEND_INTERACTIVE;
             let stepNext = CHATBOOT_STEP_START;
-            let messageObj = obj.getMessageclient_jsonToObj();
+            let messageObj = obj.getMessageclient_jsonToObjMeta();
+            console.log("messageObj", messageObj)
             if (obj.estaDentroDeltiempo(lastMessage.getMessageclient_date()) && !obj.esMessageReset()) {
 
                 switch (step) {
                     case CHATBOOT_STEP_START:
                         console.log("aca empiezo ")
-                        if (messageObj.message && messageObj.message.payload) {
+                        if (messageObj.button && messageObj.button.payload) {
+
                             if (
-                                messageObj.message.payload == DELIVERY_MODALIDAD_INMEDIATA &&
-                                messageObj.message.text == DELIVERY_MODALIDAD_INMEDIATA_TXT
+                                messageObj.button.payload == DELIVERY_MODALIDAD_INMEDIATA &&
+                                messageObj.button.text == DELIVERY_MODALIDAD_INMEDIATA_TXT_META
                             ) {
-                                objMessageStep = await MessageclientModel.getMessageStepDeliveryInmediato(
+                                console.log("entre para enviar template de mod inmeadiato")
+                                objMessageStep = await MessageclientModel.getMessageStepDeliveryInmediatoMeta(
                                     obj.getMessageclient_phone(),
                                     obj.getMessageclient_fullname()
                                 );
                                 obj.setMessageclient_methodorder(DELIVERY_MODALIDAD_INMEDIATA);
                                 stepNext = CHATBOOT_STEP_METHODDELIVERY;
-                                typeMessage = CHATBOOT_TYPEMSG_TEXT;
+                                typeMessageToSend = TYPE_MESSAGE_META_SEND_TEXT;
                             }
                             else if (
-                                messageObj.message.payload == DELIVERY_MODALIDAD_PROGRAMADO &&
-                                messageObj.message.text == DELIVERY_MODALIDAD_PROGRAMADO_TXT
+                                 messageObj.button.payload == DELIVERY_MODALIDAD_PROGRAMADO &&
+                                messageObj.button.text == DELIVERY_MODALIDAD_PROGRAMADO_TXT_META
                             ) {
-                                objMessageStep = await MessageclientModel.getMessageStepDeliveryProgramado(
+                                objMessageStep = await MessageclientModel.getMessageStepDeliveryProgramadoMeta(
                                     obj.getMessageclient_phone(),
                                     obj.getMessageclient_fullname()
                                 );
                                 obj.setMessageclient_methodorder(DELIVERY_MODALIDAD_PROGRAMADO);
                                 stepNext = CHATBOOT_STEP_METHODDELIVERY;
-                                typeMessage = CHATBOOT_TYPEMSG_TEXT;
+                                typeMessageToSend = TYPE_MESSAGE_META_SEND_TEXT;
                             } else if (
-                                messageObj.message.payload == DELIVERY_MODALIDAD_PORRECOGER &&
-                                messageObj.message.text == DELIVERY_MODALIDAD_PORRECOGER_TXT
+                                 messageObj.button.payload == DELIVERY_MODALIDAD_PORRECOGER &&
+                                messageObj.button.text == DELIVERY_MODALIDAD_PORRECOGER_TXT_META
                             ) {
-                                objMessageStep = await MessageclientModel.getMessageStepDeliveryRecojoTienda(
+                                objMessageStep = await MessageclientModel.getMessageStepDeliveryRecojoTiendaMeta(
                                     obj.getMessageclient_phone(),
                                     obj.getMessageclient_fullname()
                                 );
                                 obj.setMessageclient_methodorder(DELIVERY_MODALIDAD_PORRECOGER);
                                 stepNext = CHATBOOT_STEP_METHODDELIVERY;
-                                typeMessage = CHATBOOT_TYPEMSG_TEXT;
+                                typeMessageToSend = TYPE_MESSAGE_META_SEND_TEXT;
                             }
                         }
                         break;
 
                     case CHATBOOT_STEP_LOCATION:// No se utiliza
                     case CHATBOOT_STEP_RECOJODATE:
+                        console.log("entre a recojodate")
                     case CHATBOOT_STEP_SCHEDULEDDATE:
+                        console.log("entre a CHATBOOT_STEP_SCHEDULEDDATE")
+                        console.log(messageObj)
+
                         // Validar el cupón aquí
                         if (
-                            messageObj.message.payload &&
-                            messageObj.message.payload == CHOOSE_PRODUCTS &&
-                            messageObj.message.text == CHOOSE_PRODUCTS_TXT
+                             messageObj.button.payload &&
+                             messageObj.button.payload == CHOOSE_PRODUCTS &&
+                             messageObj.button.text == CHOOSE_PRODUCTS_TXT
                         ) {
                             obj.setMessageclient_cupon("");
-                        } else if (messageObj.message.text) {
+                        } else if (messageObj.type == TYPE_MESSAGE_META_RECIVE_TEXT) {
                             obj.setMessageclient_cupon(messageObj.message.text);
                         }
-                        objMessageStep = await MessageclientModel.getMessageStepFour(
+                        objMessageStep = await MessageclientModel.getMessageStepFourMeta(
                             obj.getMessageclient_phone(),
                             obj.getMessageclient_fullname(),
                             obj.getMessageclient_localid()
                         );
                         stepNext = CHATBOOT_STEP_SELECTPRODUCT;
-                        typeMessage = CHATBOOT_TYPEMSG_TEXT;
+                        typeMessageToSend = TYPE_MESSAGE_META_SEND_TEXT;
                         break;
 
                     case CHATBOOT_STEP_SELECTPRODUCT:
@@ -126,85 +136,91 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                             obj.getMessageclient_dateorder()
                         );
                         stepNext = CHATBOOT_STEP_SELECTPRODUCT;
-                        typeMessage = CHATBOOT_TYPEMSG_BTN;
-                        if (messageObj.message && messageObj.message.payload) {
+                        typeMessageToSend = TYPE_MESSAGE_META_SEND_TEXT;
+                        if (messageObj.button && messageObj.button.payload) {
                             if (
-                                messageObj.message.payload == DELIVERY_UPDATE_ORDER &&
-                                messageObj.message.text == DELIVERY_UPDATE_ORDER_TXT
+                                messageObj.button.payload == DELIVERY_UPDATE_ORDER &&
+                                messageObj.button.text == DELIVERY_UPDATE_ORDER_TXT_META
                             ) {
-                                objMessageStep = await MessageclientModel.getMessageStepFour(
+                                objMessageStep = await MessageclientModel.getMessageStepFourMeta(
                                     obj.getMessageclient_phone(),
                                     obj.getMessageclient_fullname(),
                                     obj.getMessageclient_localid()
                                 );
                                 stepNext = CHATBOOT_STEP_SELECTPRODUCT;
-                                typeMessage = CHATBOOT_TYPEMSG_TEXT;
+                                typeMessageToSend = CHATBOOT_TYPEMSG_TEXT;
                             } else if (
-                                messageObj.message.payload == DELIVERY_CONFIRM_ORDER &&
-                                messageObj.message.text == DELIVERY_CONFIRM_ORDER_TXT
+                                messageObj.button.payload == DELIVERY_CONFIRM_ORDER &&
+                                messageObj.button.text == DELIVERY_CONFIRM_ORDER_TXT_META
                             ) {
                                 // create order by crud
-                                objMessageStep = MessageclientModel.getMessageStepConfirmTypePayment(
+                                objMessageStep = MessageclientModel.getMessageStepConfirmTypePaymentMeta(
                                     obj.getMessageclient_phone()
                                 );
                                 stepNext = CHATBOOT_STEP_SELECTPAYMENT;
-                                typeMessage = CHATBOOT_TYPEMSG_BTN;
+                                typeMessageToSend = TYPE_MESSAGE_META_SEND_INTERACTIVE;
                             }
                         }
                         break;
 
                     case CHATBOOT_STEP_SELECTPAYMENT:
                         // aca se crea la orden
-                        objMessageStep = await MessageclientModel.getMessageStepConfirmTypePayment(
+                        objMessageStep = await MessageclientModel.getMessageStepConfirmTypePaymentMeta(
                             obj.getMessageclient_phone()
                         );
                         stepNext = CHATBOOT_STEP_SELECTPAYMENT;
-                        typeMessage = CHATBOOT_TYPEMSG_BTN;
-                        if (messageObj.message && messageObj.message.payload) {
-                            if (
-                                (messageObj.message.payload == DELIVERY_PAYMENT_CE &&
-                                    messageObj.message.text == DELIVERY_PAYMENT_CE_TXT) ||
-                                (messageObj.message.payload == DELIVERY_PAYMENT_CP &&
-                                    messageObj.message.text == DELIVERY_PAYMENT_CP_TXT)
-                            ) {
-                                obj.setMessageclient_tipopago(messageObj.message.payload);
-                                let products = obj.getMessageclient_productJsonToObj();
+                        typeMessageToSend = TYPE_MESSAGE_META_SEND_INTERACTIVE;
+                        if (messageObj.button && messageObj.button.payload) {
+                            console.log("aquiiiii llegue") 
 
+                            if (
+                                (messageObj.button.payload == DELIVERY_PAYMENT_CE &&
+                                    messageObj.button.text == DELIVERY_PAYMENT_CE_TXT_META) ||
+                                (messageObj.button.payload == DELIVERY_PAYMENT_CP &&
+                                    messageObj.button.text == DELIVERY_PAYMENT_CP_TXT_META)
+                            ) {
+                                console.log("aquiiiii llegue2") 
+
+                                obj.setMessageclient_tipopago(messageObj.button.payload);
+                                let products = obj.getMessageclient_productJsonToObj();
+console.log("asdsadasdsadsadasdasddsad",products)
                                 if (products && Array.isArray(products) && products.length > 0) {
                                     // create order
+                                    console.log("entra a genear pedido")
                                     let orderObj = obj.createOrderObj();
-                                    let url =
-                                        'http://' +
-                                        Security.getSubdomain() +
-                                        '.' +
-                                        Security.getDominio() +
-                                        '/restaurant/facebook/rest/delivery/agregarDeliveryPorIntegracion';
+                                    let url =    Utility.urlAgregarDelivery()
+                                        console.log(url)
                                     Utility.logs.push(url);
-                                    let curlOrderInstance = Utility.peticionPublica(
+                                    let curlOrderInstance = await Utility.peticionPublica(
                                         url,
                                         'POST',
                                         orderObj
                                     );
+                                    console.log("asdsayyyyyyyyyy",curlOrderInstance)
                                     Utility.logs.push(curlOrderInstance);
                                     if (
                                         curlOrderInstance.tipo &&
                                         curlOrderInstance.data &&
                                         curlOrderInstance.tipo == SUCCESS
                                     ) {
+                                        console.log("entra a genear pedido final")
                                         if (obj.getMessageclient_methodorder() == DELIVERY_MODALIDAD_PORRECOGER) {
-                                            objMessageStep = MessageclientModel.getMessageStepOrderRecojoTienda(
+                                            console.log("aca es recojo tiendad ")
+                                            objMessageStep = await MessageclientModel.getMessageStepOrderRecojoTiendaMeta(
                                                 obj.getMessageclient_phone(),
                                                 curlOrderInstance.data,
                                                 obj.getMessageclient_dateorder()
                                             );
                                         } else {
-                                            objMessageStep = MessageClient.getMessageStepOrderSeguimiento(
+                                            console.log("aca es delivery ")
+
+                                            objMessageStep = await MessageclientModel.getMessageStepOrderSeguimientoMeta(
                                                 obj.getMessageclient_phone(),
                                                 curlOrderInstance.data
                                             );
                                         }
                                         stepNext = CHATBOOT_STEP_CREATEORDER;
-                                        typeMessage = CHATBOOT_TYPEMSG_TEXT;
+                                        typeMessageToSend = TYPE_MESSAGE_META_SEND_TEXT;
                                     }
                                     data.orderObj = orderObj;
                                 }
@@ -215,10 +231,11 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
             }
             // console.log("objMessageStep" , objMessageStep)
             if (objMessageStep == null) {
-                objMessageStep = await MessageclientModel.getMessageStepOne(obj.getMessageclient_phone(), obj.getMessageclient_fullname());
+                console.log("entre por aca xq estoy en step 7")
+                objMessageStep = await MessageclientModel.getMessageStepOneMeta();
                 if (objMessageStep.buttons.length == 0) {
                     stepNext = CHATBOOT_STEP_LINEOUT;
-                    typeMessage = CHATBOOT_TYPEMSG_TEXT;
+                    typeMessageToSend = TYPE_MESSAGE_META_SEND_INTERACTIVE;
                     objMessageStep = "Por el momento no tenemos disponible delivery, intentalo mas tarde";
                 }
                 obj.clearAttr();
@@ -228,16 +245,12 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
             obj.setMessageclient_date(Utility.getFechaHoraActual());
             obj.setMessageclient_textsendwpp(JSON.stringify(objMessageStep));
             if (isUpdate == true) {
-                // console.log('update');
-                // obj.setMessageclient_id(lastMessage.getMessageclient_id());
-                // console.log("este es",obj)
+
                 datos = await obj.update();
-            } else {
-                // obj.setMessageclient_id(null);
-                // datos = await obj.insert();
-            }
+            } 
+            console.log("objMessageStep" , objMessageStep)
             Utility.logs.push(objMessageStep);
-            Utility.logs.push(await Maytapi.enviarMensajePorWhatsapp(objMessageStep, obj.getMessageclient_phone(), typeMessage));
+            Utility.logs.push(await MetaApi.enviarWhatsAppPorApiOficial(obj.getMessageclient_phone(), typeMessageToSend , objMessageStep.message , objMessageStep.buttons, ""));
             mensajes.push('Mensaje enviado exitosamente.');
 
         } else { // send the message to start the conversation
@@ -252,7 +265,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
             } else {
             // Check if I have the client registered in the instance
             console.log("pase la validacion de inicio de chat")
-            typeMessage = TYPE_TEMPLATE;
+            typeMessageToSend = TYPE_MESSAGE_META_SEND_INTERACTIVE;
             stepNext = CHATBOOT_STEP_START;
             let curlClienteInstance = await Utility.peticionPublica("http://" + Security.getSubdomain() + "." + Security.getDominio() + "/restaurant/m/rest/cliente/clienteByPropertyAndValue/cliente_telefono/" + obj.getMessageclient_phone(), "GET");
             // console.log(curlClienteInstance)
@@ -267,20 +280,18 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                 obj.setMessageclient_id(clientObj.cliente_id);
                 obj.setMessageclient_fullname(clientObj.cliente_nombres);
             }
-            let objMessageStepOne = await MessageclientModel.getTemplateStepOne();
+            let objMessageStep = await MessageclientModel.getMessageStepOneMeta();
             obj.setMessageclient_date(Utility.getFechaHoraActual());
-            if (objMessageStepOne.buttons.length == 0) {
+            if (objMessageStep.buttons.length == 0) {
                 stepNext = CHATBOOT_STEP_LINEOUT;
-                typeMessage = CHATBOOT_TYPEMSG_TEXT;
-                objMessageStepOne = "Por el momento no tenemos disponible delivery, intentalo mas tarde";
+                typeMessageToSend = TYPE_MESSAGE_META_SEND_TEXT;
+                objMessageStep.message = "Por el momento no tenemos disponible delivery, intentalo mas tarde";
             }
             obj.setMessageclient_step(stepNext);
-            obj.setMessageclient_textsendwpp(JSON.stringify(objMessageStepOne));
-            // console.log("antes de datos")
-            // datos = await obj.insert();
-            // console.log("despues de datos")
+            obj.setMessageclient_textsendwpp(JSON.stringify(objMessageStep));
+            datos = await obj.insert();
 
-            Utility.logs.push(await MetaApi.enviarWhatsAppPorApiOficial(obj.getMessageclient_phone(),"" , typeMessage , "", objMessageStepOne.templateName));
+            Utility.logs.push(await MetaApi.enviarWhatsAppPorApiOficial(obj.getMessageclient_phone(),typeMessageToSend , objMessageStep.message , objMessageStep.buttons, ""));
             mensajes.push('Mensaje enviado exitosamente.');
             }
 

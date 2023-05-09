@@ -26,7 +26,8 @@ const MessageClientSchema = new mongoose.Schema({
     messageclient_tipopago: { type: String, maxlength: 2 },
     messageclient_dateorder: Date,
     messageclient_montominimo: Number,
-    messageclient_cupondescuentojson: Object
+    messageclient_cupondescuentojson: Object,
+    messageclient_proveedorWhastapp: String
 }, {
     timestamps: true,
 });
