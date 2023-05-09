@@ -59,7 +59,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                             console.log("no pase la validacion de chatboot start")
                             if (
                                 messageObj.interactive.button_reply.id == DELIVERY_MODALIDAD_INMEDIATA &&
-                                messageObj.interactive.title == DELIVERY_MODALIDAD_INMEDIATA_TXT_META
+                                messageObj.interactive.button_reply.title == DELIVERY_MODALIDAD_INMEDIATA_TXT_META
                             ) {
                                 objMessageStep = await MessageclientModel.getMessageStepDeliveryInmediatoMeta(
                                     obj.getMessageclient_phone(),

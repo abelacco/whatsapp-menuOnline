@@ -54,7 +54,7 @@ class MetaApi {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Bearer EAALRutGwJjoBAK98Kt7uh3zPtHCT0dHWy4NXWos6D0bcxrxT9HZAOpN4gHKJuEPtQGXREWAUJtRHZAREFp7grLcPVIITd7P0Vj5IudlIHDx408WuoRp6HtDkOqLSMUTV5ZBxkPo0a69UeLjicmg5WEKxPG50sOWejPZBa0FKsFwZBp0bnFxaeJzrgYhQzyjoiOyW53ZAVzdhUf6h8OZCKPCYR7Lc4DmtEYZD"
+                    "Authorization": "Bearer EAALRutGwJjoBAPqn7xcEFVmSFNULYtOvTcGQ9WluGlgtZBr2armQzpB1SONX1saiJ1ukiWbMJqJ1SWUnLUQMwOZBs3v1tOxQarIiulAK7wAJgmA4cPYxss9L3fe0psvaVYoxcyIILzRJxyjQHwPMCScVi8ZCgdZBZCQvs0IZCVavgegMJcwpMZBfDepaTHdnJBbUbj2LumjdbQGKZC8RVn8a"
                 },
                 body: JSON.stringify(body),
             });
