@@ -168,7 +168,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                         );
                         stepNext = CHATBOOT_STEP_SELECTPAYMENT;
                         typeMessageToSend = TYPE_MESSAGE_META_SEND_INTERACTIVE;
-                        if (messageObj.button && messageObj.interactive.button_reply.id) {
+                        if (messageObj.interactive && messageObj.interactive.button_reply.id) {
 
                             if (
                                 (messageObj.interactive.button_reply.id == DELIVERY_PAYMENT_CE &&
