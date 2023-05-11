@@ -40,6 +40,8 @@ class MetaApi {
         else if (type === "template") {
 
             let templateName = "crm_sin_cupon_no_dinamico"
+            let imageUrlAlter = "https://res.cloudinary.com/dbq85fwfz/image/upload/v1683769227/266830776_1029167034298709_8217632826314384432_n_1_hqsgr4.jpg"
+
             objEnvio.template = {
                 name: templateName,
                 language: {
@@ -47,49 +49,70 @@ class MetaApi {
                 }
             }
 
-            if (!imageUrl) {
-                templateName = "crm_sin_cupon_sin_imagen"
-                imageUrl = "https://res.cloudinary.com/dbq85fwfz/image/upload/v1683836474/346126881_1279567985998739_527824287193068121_n_udvddh.webp"
-                objEnvio.template.components = [
-                    {
-                        type: "body",
-                        parameters: [
-                            {
-                                "type": "text",
-                                "text": texto
+            objEnvio.template.components = [
+                {
+                    type: "header",
+                    parameters: [
+                        {
+                            type: "image",
+                            image: {
+                                link: imageUrl || imageUrlAlter
                             }
-                        ]
-                    }
-                ]
-            } else {
-                objEnvio.template.components = [
-                    {
-                        type: "header",
-                        parameters: [
-                            {
-                                type: "image",
-                                image: {
-                                    link: imageUrl
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        type: "body",
-                        parameters: [
-                            {
-                                "type": "text",
-                                "text": texto
-                            }
+                        }
+                    ]
+                },
+                {
+                    type: "body",
+                    parameters: [
+                        {
+                            "type": "text",
+                            "text": texto
+                        }
+    
+                       
+                    ]
+                }
+            ]
+
+            // if (!imageUrl) {
+            //     // templateName = "crm_sin_cupon_sin_imagen"
+            //     // objEnvio.template.components = [
+            //     //     {
+            //     //         type: "body",
+            //     //         parameters: [
+            //     //             {
+            //     //                 "type": "text",
+            //     //                 "text": texto
+            //     //             }
+            //     //         ]
+            //     //     }
+            //     // ]
+            // } else {
+            //     objEnvio.template.components = [
+            //         {
+            //             type: "header",
+            //             parameters: [
+            //                 {
+            //                     type: "image",
+            //                     image: {
+            //                         link: imageUrl || imageUrlAlter
+            //                     }
+            //                 }
+            //             ]
+            //         },
+            //         {
+            //             type: "body",
+            //             parameters: [
+            //                 {
+            //                     "type": "text",
+            //                     "text": texto
+            //                 }
         
                            
-                        ]
-                    }
-                ]
-            }
-
-
-
+            //             ]
+            //         }
+            //     ]
+            // }
 
         }
 
