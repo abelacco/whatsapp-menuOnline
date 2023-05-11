@@ -46,18 +46,13 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
             let typeMessageToSend = TYPE_MESSAGE_META_SEND_INTERACTIVE;
             let stepNext = CHATBOOT_STEP_START;
             let messageObj = obj.getMessageclient_jsonToObjMeta();
-            console.log("messageObjxxxxxxxxxxxxxxx", messageObj)
-            console.log("yyyyyyyyyyy", obj.estaDentroDeltiempo(lastMessage.getMessageclient_date()))
-            console.log("ooooooooooo",!obj.esMessageResetMeta())
+
             if (obj.estaDentroDeltiempo(lastMessage.getMessageclient_date()) && !obj.esMessageResetMeta()) {
-                console.log("asdasdasd", step)
                 switch (step) {
                     
                     case CHATBOOT_STEP_START:
                         console.log("aca empiezo ")
-                        console.log(messageObj.type)
-                        console.log(messageObj.interactive.type)
-                        console.log(messageObj.interactive.button_reply)
+
                         if (messageObj.type && messageObj.interactive.type) {
                             console.log("no pase la validacion de chatboot start")
                             if (
@@ -295,5 +290,24 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
 
 }
 
+const sendMensajeCampanaCrm = async (messageCampana) => {   
+    let data = {};
+    let mensajes = [];
+    let tipo = SUCCESS;
+    let datos = [];
 
-module.exports = { addMessageFromWebHoookMeta  }
+    for(let i = 0 ; i < messageCampana.numbers.length ; i++){
+        const respuesta = await MetaApi.enviarWhatsAppPorApiOficial(messageCampana.numbers[i], TYPE_MESSAGE_META_SEND_TEMPLATE , messageCampana.campana_mensaje , null , messageCampana.image_url);
+        datos.push(respuesta.mensajes);
+        // Utility.logs.push(respuesta.mensajes);
+    }
+    mensajes.push('Mensaje enviado exitosamente.');
+
+    data.mensajes = mensajes;
+    data.tipo = tipo;
+    data.data = datos;
+    data.logs = Utility.logs;
+    return data;
+}
+
+module.exports = { addMessageFromWebHoookMeta , sendMensajeCampanaCrm }

@@ -1,4 +1,4 @@
-const {  ERROR, SUCCESS, META_PHONE_ID } = require('../config/constants');
+const { ERROR, SUCCESS, META_PHONE_ID } = require('../config/constants');
 const Utility = require('./utility.services');
 const fetch = require('node-fetch');
 
@@ -8,7 +8,7 @@ class MetaApi {
     }
 
 
-    static async enviarWhatsAppPorApiOficial(telefono, type = "text", texto , buttonActions = "", templateName = "") {
+    static async enviarWhatsAppPorApiOficial(telefono, type = "text", texto, buttonActions = "", imageUrl = "") {
         console.log("enviarWhatsAppPorApiOficial")
 
 
@@ -19,13 +19,13 @@ class MetaApi {
         };
         // Para Texto
 
-        if(type === "text"){
+        if (type === "text") {
             objEnvio.text = {
                 body: texto
             }
         }
         // Para botones
-        else if(type === "interactive"){
+        else if (type === "interactive") {
             objEnvio.interactive = {
                 type: "button",
                 body: {
@@ -36,9 +36,63 @@ class MetaApi {
                 }
             }
         }
+        // Para templates
+        else if (type === "template") {
 
+            let templateName = "crm_sin_cupon_no_dinamico"
+            objEnvio.template = {
+                name: templateName,
+                language: {
+                    code: "es"
+                }
+            }
 
+            if (!imageUrl) {
+                templateName = "crm_sin_cupon_sin_imagen"
+                imageUrl = "https://res.cloudinary.com/dbq85fwfz/image/upload/v1683836474/346126881_1279567985998739_527824287193068121_n_udvddh.webp"
+                objEnvio.template.components = [
+                    {
+                        type: "body",
+                        parameters: [
+                            {
+                                "type": "text",
+                                "text": texto
+                            }
+                        ]
+                    }
+                ]
+            } else {
+                objEnvio.template.components = [
+                    {
+                        type: "header",
+                        parameters: [
+                            {
+                                type: "image",
+                                image: {
+                                    link: imageUrl
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        type: "body",
+                        parameters: [
+                            {
+                                "type": "text",
+                                "text": texto
+                            }
         
+                           
+                        ]
+                    }
+                ]
+            }
+
+
+
+
+        }
+
         return await this.peticionClientWhatsAppBusiness(objEnvio);
     }
 
@@ -50,19 +104,19 @@ class MetaApi {
         console.log(body)
         try {
             console.log("empieza peticion")
-            const response = await fetch(`https://graph.facebook.com/v16.0/${META_PHONE_ID}/messages` , {
+            const response = await fetch(`https://graph.facebook.com/v16.0/${META_PHONE_ID}/messages`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Bearer EAALRutGwJjoBAPqn7xcEFVmSFNULYtOvTcGQ9WluGlgtZBr2armQzpB1SONX1saiJ1ukiWbMJqJ1SWUnLUQMwOZBs3v1tOxQarIiulAK7wAJgmA4cPYxss9L3fe0psvaVYoxcyIILzRJxyjQHwPMCScVi8ZCgdZBZCQvs0IZCVavgegMJcwpMZBfDepaTHdnJBbUbj2LumjdbQGKZC8RVn8a"
+                    "Authorization": "Bearer EAALRutGwJjoBAJPsQlLfPtvCXuooOAmeSqZALZClXXZArOgYpCFgoDKwqaBVL7Jx4g5LucHwaA8DeezW5SOlXSYC0ifEN5a40gj56qcBicxTONCRXZCxZADYDEeZAoPb8ofz7yNXx3ZC7savKZCp9GGZCol7idw818PdBqBd8xSknGF8ZAAaHhZA3XaWoTyHmjzvnpCZBIJzWjhWDjXA1gR1gvIb"
                 },
                 body: JSON.stringify(body),
             });
 
-            console.log("status",response.status)
+            console.log("status", response.status)
             const http_status = response.status;
 
-            Utility.logs.push(`http_status ${http_status}`);
+            Utility.logs.push(`Mensaje eniado a ${body.to} , http_status ${http_status}`);
 
             if (http_status !== 200) {
                 tipo = ERROR;
@@ -76,7 +130,7 @@ class MetaApi {
                 }
                 mensajes.push(mensaje);
             } else {
-                mensajes.push("Enviado");
+                mensajes.push("Enviado" );
             }
         } catch (e) {
             console.log("falla en el envio de whatsapp", e)

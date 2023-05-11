@@ -61,6 +61,13 @@ router.get('/webHookMetaWhatsapp/:subdominio/:dominio', async (req, res) => {
   }
 });
 
+router.post('/campanawhatsapp/:subdominio/:dominio', async (req, res) => {
+  Security.obtenerDominiodeSubdominio(req.params.subdominio, req.params.dominio);  
+  const obj = req.body;
+  const result = await MessageclientMetaController.sendMensajeCampanaCrm(obj);
+  res.json(result);
+});
+
 
 
 module.exports = router;
