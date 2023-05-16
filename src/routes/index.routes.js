@@ -1,8 +1,9 @@
 const webHookMaytaWhatsapp = require('./webHookWhatsapp.routes');
+const integracionLocal = require('./integracion.routes');
 
 
 
 module.exports = (app) => {
-    // app.use('/integracion', messageRoutes);
     app.use('', webHookMaytaWhatsapp);
+    app.use('/integracion', integracionLocal);
 }

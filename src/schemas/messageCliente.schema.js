@@ -32,4 +32,4 @@ const MessageClientSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-module.exports = mongoose.model('messageclientSchemas', MessageClientSchema);
+module.exports = mongoose.model('messageclientSchema', MessageClientSchema);

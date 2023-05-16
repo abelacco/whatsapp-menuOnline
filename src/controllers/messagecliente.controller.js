@@ -566,7 +566,7 @@ console.log("lastMessage", lastMessage)
 
     if (!objParametros.hasOwnProperty('phone')) {
         tipo = ERROR;
-        mensajes.push("Ingrese un telefono valido.");
+        mensajes.push("Ingrese un telefono válido.");
     }
 
 
@@ -575,7 +575,6 @@ console.log("lastMessage", lastMessage)
         if (lastMessage != null &&
             (lastMessage.getMessageclient_step() == CHATBOOT_STEP_SELECTPRODUCT || lastMessage.getMessageclient_step() == CHATBOOT_STEP_SELECTPAYMENT)
         ) {
-            console.log("entro a enviar mensaje")
             let proveedor = lastMessage.getMessageclient_proveedorWhastapp();
             messageClient.setMessageclient_modelId(lastMessage.messageclient_modelId);
             messageClient.setMessageclient_dateorder(lastMessage.messageclient_dateorder);

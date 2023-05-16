@@ -74,46 +74,6 @@ class MetaApi {
                 }
             ]
 
-            // if (!imageUrl) {
-            //     // templateName = "crm_sin_cupon_sin_imagen"
-            //     // objEnvio.template.components = [
-            //     //     {
-            //     //         type: "body",
-            //     //         parameters: [
-            //     //             {
-            //     //                 "type": "text",
-            //     //                 "text": texto
-            //     //             }
-            //     //         ]
-            //     //     }
-            //     // ]
-            // } else {
-            //     objEnvio.template.components = [
-            //         {
-            //             type: "header",
-            //             parameters: [
-            //                 {
-            //                     type: "image",
-            //                     image: {
-            //                         link: imageUrl || imageUrlAlter
-            //                     }
-            //                 }
-            //             ]
-            //         },
-            //         {
-            //             type: "body",
-            //             parameters: [
-            //                 {
-            //                     "type": "text",
-            //                     "text": texto
-            //                 }
-        
-                           
-            //             ]
-            //         }
-            //     ]
-            // }
-
         }
 
         return await this.peticionClientWhatsAppBusiness(objEnvio);
@@ -131,7 +91,7 @@ class MetaApi {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Bearer EAALRutGwJjoBAJPsQlLfPtvCXuooOAmeSqZALZClXXZArOgYpCFgoDKwqaBVL7Jx4g5LucHwaA8DeezW5SOlXSYC0ifEN5a40gj56qcBicxTONCRXZCxZADYDEeZAoPb8ofz7yNXx3ZC7savKZCp9GGZCol7idw818PdBqBd8xSknGF8ZAAaHhZA3XaWoTyHmjzvnpCZBIJzWjhWDjXA1gR1gvIb"
+                    "Authorization": "Bearer EAALRutGwJjoBAJGaIpJax3dGheeDXSxk68ni3XQxGiaW9ZBMDh20lHOnW7z7UeUONvJxjmDYBzu2QyKAK1cIjenMwisLphTDGAR3mUK1VBJTVQaaBUDttJNreofjaX5rwBkj20fwuIJLsIKp0FptYWOcIKx3UTSZAOOHaF2i60io6LlBBEtLO7UOAydm46HfZAmlI7LvzoNxZBXB33xp"
                 },
                 body: JSON.stringify(body),
             });
