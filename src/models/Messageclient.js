@@ -404,7 +404,7 @@ class MessageclientModel {
         let messageObjWpp = new Object();
         // messageObjWpp.message = `${clienteName != null ? clienteName + "\n" : ""}Encuentra todos los productos que necesitas en nuestro catálogo en línea.\n Haz clic en este enlace para comenzar a seleccionar tus productos: \n\n ${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/tienda/${local_id}?phone=${phone}`)}\n\n Gracias por elegirnos. ¡Estamos emocionados de ser parte de tu experiencia de compra! 🛍️👩‍💻`;
         // para deploy abel
-        messageObjWpp.message = `${clienteName != null ? clienteName + "\n" : ""}Encuentra todos los productos que necesitas en nuestro catálogo en línea.\n Haz clic en este enlace para comenzar a seleccionar tus productos: \n\n ${await Bitly.getLinkEncodedMsQuipu(`https://menuonline-dbe64.web.app}/carta-digital/#/tienda/${local_id}?phone=${phone}`)}\n\n Gracias por elegirnos. ¡Estamos emocionados de ser parte de tu experiencia de compra! 🛍️👩‍💻`;
+        messageObjWpp.message = `${clienteName != null ? clienteName + "\n" : ""}Encuentra todos los productos que necesitas en nuestro catálogo en línea.\n Haz clic en este enlace para comenzar a seleccionar tus productos: \n\n ${await Bitly.getLinkEncodedMsQuipu(`https://menuonline-dbe64.web.app/carta-digital/#/tienda/${local_id}?phone=${phone}`)}\n\n Gracias por elegirnos. ¡Estamos emocionados de ser parte de tu experiencia de compra! 🛍️👩‍💻`;
 
         messageObjWpp.buttons = [];
         return messageObjWpp;
