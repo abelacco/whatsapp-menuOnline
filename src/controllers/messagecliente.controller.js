@@ -373,7 +373,7 @@ const addMessageFromWebHoook = async (messageComplete) => {
 
 }
 
-async function messageLatLngDateClient(objParametros) {
+async function messageLatLngDateClient(objParametros, credenciales) {
 
     let data = {};
     let mensajes = [];
@@ -443,8 +443,8 @@ async function messageLatLngDateClient(objParametros) {
             messageClient.update();
             
             proveedor == PROVEEDOR_META
-            ?  Utility.logs.push(MetaApi.enviarWhatsAppPorApiOficial(messageClient.getMessageclient_phone(), TYPE_MESSAGE_META_SEND_INTERACTIVE , objMessageStep.message , objMessageStep.buttons, ""))
-            : Utility.logs.push(Maytapi.enviarMensajePorWhatsapp(objMessageStep, messageClient.getMessageclient_phone(), CHATBOOT_TYPEMSG_BTN));
+            ?  Utility.logs.push(MetaApi.enviarWhatsAppPorApiOficial(messageClient.getMessageclient_phone(), TYPE_MESSAGE_META_SEND_INTERACTIVE , objMessageStep.message , objMessageStep.buttons, "", credenciales))
+            : Utility.logs.push(Maytapi.enviarMensajePorWhatsapp(objMessageStep, messageClient.getMessageclient_phone(), CHATBOOT_TYPEMSG_BTN, credenciales));
 
             tipo = SUCCESS;
             mensajes.push("Dirección dentro de la zon de reparto.");
@@ -478,8 +478,8 @@ async function messageLatLngDateClient(objParametros) {
             messageClient.update();
 
             proveedor == PROVEEDOR_META
-            ?  Utility.logs.push(MetaApi.enviarWhatsAppPorApiOficial(messageClient.getMessageclient_phone(), TYPE_MESSAGE_META_SEND_INTERACTIVE , objMessageStep.message , objMessageStep.buttons, ""))
-            : Utility.logs.push(Maytapi.enviarMensajePorWhatsapp(objMessageStep, messageClient.getMessageclient_phone(), CHATBOOT_TYPEMSG_BTN));
+            ?  Utility.logs.push(MetaApi.enviarWhatsAppPorApiOficial(messageClient.getMessageclient_phone(), TYPE_MESSAGE_META_SEND_INTERACTIVE , objMessageStep.message , objMessageStep.buttons, "", credenciales))
+            : Utility.logs.push(Maytapi.enviarMensajePorWhatsapp(objMessageStep, messageClient.getMessageclient_phone(), CHATBOOT_TYPEMSG_BTN , credenciales));
 
             tipo = SUCCESS;
             mensajes.push("Dirección dentro de la zon de reparto.");
@@ -514,8 +514,8 @@ async function messageLatLngDateClient(objParametros) {
                     messageClient.update();
 
                     proveedor == PROVEEDOR_META
-                    ?  Utility.logs.push(MetaApi.enviarWhatsAppPorApiOficial(messageClient.getMessageclient_phone(), TYPE_MESSAGE_META_SEND_INTERACTIVE , objMessageStep.message , objMessageStep.buttons, ""))
-                    : Utility.logs.push(Maytapi.enviarMensajePorWhatsapp(objMessageStep, messageClient.getMessageclient_phone(), CHATBOOT_TYPEMSG_BTN));
+                    ?  Utility.logs.push(MetaApi.enviarWhatsAppPorApiOficial(messageClient.getMessageclient_phone(), TYPE_MESSAGE_META_SEND_INTERACTIVE , objMessageStep.message , objMessageStep.buttons, "" , credenciales))
+                    : Utility.logs.push(Maytapi.enviarMensajePorWhatsapp(objMessageStep, messageClient.getMessageclient_phone(), CHATBOOT_TYPEMSG_BTN , credenciales));
 
                     tipo = SUCCESS;
                 }
@@ -547,7 +547,7 @@ async function messageLatLngDateClient(objParametros) {
     return data;
 }
 
-async function messageProductClient(objParametros) {
+async function messageProductClient(objParametros , credenciales) {
 
     let data = {};
     let mensajes = [];
@@ -558,7 +558,6 @@ async function messageProductClient(objParametros) {
     let messageClient = new MessageclientModel();
     messageClient.setMessageclient_phone(objParametros.phone);
     let lastMessage = await messageClient.getLastMessageByPhone();
-console.log("lastMessage", lastMessage)
     if (!objParametros.hasOwnProperty('products')) {
         tipo = ERROR;
         mensajes.push("Ingrese productos.");
@@ -591,8 +590,8 @@ console.log("lastMessage", lastMessage)
             messageClient.update();
 
             proveedor == PROVEEDOR_META
-            ?  Utility.logs.push(MetaApi.enviarWhatsAppPorApiOficial(messageClient.getMessageclient_phone(), TYPE_MESSAGE_META_SEND_INTERACTIVE , objMessageStep.message , objMessageStep.buttons, ""))
-            :  Utility.logs.push(Maytapi.enviarMensajePorWhatsapp(objMessageStep, messageClient.getMessageclient_phone(), CHATBOOT_TYPEMSG_BTN));
+            ?  Utility.logs.push(MetaApi.enviarWhatsAppPorApiOficial(messageClient.getMessageclient_phone(), TYPE_MESSAGE_META_SEND_INTERACTIVE , objMessageStep.message , objMessageStep.buttons, "" , credenciales))
+            :  Utility.logs.push(Maytapi.enviarMensajePorWhatsapp(objMessageStep, messageClient.getMessageclient_phone(), CHATBOOT_TYPEMSG_BTN , credenciales));
 
 
 

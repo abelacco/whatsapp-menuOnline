@@ -1,4 +1,4 @@
-CrendencialesSchema = require('../schemas/credenciales.schema');
+CredencialesModel = require('../schemas/credenciales.schema');
 
 class IntegracionService {
 
@@ -27,12 +27,12 @@ class IntegracionService {
         }
     }
 
-    static async getCredenciales() {
+    static async getCredenciales(phone_number) {
         try {
-            const result = await CrendencialesSchema.findOne();
+            const result = await CredencialesModel.findOne({phone_number});
             return result;
         } catch (error) {
-            console.error(error);
+            console.error("xxxxxxxxxxx",error);
             throw new Error('Error en el servidor');
         }
     }

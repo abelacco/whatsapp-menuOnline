@@ -12,13 +12,14 @@ class CredencialesModel {
     phone_id_mayta;
     phone_number;
 
-    constructor() {
-        setCredenciales();
+    constructor(phone_number) {
+        this.setCredenciales(phone_number);
     }
 
-    static async setCredenciales() {
+     async setCredenciales(phone_number) {
 
-        const credenciales = IntegracionService.getCredenciales();
+        const credenciales = await IntegracionService.getCredenciales(phone_number);
+        console.log("credencialesxxxxxx", credenciales)
         if (credenciales) {
             this.phone_number = credenciales.phone_number;
             this.proveedor = credenciales.proveedor;

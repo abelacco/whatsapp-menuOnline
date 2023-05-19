@@ -8,7 +8,7 @@ class MetaApi {
     }
 
 
-    static async enviarWhatsAppPorApiOficial(telefono, type = "text", texto, buttonActions = "", imageUrl = "") {
+    static async enviarWhatsAppPorApiOficial(telefono, type = "text", texto, buttonActions = "", imageUrl = "", credenciales) {
         console.log("enviarWhatsAppPorApiOficial")
 
 
@@ -76,22 +76,22 @@ class MetaApi {
 
         }
 
-        return await this.peticionClientWhatsAppBusiness(objEnvio);
+        return await this.peticionClientWhatsAppBusiness(objEnvio , credenciales);
     }
 
 
-    static async peticionClientWhatsAppBusiness(body = {}) {
+    static async peticionClientWhatsAppBusiness(body = {}, credenciales) {
         let tipo = SUCCESS;
         let mensajes = [];
         let data = {};
-        console.log(body)
+        console.log(credenciales)
         try {
             console.log("empieza peticion")
-            const response = await fetch(`https://graph.facebook.com/v16.0/${META_PHONE_ID}/messages`, {
+            const response = await fetch(`https://graph.facebook.com/v16.0/${credenciales.phone_id_meta}/messages`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Bearer EAALRutGwJjoBAJGaIpJax3dGheeDXSxk68ni3XQxGiaW9ZBMDh20lHOnW7z7UeUONvJxjmDYBzu2QyKAK1cIjenMwisLphTDGAR3mUK1VBJTVQaaBUDttJNreofjaX5rwBkj20fwuIJLsIKp0FptYWOcIKx3UTSZAOOHaF2i60io6LlBBEtLO7UOAydm46HfZAmlI7LvzoNxZBXB33xp"
+                    "Authorization": `Bearer ${credenciales.token_permanente}`
                 },
                 body: JSON.stringify(body),
             });

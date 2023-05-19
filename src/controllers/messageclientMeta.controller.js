@@ -5,7 +5,7 @@ const Security = require('../services/security.services');
 const MetaApi = require('../services/metapi.services');
 
 
-const addMessageFromWebHoookMeta = async (messageComplete) => {
+const addMessageFromWebHoookMeta = async (messageComplete , credenciales) => {
     // recibo el mensaje completo
     // iniciamos la clase del mensaje
     let data = {};
@@ -17,6 +17,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
     console.log("Aca empezamos controller")
     // seteamos la propiedades de messageclient segun el messagecomplete
     obj.setMessageclient_json( messageComplete);
+    obj.setCredenciales(credenciales);
     messageComplete.entry
         ?obj.setMessageclient_proveedorWhastapp(PROVEEDOR_META)
         :obj.setMessageclient_proveedorWhastapp(PROVEEDOR_MAYTAPI);
@@ -236,7 +237,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
                 datos = await obj.update();
             } 
             Utility.logs.push(objMessageStep);
-            Utility.logs.push(await MetaApi.enviarWhatsAppPorApiOficial(obj.getMessageclient_phone(), typeMessageToSend , objMessageStep.message , objMessageStep.buttons, ""));
+            Utility.logs.push(await MetaApi.enviarWhatsAppPorApiOficial(obj.getMessageclient_phone(), typeMessageToSend , objMessageStep.message , objMessageStep.buttons, "", credenciales));
             mensajes.push('Mensaje enviado exitosamente.');
 
         } else { // send the message to start the conversation
@@ -275,7 +276,7 @@ const addMessageFromWebHoookMeta = async (messageComplete) => {
             obj.setMessageclient_textsendwpp(JSON.stringify(objMessageStep));
             datos = await obj.insert();
 
-            Utility.logs.push(await MetaApi.enviarWhatsAppPorApiOficial(obj.getMessageclient_phone(),typeMessageToSend , objMessageStep.message , objMessageStep.buttons, ""));
+            Utility.logs.push(await MetaApi.enviarWhatsAppPorApiOficial(obj.getMessageclient_phone(),typeMessageToSend , objMessageStep.message , objMessageStep.buttons, "", credenciales));
             mensajes.push('Mensaje enviado exitosamente.');
             }
 
@@ -297,7 +298,7 @@ const sendMensajeCampanaCrm = async (messageCampana) => {
     let datos = [];
 
     for(let i = 0 ; i < messageCampana.numbers.length ; i++){
-        const respuesta = await MetaApi.enviarWhatsAppPorApiOficial(messageCampana.numbers[i], TYPE_MESSAGE_META_SEND_TEMPLATE , messageCampana.campana_mensaje , null , messageCampana.image_url);
+        const respuesta = await MetaApi.enviarWhatsAppPorApiOficial(messageCampana.numbers[i], TYPE_MESSAGE_META_SEND_TEMPLATE , messageCampana.campana_mensaje , null , messageCampana.image_url, credenciales);
         datos.push(respuesta.mensajes);
         // Utility.logs.push(respuesta.mensajes);
     }

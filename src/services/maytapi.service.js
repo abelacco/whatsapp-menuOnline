@@ -9,7 +9,7 @@ class Maytapi {
     constructor() {
     }
 
-  static  async enviarMensajePorWhatsapp(texto, phone, type = "text", url = "") {
+  static  async enviarMensajePorWhatsapp(texto, phone, type = "text", url = "" , credenciales) {
         let objEnvio = {};
         if (type === "text") {
             objEnvio = {
@@ -33,11 +33,11 @@ class Maytapi {
             };
         }
         // Utility.logs.push(objEnvio);
-        return this.peticionClientMaytaCurl(`${BASE_MAYTA}${MAYTA_PRODUCT_ID}/${MAYTA_PHONE_ID}/sendMessage`, "POST", objEnvio, -1);
+        return this.peticionClientMaytaCurl(`${BASE_MAYTA}${credenciales.product_id_mayta}/${credenciales.phone_id_mayta}/sendMessage`, "POST", objEnvio, -1, credenciales.token_mayta);
     }
 
 
-      static async peticionClientMaytaCurl(url, metodo, body={}, tiempoEspera=-1) {
+      static async peticionClientMaytaCurl(url, metodo, body={}, tiempoEspera=-1, token) {
         let tipo = SUCCESS;
         let mensajes = [];
         let data = {};
@@ -64,7 +64,7 @@ class Maytapi {
                 body,
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-maytapi-key': MAYTA_TOKEN,
+                    'x-maytapi-key': token,
                 },
             });
 

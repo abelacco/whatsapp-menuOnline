@@ -5,22 +5,28 @@ const MessageclientController = require('../controllers/messagecliente.controlle
 const MessageclientMetaController = require('../controllers/messageclientMeta.controller');
 const Security = require('../services/security.services');
 const { TOKEN_PARA_META } = require('../config/constants');
+const configDB = require('../config/db');
+const IntegracionService = require('../services/integracion.services');
+
 
 // webHookWhatsapp --> Mayta
 
 
-// router.post('/webHookMaytaWhatsapp/:subdominio/:dominio', async (req, res) => {
-//   Security.obtenerDominiodeSubdominio(req.params.subdominio, req.params.dominio);  
-//   console.log(req.body)
-//   const obj = req.body;
-//   const result = await MessageclientController.addMessageFromWebHoook(obj);
-//   res.json(result);
-// });
+router.post('/webHookMaytaWhatsapp/:subdominio/:dominio', async (req, res) => {
+  Security.obtenerDominiodeSubdominio(req.params.subdominio, req.params.dominio);  
+  console.log(req.body)
+  const obj = req.body;
+  const result = await MessageclientController.addMessageFromWebHoook(obj);
+  res.json(result);
+});
 
 router.post('/messageLatLngDateClient', async (req, res) => {
     try {
+      await configDB.setDbName('demoperu')
+      const phone_number = '51942001378'
+      const credenciales = await IntegracionService.getCredenciales(phone_number);
         const obj = req.body;
-        const result = await MessageclientController.messageLatLngDateClient(obj);
+        const result = await MessageclientController.messageLatLngDateClient(obj , credenciales);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
@@ -30,8 +36,11 @@ router.post('/messageLatLngDateClient', async (req, res) => {
 
 router.post('/messageProductClient', async (req, res) => {
     try {
+      configDB.setDbName('demoperu')
+      const phone_number = '51942001378'
+      const credenciales = await IntegracionService.getCredenciales(phone_number);
       const obj = req.body;
-      const result = await MessageclientController.messageProductClient(obj);
+      const result = await MessageclientController.messageProductClient(obj, credenciales);
       return res.status(200).json(result);
     } catch (error) {
       console.error(error);
@@ -42,10 +51,17 @@ router.post('/messageProductClient', async (req, res) => {
 // webHookWhatsapp --> Meta
 
 router.post('/webHookMetaWhatsapp/:subdominio/:dominio', async (req, res) => {
-  Security.obtenerDominiodeSubdominio(req.params.subdominio, req.params.dominio);  
-  // peticion a la db
+  Security.obtenerDominiodeSubdominio(req.params.subdominio, req.params.dominio);
+  // Peticion a db con nombre de la db del local y numero de celular que usa el servicio
+  // const suscripcion = await Suscripcion.getDatos()
+  // let dbName = suscripcion.dbName;
+  // let phoneNumber = suscripcion.phoneNumber;
+  // Asignar nombre de la db
+  await configDB.setDbName('demoperu')
+  const phone_number = '51942001378'
+  const credenciales = await IntegracionService.getCredenciales(phone_number);
   const obj = req.body;
-  const result = await MessageclientMetaController.addMessageFromWebHoookMeta(obj);
+  const result = await MessageclientMetaController.addMessageFromWebHoookMeta(obj, credenciales);
   res.json(result);
 });
 

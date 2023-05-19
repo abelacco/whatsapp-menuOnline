@@ -6,7 +6,9 @@ const cors = require("cors");
 
 
 // Conexion DB
-require('./src/config/db')
+const dbConfig = require('./src/config/db')
+
+dbConfig.connection2;
 
 /* Inicio de configuración del middlewares */
 

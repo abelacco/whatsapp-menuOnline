@@ -41,6 +41,7 @@ const Security = require('../services/security.services')
 const Utility = require('../services/utility.services');
 const Establishment = require('../services/establishment.services');
 const Bitly = require('../services/bitly.services');
+const CredencialesModel = require('./Credenciales');
 
 
 
@@ -74,6 +75,7 @@ class MessageclientModel {
     messageclient_montominimo;
     messageclient_cupondescuentojson;
     messageclient_proveedorWhastapp;
+    credenciales;
 
     constructor(lastMessage = null) {
         // super();
@@ -254,7 +256,7 @@ class MessageclientModel {
 
 
     async getLastMessageByPhone() {
-
+        // aqui peticion de credenciales
         const lastMessage = await MessageClienteSchema.findOne({
             messageclient_status: 1,
             messageclient_phone: this.getMessageclient_phone()
@@ -263,6 +265,8 @@ class MessageclientModel {
 
 
     }
+
+
 
     // MESSAGE WPP
     static async getMessageStepOne(phone, clienteName = null) {
@@ -944,6 +948,13 @@ class MessageclientModel {
     setMessageclient_proveedorWhastapp(messageclient_proveedorWhastapp) {
         this.messageclient_proveedorWhastapp = messageclient_proveedorWhastapp;
     }
+    setCredenciales(credenciales) {
+        this.credenciales = credenciales;
+    }
+
+    getCredenciales() { 
+        return this.credenciales;
+    }
 
     async insert() {
         try {
@@ -975,6 +986,8 @@ class MessageclientModel {
             if (this.messageclient_montominimo) insertData.messageclient_montominimo = this.messageclient_montominimo;
             if (this.messageclient_cupondescuentojson) insertData.messageclient_cupondescuentojson = this.messageclient_cupondescuentojson;
             if (this.messageclient_proveedorWhastapp) insertData.messageclient_proveedorWhastapp = this.messageclient_proveedorWhastapp;
+                    // aqui peticion de credenciales
+
             const messageClient = new MessageClienteSchema(insertData);
             messageClient.save();
             if (messageClient) {
@@ -1067,13 +1080,13 @@ class MessageclientModel {
             query.messageclient_cupondescuentojson = this.messageclient_cupondescuentojson;
           }
           
-          console.log("este es",this.messageclient_modelId)
+        // aqui peticion de credenciales
+
           const result = await MessageClienteSchema.updateOne(
             { _id: this.messageclient_modelId },
             query
           );
 
-          console.log("sadasdsads",result)
       
           return result.ok === 1;
         } catch (error) {
