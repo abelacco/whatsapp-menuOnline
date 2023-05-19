@@ -287,7 +287,10 @@ class MessageclientModel {
 
     static async getMessageStepDeliveryInmediatoMeta(phone, clienteName = null) {
         let messageObjWpp = new Object();
-        messageObjWpp.message = `${clienteName ? `${clienteName}\n` : ''} Envía tu ubicación o dirección a través  del siguiente link para encontrar el restaurante más cercano \n ${ await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/map-boot-select?phone=${phone}`)} ! \n`;
+        // messageObjWpp.message = `${clienteName ? `${clienteName}\n` : ''} Envía tu ubicación o dirección a través  del siguiente link para encontrar el restaurante más cercano \n ${ await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/map-boot-select?phone=${phone}`)} ! \n`;
+        // para deploy abel
+        messageObjWpp.message = `${clienteName ? `${clienteName}\n` : ''} Envía tu ubicación o dirección a través  del siguiente link para encontrar el restaurante más cercano \n ${ await Bitly.getLinkEncodedMsQuipu(`https://menuonline-dbe64.web.app/carta-digital/#/map-boot-select?phone=${phone}`)} ! \n`;
+
         messageObjWpp.buttons = [];
         return messageObjWpp;
     }
@@ -297,7 +300,10 @@ class MessageclientModel {
     }
     static async getMessageStepDeliveryRecojoTiendaMeta(phone, clienteName = null) {
         let messageObjWpp = new Object();
-        messageObjWpp.message = `${clienteName ? `${clienteName}\n` : ''}Para seleccionar tu fecha de recojo, por favor, accede al siguiente enlace: \n${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/inicio?deliveryMethod=2&phone=${phone}`)}`;
+        // messageObjWpp.message = `${clienteName ? `${clienteName}\n` : ''}Para seleccionar tu fecha de recojo, por favor, accede al siguiente enlace: \n${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/inicio?deliveryMethod=2&phone=${phone}`)}`;
+        // para deploy abel
+        messageObjWpp.message = `${clienteName ? `${clienteName}\n` : ''}Para seleccionar tu fecha de recojo, por favor, accede al siguiente enlace: \n${await Bitly.getLinkEncodedMsQuipu(`https://menuonline-dbe64.web.app/carta-digital/#/inicio?deliveryMethod=2&phone=${phone}`)}`;
+
         messageObjWpp.buttons = [];
         return messageObjWpp;
     }
@@ -308,7 +314,10 @@ class MessageclientModel {
 
     static async getMessageStepDeliveryProgramadoMeta(phone, clienteName = null) {
         let messageObjWpp = new Object();
-        messageObjWpp.message = `${clienteName ? `${clienteName}\n` : ''}Envía tu ubicación o dirección a través del siguiente link para encontrar el restaurante más cercano \n ${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/map-boot-select?phone=${phone}&deliveryMethod=3`)} ! \n`;
+        // messageObjWpp.message = `${clienteName ? `${clienteName}\n` : ''}Envía tu ubicación o dirección a través del siguiente link para encontrar el restaurante más cercano \n ${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/map-boot-select?phone=${phone}&deliveryMethod=3`)} ! \n`;
+        // para deploy abel
+        messageObjWpp.message = `${clienteName ? `${clienteName}\n` : ''}Envía tu ubicación o dirección a través del siguiente link para encontrar el restaurante más cercano \n ${await Bitly.getLinkEncodedMsQuipu(`https://menuonline-dbe64.web.app/carta-digital/#/map-boot-select?phone=${phone}&deliveryMethod=3`)} ! \n`;
+       
         messageObjWpp.buttons = [];
         return messageObjWpp;
     }
@@ -393,7 +402,10 @@ class MessageclientModel {
 
     static async getMessageStepFourMeta(phone, clienteName = null, local_id = null) {
         let messageObjWpp = new Object();
-        messageObjWpp.message = `${clienteName != null ? clienteName + "\n" : ""}Encuentra todos los productos que necesitas en nuestro catálogo en línea.\n Haz clic en este enlace para comenzar a seleccionar tus productos: \n\n ${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/tienda/${local_id}?phone=${phone}`)}\n\n Gracias por elegirnos. ¡Estamos emocionados de ser parte de tu experiencia de compra! 🛍️👩‍💻`;
+        // messageObjWpp.message = `${clienteName != null ? clienteName + "\n" : ""}Encuentra todos los productos que necesitas en nuestro catálogo en línea.\n Haz clic en este enlace para comenzar a seleccionar tus productos: \n\n ${await Bitly.getLinkEncodedMsQuipu(`https://${Security.getSubdomain()}.${Security.getDominio()}/carta-digital/#/tienda/${local_id}?phone=${phone}`)}\n\n Gracias por elegirnos. ¡Estamos emocionados de ser parte de tu experiencia de compra! 🛍️👩‍💻`;
+        // para deploy abel
+        messageObjWpp.message = `${clienteName != null ? clienteName + "\n" : ""}Encuentra todos los productos que necesitas en nuestro catálogo en línea.\n Haz clic en este enlace para comenzar a seleccionar tus productos: \n\n ${await Bitly.getLinkEncodedMsQuipu(`https://menuonline-dbe64.web.app}/carta-digital/#/tienda/${local_id}?phone=${phone}`)}\n\n Gracias por elegirnos. ¡Estamos emocionados de ser parte de tu experiencia de compra! 🛍️👩‍💻`;
+
         messageObjWpp.buttons = [];
         return messageObjWpp;
     }
