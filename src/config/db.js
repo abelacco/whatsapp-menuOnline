@@ -8,6 +8,6 @@ mongoose.set('strictQuery', true);
 
 
 mongoose.connect(dbUrl, { useNewUrlParser: true }).then(
-    () => {console.log('Database is connected') },
+    () => {console.log(`Database is connected ${DB_NAME}`) },
     err => { console.log('Can not connect to the database' + err)}
 );

@@ -91,7 +91,7 @@ class MetaApi {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Bearer EAALRutGwJjoBAJGaIpJax3dGheeDXSxk68ni3XQxGiaW9ZBMDh20lHOnW7z7UeUONvJxjmDYBzu2QyKAK1cIjenMwisLphTDGAR3mUK1VBJTVQaaBUDttJNreofjaX5rwBkj20fwuIJLsIKp0FptYWOcIKx3UTSZAOOHaF2i60io6LlBBEtLO7UOAydm46HfZAmlI7LvzoNxZBXB33xp"
+                    "Authorization": "Bearer EAALRutGwJjoBAOBCiALCZCz06DMmJ4pZAbBMPI9yt7n7nxzRXvju3NuVGDTyrwDDY35JiHgJEgPPcIIZCdlkZCVEhNTVUvAfxliZA7inI0d9Bekw2NcP0V1Vw6TZBdBWbkj2mOz7NjbCObKbWPXp2VRUZBlZBHDzLHbJ0qTSMvh7qKBulqe6BGzIatru5QS0w8eUzEHZBiCR0tkywP4oHWiGQ"
                 },
                 body: JSON.stringify(body),
             });
