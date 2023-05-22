@@ -38,11 +38,10 @@ class MetaApi {
         }
         // Para templates
         else if (type === "template") {
-
             let templateName = "crm_sin_cupon_no_dinamico"
 
             if(!imageUrl) {
-                templateName = "crm_sin_imagen "
+                templateName = "crm_sin_imagen"
             }
             // let imageUrlAlter = "https://res.cloudinary.com/dbq85fwfz/image/upload/v1683769227/266830776_1029167034298709_8217632826314384432_n_1_hqsgr4.jpg"
 
@@ -76,12 +75,12 @@ class MetaApi {
                 ]
             }
 
-            if(templateName === "crm_sin_imagen") {
-                objEnvio.template.parameters = [
+            if(templateName == "crm_sin_imagen") {
+                objEnvio.template.components = [
                     body
                 ]
             } else {
-                objEnvio.template.parameters = [
+                objEnvio.template.components = [
                     header,
                     body
                 ]
