@@ -40,7 +40,11 @@ class MetaApi {
         else if (type === "template") {
 
             let templateName = "crm_sin_cupon_no_dinamico"
-            let imageUrlAlter = "https://res.cloudinary.com/dbq85fwfz/image/upload/v1683769227/266830776_1029167034298709_8217632826314384432_n_1_hqsgr4.jpg"
+
+            if(!imageUrl) {
+                templateName = "crm_sin_imagen "
+            }
+            // let imageUrlAlter = "https://res.cloudinary.com/dbq85fwfz/image/upload/v1683769227/266830776_1029167034298709_8217632826314384432_n_1_hqsgr4.jpg"
 
             objEnvio.template = {
                 name: templateName,
@@ -48,31 +52,41 @@ class MetaApi {
                     code: "es"
                 }
             }
+            let header = {
+                type: "header",
+                parameters: [
+                    {
+                        type: "image",
+                        image: {
+                            link: imageUrl 
+                        }
+                    }
+                ]
+            }
 
-            objEnvio.template.components = [
-                {
-                    type: "header",
-                    parameters: [
-                        {
-                            type: "image",
-                            image: {
-                                link: imageUrl || imageUrlAlter
-                            }
-                        }
-                    ]
-                },
-                {
-                    type: "body",
-                    parameters: [
-                        {
-                            "type": "text",
-                            "text": texto
-                        }
-    
-                       
-                    ]
-                }
-            ]
+            let body =  {
+                type: "body",
+                parameters: [
+                    {
+                        "type": "text",
+                        "text": texto
+                    }
+
+                   
+                ]
+            }
+
+            if(templateName === "crm_sin_imagen") {
+                objEnvio.template.parameters = [
+                    body
+                ]
+            } else {
+                objEnvio.template.parameters = [
+                    header,
+                    body
+                ]
+            }
+
 
         }
 
@@ -91,7 +105,7 @@ class MetaApi {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Bearer EAALRutGwJjoBAOBCiALCZCz06DMmJ4pZAbBMPI9yt7n7nxzRXvju3NuVGDTyrwDDY35JiHgJEgPPcIIZCdlkZCVEhNTVUvAfxliZA7inI0d9Bekw2NcP0V1Vw6TZBdBWbkj2mOz7NjbCObKbWPXp2VRUZBlZBHDzLHbJ0qTSMvh7qKBulqe6BGzIatru5QS0w8eUzEHZBiCR0tkywP4oHWiGQ"
+                    "Authorization": "Bearer EAALRutGwJjoBAGTRZBp2ZAEQOz9BaZBThvYYXT0enG3uLjQZCIS2czhWpfB3J1ZCJmhQ9QeMaly7ZCN1fEOCCVnQsOqffVKrqzjvHo3s66SljrmYt4Tl82alhBzkupQGykSmdTLHwnPHx4GUBaOpB9hZCFhFshj784JtEQNamKe43ZB71loXayb2AVqtvCyhSXDmliLQqY0kGAarblsZAxZCr0"
                 },
                 body: JSON.stringify(body),
             });
