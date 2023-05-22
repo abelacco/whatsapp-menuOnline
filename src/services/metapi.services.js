@@ -38,7 +38,8 @@ class MetaApi {
         }
         // Para templates
         else if (type === "template") {
-            let templateName = "crm_sin_cupon_no_dinamico"
+            // let templateName = "crm_sin_cupon_no_dinamico"
+            let templateName = "crm_con_cupon"
 
             if(!imageUrl) {
                 templateName = "crm_sin_imagen"
@@ -69,6 +70,14 @@ class MetaApi {
                     {
                         "type": "text",
                         "text": texto
+                    },
+                    {
+                        "type": "text",
+                        "text": " "
+                    },
+                    {
+                        "type": "text",
+                        "text": " "
                     }
 
                    
