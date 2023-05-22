@@ -9,7 +9,7 @@ class MetaApi {
 
 
     static async enviarWhatsAppPorApiOficial(telefono, type = "text", texto, buttonActions = "", imageUrl = "") {
-        console.log("enviarWhatsAppPorApiOficial")
+        console.log("enviarWhatsAppPorApiOficial" , imageUrl)
 
 
         let objEnvio = {
@@ -42,6 +42,7 @@ class MetaApi {
             let templateName = "crm_con_cupon"
 
             if(!imageUrl) {
+                console.log("sinnn imagenn poe")
                 templateName = "crm_sin_imagen"
             }
             // let imageUrlAlter = "https://res.cloudinary.com/dbq85fwfz/image/upload/v1683769227/266830776_1029167034298709_8217632826314384432_n_1_hqsgr4.jpg"
@@ -64,7 +65,7 @@ class MetaApi {
                 ]
             }
 
-            let body =  {
+            let body1 =  {
                 type: "body",
                 parameters: [
                     {
@@ -84,14 +85,27 @@ class MetaApi {
                 ]
             }
 
+            let body2 =  {
+                type: "body",
+                parameters: [
+                    {
+                        "type": "text",
+                        "text": texto
+                    }
+
+                   
+                ]
+            }
+
             if(templateName == "crm_sin_imagen") {
+                console.log("sin imagen pe 22222222")
                 objEnvio.template.components = [
-                    body
+                    body2
                 ]
             } else {
                 objEnvio.template.components = [
                     header,
-                    body
+                    body1
                 ]
             }
 
