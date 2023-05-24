@@ -1,4 +1,4 @@
-const { ERROR, SUCCESS, META_PHONE_ID } = require('../config/constants');
+const { ERROR, SUCCESS, META_PHONE_ID, TOKEN_PERMANENTE } = require('../config/constants');
 const Utility = require('./utility.services');
 const fetch = require('node-fetch');
 
@@ -39,10 +39,9 @@ class MetaApi {
         // Para templates
         else if (type === "template") {
             // let templateName = "crm_sin_cupon_no_dinamico"
-            let templateName = "crm_con_cupon"
+            let templateName = "crm_con_imagen "
 
             if(!imageUrl) {
-                console.log("sinnn imagenn poe")
                 templateName = "crm_sin_imagen"
             }
             // let imageUrlAlter = "https://res.cloudinary.com/dbq85fwfz/image/upload/v1683769227/266830776_1029167034298709_8217632826314384432_n_1_hqsgr4.jpg"
@@ -65,47 +64,26 @@ class MetaApi {
                 ]
             }
 
-            let body1 =  {
-                type: "body",
-                parameters: [
-                    {
-                        "type": "text",
-                        "text": texto
-                    },
-                    {
-                        "type": "text",
-                        "text": " "
-                    },
-                    {
-                        "type": "text",
-                        "text": " "
-                    }
-
-                   
-                ]
-            }
-
-            let body2 =  {
+            let body =  {
                 type: "body",
                 parameters: [
                     {
                         "type": "text",
                         "text": texto
                     }
-
                    
                 ]
             }
+
 
             if(templateName == "crm_sin_imagen") {
-                console.log("sin imagen pe 22222222")
                 objEnvio.template.components = [
-                    body2
+                    body
                 ]
             } else {
                 objEnvio.template.components = [
                     header,
-                    body1
+                    body
                 ]
             }
 
@@ -120,19 +98,19 @@ class MetaApi {
         let tipo = SUCCESS;
         let mensajes = [];
         let data = {};
-        console.log(body)
+        // console.log(TOKEN_PERMANENTE)
         try {
             console.log("empieza peticion")
             const response = await fetch(`https://graph.facebook.com/v16.0/${META_PHONE_ID}/messages`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Bearer EAALRutGwJjoBAGTRZBp2ZAEQOz9BaZBThvYYXT0enG3uLjQZCIS2czhWpfB3J1ZCJmhQ9QeMaly7ZCN1fEOCCVnQsOqffVKrqzjvHo3s66SljrmYt4Tl82alhBzkupQGykSmdTLHwnPHx4GUBaOpB9hZCFhFshj784JtEQNamKe43ZB71loXayb2AVqtvCyhSXDmliLQqY0kGAarblsZAxZCr0"
+                    "Authorization": `Bearer ${TOKEN_PERMANENTE}`
                 },
                 body: JSON.stringify(body),
             });
 
-            console.log("status", response.status)
+            console.log("status", response.headers)
             const http_status = response.status;
 
             Utility.logs.push(`Mensaje eniado a ${body.to} , http_status ${http_status}`);
