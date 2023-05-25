@@ -5,7 +5,7 @@ const Security = require('../services/security.services');
 const MetaApi = require('../services/metapi.services');
 
 
-const addMessageFromWebHoookMeta = async (messageComplete , credenciales) => {
+const addMessageFromWebHoookMeta = async (messageComplete , credenciales, integracionService) => {
     // recibo el mensaje completo
     // iniciamos la clase del mensaje
     let data = {};
@@ -18,6 +18,7 @@ const addMessageFromWebHoookMeta = async (messageComplete , credenciales) => {
     // seteamos la propiedades de messageclient segun el messagecomplete
     obj.setMessageclient_json( messageComplete);
     obj.setCredenciales(credenciales);
+    obj.setConexion(integracionService.localConnection);
     messageComplete.entry
         ?obj.setMessageclient_proveedorWhastapp(PROVEEDOR_META)
         :obj.setMessageclient_proveedorWhastapp(PROVEEDOR_MAYTAPI);

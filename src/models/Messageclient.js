@@ -76,6 +76,7 @@ class MessageclientModel {
     messageclient_cupondescuentojson;
     messageclient_proveedorWhastapp;
     credenciales;
+    conexion;
 
     constructor(lastMessage = null) {
         // super();
@@ -257,7 +258,9 @@ class MessageclientModel {
 
     async getLastMessageByPhone() {
         // aqui peticion de credenciales
-        const lastMessage = await MessageClienteSchema.findOne({
+        const CredencialesModel = this.conexion.model('messageclienteSchema', MessageClienteSchema);
+
+        const lastMessage = await CredencialesModel.findOne({
             messageclient_status: 1,
             messageclient_phone: this.getMessageclient_phone()
         }).sort({ _id: -1 }).limit(1);
@@ -956,6 +959,15 @@ class MessageclientModel {
         return this.credenciales;
     }
 
+    setConexion(conexion) {
+        this.conexion = conexion;
+    }
+
+    getConexion() { 
+        return this.conexion;
+    }
+    
+
     async insert() {
         try {
             const insertData = {};
@@ -987,8 +999,8 @@ class MessageclientModel {
             if (this.messageclient_cupondescuentojson) insertData.messageclient_cupondescuentojson = this.messageclient_cupondescuentojson;
             if (this.messageclient_proveedorWhastapp) insertData.messageclient_proveedorWhastapp = this.messageclient_proveedorWhastapp;
                     // aqui peticion de credenciales
-
-            const messageClient = new MessageClienteSchema(insertData);
+            const CredencialesModel = this.conexion.model('messageclienteSchema', MessageClienteSchema);
+            const messageClient = new CredencialesModel(insertData);
             messageClient.save();
             if (messageClient) {
                 return messageClient._id;

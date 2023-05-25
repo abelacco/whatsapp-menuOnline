@@ -57,11 +57,13 @@ router.post('/webHookMetaWhatsapp/:subdominio/:dominio', async (req, res) => {
   // let dbName = suscripcion.dbName;
   // let phoneNumber = suscripcion.phoneNumber;
   // Asignar nombre de la db
-  await configDB.setDbName('demoperu')
+  const localConnection = await configDB.setDbName('demoperu')
   const phone_number = '51942001378'
-  const credenciales = await IntegracionService.getCredenciales(phone_number);
+  const integracionService = new IntegracionService(localConnection)
+  const credenciales = await integracionService.getCredenciales(phone_number);
+  console.log("credenciales", credenciales)
   const obj = req.body;
-  const result = await MessageclientMetaController.addMessageFromWebHoookMeta(obj, credenciales);
+  const result = await MessageclientMetaController.addMessageFromWebHoookMeta(obj, credenciales , integracionService);
   res.json(result);
 });
 
