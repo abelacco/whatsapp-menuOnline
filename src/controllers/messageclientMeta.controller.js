@@ -296,11 +296,7 @@ const sendMensajeCampanaCrm = async (messageCampana) => {
     let tipo = SUCCESS;
     let datos = [];
 
-    // for(let i = 0 ; i < messageCampana.numbers.length ; i++){
-    //     const respuesta = await MetaApi.enviarWhatsAppPorApiOficial(messageCampana.numbers[i], TYPE_MESSAGE_META_SEND_TEMPLATE , messageCampana.campana_mensaje , null , messageCampana.image_url);
-    //     datos.push(respuesta.mensajes);
-    //     // Utility.logs.push(respuesta.mensajes);
-    // }
+
     for(let i = 0 ; i < messageCampana.length ; i++){
         const respuesta = await MetaApi.enviarWhatsAppPorApiOficial(messageCampana[i].number, TYPE_MESSAGE_META_SEND_TEMPLATE , messageCampana[i].campana_mensaje , null , messageCampana[0].image_url);
         datos.push(respuesta.mensajes);

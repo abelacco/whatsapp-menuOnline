@@ -38,13 +38,11 @@ class MetaApi {
         }
         // Para templates
         else if (type === "template") {
-            // let templateName = "crm_sin_cupon_no_dinamico"
             let templateName = "crm_con_imagen "
 
             if(!imageUrl) {
                 templateName = "crm_sin_imagen"
             }
-            // let imageUrlAlter = "https://res.cloudinary.com/dbq85fwfz/image/upload/v1683769227/266830776_1029167034298709_8217632826314384432_n_1_hqsgr4.jpg"
 
             objEnvio.template = {
                 name: templateName,
@@ -98,7 +96,6 @@ class MetaApi {
         let tipo = SUCCESS;
         let mensajes = [];
         let data = {};
-        // console.log(TOKEN_PERMANENTE)
         try {
             console.log("empieza peticion")
             const response = await fetch(`https://graph.facebook.com/v16.0/${META_PHONE_ID}/messages`, {
