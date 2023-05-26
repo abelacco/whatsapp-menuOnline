@@ -1,4 +1,4 @@
-const { ERROR, SUCCESS, META_PHONE_ID, TOKEN_PERMANENTE } = require('../config/constants');
+const { ERROR, SUCCESS, META_PHONE_ID, TOKEN_PERMANENTE, TEMPLATE_LITE } = require('../config/constants');
 const Utility = require('./utility.services');
 const fetch = require('node-fetch');
 
@@ -8,8 +8,8 @@ class MetaApi {
     }
 
 
-    static async enviarWhatsAppPorApiOficial(telefono, type = "text", texto, buttonActions = "", imageUrl = "") {
-        console.log("enviarWhatsAppPorApiOficial" , imageUrl)
+    static async enviarWhatsAppPorApiOficial(telefono, type = "text", texto, buttonActions = "", imageUrl = "", url, idTemplate) {
+        console.log("enviarWhatsAppPorApiOficial", imageUrl)
 
 
         let objEnvio = {
@@ -36,11 +36,16 @@ class MetaApi {
                 }
             }
         }
-        // Para templates
-        else if (type === "template") {
-            let templateName = "crm_con_imagen "
+        // Para templates de crm
+        else if (type === "template" && !idTemplate) {
 
-            if(!imageUrl) {
+            let templateName;
+
+            if (!idTemplate) {
+                templateName = "crm_con_imagen "
+            }
+
+            else if (!imageUrl) {
                 templateName = "crm_sin_imagen"
             }
 
@@ -56,25 +61,22 @@ class MetaApi {
                     {
                         type: "image",
                         image: {
-                            link: imageUrl 
+                            link: imageUrl
                         }
                     }
                 ]
             }
-
-            let body =  {
+            let body = {
                 type: "body",
                 parameters: [
                     {
                         "type": "text",
                         "text": texto
                     }
-                   
+
                 ]
             }
-
-
-            if(templateName == "crm_sin_imagen") {
+            if (templateName == "crm_sin_imagen") {
                 objEnvio.template.components = [
                     body
                 ]
@@ -83,6 +85,35 @@ class MetaApi {
                     header,
                     body
                 ]
+            }
+
+
+        }
+        // Para template de lite
+        else {
+
+            let templateName = TEMPLATE_LITE[idTemplate];
+            objEnvio.template = {
+                name: templateName,
+                language: {
+                    code: "es"
+                },
+                components: [
+                    {
+                        type: "button",
+                        sub_type: "url",
+                        index: "1",
+                        parameters: [
+                            {
+                                "type": "text",
+                                "text": url
+                            }
+
+                        ]
+                    }
+
+                ]
+
             }
 
 
@@ -124,7 +155,7 @@ class MetaApi {
                 }
                 mensajes.push(mensaje);
             } else {
-                mensajes.push("Enviado" );
+                mensajes.push("Enviado");
             }
         } catch (e) {
             console.log("falla en el envio de whatsapp", e)

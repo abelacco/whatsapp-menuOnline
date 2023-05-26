@@ -62,10 +62,20 @@ router.get('/webHookMetaWhatsapp/:subdominio/:dominio', async (req, res) => {
   }
 });
 
-router.post('/campanawhatsapp/:subdominio/:dominio', async (req, res) => {
-  Security.obtenerDominiodeSubdominio(req.params.subdominio, req.params.dominio);  
+//region CRM
+
+router.post('/campanawhatsapp', async (req, res) => {
+  // Security.obtenerDominiodeSubdominio(req.params.subdominio, req.params.dominio);  
   const obj = req.body;
   const result = await MessageclientMetaController.sendMensajeCampanaCrm(obj);
+  res.json(result);
+});
+
+//region Lite
+
+router.post('/recordatoriosLiteWhatsapp', async (req, res) => {
+  const obj = req.body;
+  const result = await MessageclientMetaController.sendRecordatoriosLite(obj);
   res.json(result);
 });
 

@@ -311,4 +311,25 @@ const sendMensajeCampanaCrm = async (messageCampana) => {
     return data;
 }
 
-module.exports = { addMessageFromWebHoookMeta , sendMensajeCampanaCrm }
+const sendRecordatoriosLite = async (recordatorioInfo) => {   
+    let data = {};
+    let mensajes = [];
+    let tipo = SUCCESS;
+    let datos = [];
+
+
+    for(let i = 0 ; i < recordatorioInfo.length ; i++){
+        const respuesta = await MetaApi.enviarWhatsAppPorApiOficial(recordatorioInfo.number[i], TYPE_MESSAGE_META_SEND_TEMPLATE , null , null , null, recordatorioInfo.url , recordatorioInfo.idTemplate);
+        datos.push(respuesta.mensajes);
+        // Utility.logs.push(respuesta.mensajes);
+    }
+    mensajes.push('Operación exitosa');
+
+    data.mensajes = mensajes;
+    data.tipo = tipo;
+    data.data = datos;
+    data.logs = Utility.logs;
+    return data;
+}
+
+module.exports = { addMessageFromWebHoookMeta , sendMensajeCampanaCrm , sendRecordatoriosLite}

@@ -210,6 +210,16 @@ module.exports = {
     DELIVERY_PAYMENT_CE_TXT_META: 'Efectivo',
     DELIVERY_PAYMENT_CP_TXT_META: 'POS',
 
+    //Templates para lite
+    TEMPLATE_LITE: {
+        "1": "aperturar_caja",
+        "2": "regsitrar_primera_venta",
+        "3": "crear_salone",
+        "4": "crear_productos",
+        "5": "cerrar_caja",
+        
+    }
+
 
 
 
