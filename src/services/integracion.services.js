@@ -32,14 +32,14 @@ class IntegracionService {
     //     }
     // }
 
-     async getCredenciales(phone_number , localConnection) {
+     async getCredenciales(phone_number) {
         try {
             console.log("entre al servicio")
             const CredencialesModel = this.localConnection.model('credencialesSchema', CredencialesSchema);
             const result = await CredencialesModel.findOne({phone_number});
             return result;
         } catch (error) {
-            console.error("xxxxxxxxxxx",error);
+            console.error(error);
             throw new Error('Error en el servidor');
         }
     }

@@ -75,7 +75,7 @@ class MetaApi {
             ]
 
         }
-
+        console.log("objEnvio", objEnvio)
         return await this.peticionClientWhatsAppBusiness(objEnvio , credenciales);
     }
 

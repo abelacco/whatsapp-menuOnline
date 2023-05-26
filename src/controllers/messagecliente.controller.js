@@ -373,7 +373,7 @@ const addMessageFromWebHoook = async (messageComplete) => {
 
 }
 
-async function messageLatLngDateClient(objParametros, credenciales) {
+async function messageLatLngDateClient(objParametros, credenciales, integracionService) {
 
     let data = {};
     let mensajes = [];
@@ -382,6 +382,8 @@ async function messageLatLngDateClient(objParametros, credenciales) {
     let timeOperation = [];
     timeOperation.push("Inicio proceso: " + Utility.getFechaActualConMilisegundos());
     let messageClient = new MessageclientModel();
+    messageClient.setCredenciales(credenciales);
+    messageClient.setConexion(integracionService.localConnection);
     messageClient.setMessageclient_phone(objParametros.phone);
     let lastMessage = await messageClient.getLastMessageByPhone();
     console.log(lastMessage)
@@ -547,7 +549,7 @@ async function messageLatLngDateClient(objParametros, credenciales) {
     return data;
 }
 
-async function messageProductClient(objParametros , credenciales) {
+async function messageProductClient(objParametros , credenciales,integracionService) {
 
     let data = {};
     let mensajes = [];
@@ -556,6 +558,8 @@ async function messageProductClient(objParametros , credenciales) {
     let timeOperation = [];
     timeOperation.push("Inicio proceso: " + Utility.getFechaActualConMilisegundos());
     let messageClient = new MessageclientModel();
+    messageClient.setCredenciales(credenciales);
+    messageClient.setConexion(integracionService.localConnection);
     messageClient.setMessageclient_phone(objParametros.phone);
     let lastMessage = await messageClient.getLastMessageByPhone();
     if (!objParametros.hasOwnProperty('products')) {

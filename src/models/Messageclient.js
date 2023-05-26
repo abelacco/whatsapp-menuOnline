@@ -258,7 +258,7 @@ class MessageclientModel {
 
     async getLastMessageByPhone() {
         // aqui peticion de credenciales
-        const CredencialesModel = this.conexion.model('messageclienteSchema', MessageClienteSchema);
+        const CredencialesModel = this.conexion.model('messageclientSchema', MessageClienteSchema);
 
         const lastMessage = await CredencialesModel.findOne({
             messageclient_status: 1,
@@ -280,10 +280,10 @@ class MessageclientModel {
         return messageObjWpp;
     }
 
-    static async getMessageStepOneMeta() {
+    static async getMessageStepOneMeta(localConnection) {
         let messageObjWpp = new Object();
         messageObjWpp.message = "¡Hola! 👋 ¡Bienvenid@ a nuestro chatbot! Estoy aquí para ayudarte a encontrar los productos que amas y brindarte el mejor servicio. Por favor, escoge una modalidad para comenzar:";
-        messageObjWpp.buttons = await Establishment.getEstablishmentButtonsMetodoDeliveryMeta();
+        messageObjWpp.buttons = await Establishment.getEstablishmentButtonsMetodoDeliveryMeta(localConnection);
         console.log("messageObjWpp", messageObjWpp)
         return messageObjWpp;
     }
@@ -999,7 +999,7 @@ class MessageclientModel {
             if (this.messageclient_cupondescuentojson) insertData.messageclient_cupondescuentojson = this.messageclient_cupondescuentojson;
             if (this.messageclient_proveedorWhastapp) insertData.messageclient_proveedorWhastapp = this.messageclient_proveedorWhastapp;
                     // aqui peticion de credenciales
-            const CredencialesModel = this.conexion.model('messageclienteSchema', MessageClienteSchema);
+            const CredencialesModel = this.conexion.model('messageclientSchema', MessageClienteSchema);
             const messageClient = new CredencialesModel(insertData);
             messageClient.save();
             if (messageClient) {
@@ -1093,8 +1093,9 @@ class MessageclientModel {
           }
           
         // aqui peticion de credenciales
+        const CredencialesModel = this.conexion.model('messageclientSchema', MessageClienteSchema);
 
-          const result = await MessageClienteSchema.updateOne(
+          const result = await CredencialesModel.updateOne(
             { _id: this.messageclient_modelId },
             query
           );

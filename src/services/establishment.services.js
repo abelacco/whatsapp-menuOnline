@@ -3,9 +3,9 @@ const EstablishmentSchema = require("../schemas/establishment.schema");
 
 class Establishment {
 
-  static async getEstablishmentButtonsMetodoDelivery() {
+  static async getEstablishmentButtonsMetodoDelivery(localConnection = null) {
     const buttons = [];
-    const establishments = await this.getAll();
+    const establishments = await this.getAll("","","",localConnection);
     let estaAbiertoParaDelivery = false;
     let estaAbiertoParaProgramarPedidos = false;
     let estaAbiertoParaRecojo = false;
@@ -36,9 +36,9 @@ class Establishment {
     return buttons;
   }
 
-  static async getEstablishmentButtonsMetodoDeliveryMeta() {
+  static async getEstablishmentButtonsMetodoDeliveryMeta(localConnection) {
     const buttons = [];
-    const establishments = await this.getAll();
+    const establishments = await this.getAll(-1,0,0,localConnection);
     let estaAbiertoParaDelivery = false;
     let estaAbiertoParaProgramarPedidos = false;
     let estaAbiertoParaRecojo = false;
@@ -69,13 +69,13 @@ class Establishment {
     return buttons;
   }
 
-  static async getAll(estado = PARAM_ESTADO_TODOS, pagina = 0, registros = 0) {
-    return (await this.getAllArray(estado, pagina, registros))[
+  static async getAll(estado = PARAM_ESTADO_TODOS, pagina = 0, registros = 0 , localConnection) {
+    return (await this.getAllArray(estado, pagina, registros,localConnection))[
       "establishment_array"
     ];
   }
 
-  static async  getAllArray(filter = PARAM_ESTADO_TODOS, pagina = 0, registros = 0) {
+  static async  getAllArray(filter = PARAM_ESTADO_TODOS, pagina = 0, registros = 0,localConnection) {
 
 
       try {
@@ -107,9 +107,9 @@ class Establishment {
             where.city_id = city_id;
           }
         }
-    
-        const totalCount = await EstablishmentSchema.countDocuments(where);
-        let establishment_array = await EstablishmentSchema.find(where, null, { ...near, ...sort }).skip(start).limit(limit);
+        const conexionModel = localConnection.model('establishmentSchema', EstablishmentSchema);
+        const totalCount = await conexionModel.countDocuments(where);
+        let establishment_array = await conexionModel.find(where, null, { ...near, ...sort }).skip(start).limit(limit);
     
         return { establishment_array, totalCount };
       } catch (error) {

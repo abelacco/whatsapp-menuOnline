@@ -28,4 +28,6 @@ const EstablishmentSchema = new mongoose.Schema({
     establishment_localjson: { type: Object}
 });
 
-module.exports = mongoose.model('establishmentSchema', EstablishmentSchema);
+module.exports = EstablishmentSchema;
+
+// module.exports = mongoose.model('establishmentSchema', EstablishmentSchema);

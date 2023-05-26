@@ -251,7 +251,7 @@ const addMessageFromWebHoookMeta = async (messageComplete , credenciales, integr
                 mensajes.push('No es un mensaje valido,  iniciar chat con Pedir.');
             } else {
             // Check if I have the client registered in the instance
-            console.log("pase la validacion de inicio de chat")
+            console.log("pase la validacion de inicio de chat cuando no hay mensajes")
             typeMessageToSend = TYPE_MESSAGE_META_SEND_INTERACTIVE;
             stepNext = CHATBOOT_STEP_START;
             let curlClienteInstance = await Utility.peticionPublica("http://" + Security.getSubdomain() + "." + Security.getDominio() + "/restaurant/m/rest/cliente/clienteByPropertyAndValue/cliente_telefono/" + obj.getMessageclient_phone(), "GET");
@@ -266,7 +266,7 @@ const addMessageFromWebHoookMeta = async (messageComplete , credenciales, integr
                 obj.setMessageclient_id(clientObj.cliente_id);
                 obj.setMessageclient_fullname(clientObj.cliente_nombres);
             }
-            let objMessageStep = await MessageclientModel.getMessageStepOneMeta();
+            let objMessageStep = await MessageclientModel.getMessageStepOneMeta(integracionService.localConnection);
             obj.setMessageclient_date(Utility.getFechaHoraActual());
             if (objMessageStep.buttons.length == 0) {
                 stepNext = CHATBOOT_STEP_LINEOUT;

@@ -4,17 +4,6 @@ const Security = require('./security.services');
 
 class Utility {
 
-    // static $client = null;
-    // static $parameters = array();
-
-    // static $SYNC_AGREGAR = "1";
-    // static $SYNC_EDITAR = "2";
-    // static $SYNC_ELIMINAR = "3";
-    // static $SYNC_TIPO_REMOTO = "2";
-    // static $SYNC_TIPO_LOCAL = "1";
-
-    // static $READONLY_MARIA_SCALE = false;
-
     static logs = [];
 
     constructor() {

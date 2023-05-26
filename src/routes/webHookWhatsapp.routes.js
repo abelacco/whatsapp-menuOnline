@@ -13,7 +13,7 @@ const IntegracionService = require('../services/integracion.services');
 
 
 router.post('/webHookMaytaWhatsapp/:subdominio/:dominio', async (req, res) => {
-  Security.obtenerDominiodeSubdominio(req.params.subdominio, req.params.dominio);  
+  Security.obtenerDominiodeSubdominio(req.params.subdominio, req.params.dominio);
   console.log(req.body)
   const obj = req.body;
   const result = await MessageclientController.addMessageFromWebHoook(obj);
@@ -21,31 +21,33 @@ router.post('/webHookMaytaWhatsapp/:subdominio/:dominio', async (req, res) => {
 });
 
 router.post('/messageLatLngDateClient', async (req, res) => {
-    try {
-      await configDB.setDbName('demoperu')
-      const phone_number = '51942001378'
-      const credenciales = await IntegracionService.getCredenciales(phone_number);
-        const obj = req.body;
-        const result = await MessageclientController.messageLatLngDateClient(obj , credenciales);
-        res.status(200).json(result);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
+  try {
+    const localConnection = await configDB.setDbName('demoperu')
+    const phone_number = '51942001378'
+    const integracionService = new IntegracionService(localConnection)
+    const credenciales = await integracionService.getCredenciales(phone_number);
+    const obj = req.body;
+    const result = await MessageclientController.messageLatLngDateClient(obj, credenciales , integracionService);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 router.post('/messageProductClient', async (req, res) => {
-    try {
-      configDB.setDbName('demoperu')
-      const phone_number = '51942001378'
-      const credenciales = await IntegracionService.getCredenciales(phone_number);
-      const obj = req.body;
-      const result = await MessageclientController.messageProductClient(obj, credenciales);
-      return res.status(200).json(result);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Error en el servidor' });
-    }
+  try {
+    const localConnection = await configDB.setDbName('demoperu')
+    const phone_number = '51942001378'
+    const integracionService = new IntegracionService(localConnection)
+    const credenciales = await integracionService.getCredenciales(phone_number);
+    const obj = req.body;
+    const result = await MessageclientController.messageProductClient(obj, credenciales, integracionService);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Error en el servidor' });
+  }
 });
 
 // webHookWhatsapp --> Meta
@@ -61,9 +63,8 @@ router.post('/webHookMetaWhatsapp/:subdominio/:dominio', async (req, res) => {
   const phone_number = '51942001378'
   const integracionService = new IntegracionService(localConnection)
   const credenciales = await integracionService.getCredenciales(phone_number);
-  console.log("credenciales", credenciales)
   const obj = req.body;
-  const result = await MessageclientMetaController.addMessageFromWebHoookMeta(obj, credenciales , integracionService);
+  const result = await MessageclientMetaController.addMessageFromWebHoookMeta(obj, credenciales, integracionService);
   res.json(result);
 });
 
@@ -81,7 +82,7 @@ router.get('/webHookMetaWhatsapp/:subdominio/:dominio', async (req, res) => {
 });
 
 router.post('/campanawhatsapp/:subdominio/:dominio', async (req, res) => {
-  Security.obtenerDominiodeSubdominio(req.params.subdominio, req.params.dominio);  
+  Security.obtenerDominiodeSubdominio(req.params.subdominio, req.params.dominio);
   const obj = req.body;
   const result = await MessageclientMetaController.sendMensajeCampanaCrm(obj);
   res.json(result);
