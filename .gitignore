@@ -1,0 +1,18 @@
+# Archivos de configuración local
+.vscode/
+.idea/
+*.env
+
+# Archivos de compilación
+/dist/
+/build/
+/out/
+/bin/
+
+# Archivos sensibles o privados
+config.js
+
+# Archivos de registro y temporales
+/log/
+/cache/
+*.bak
