@@ -296,13 +296,13 @@ const sendMensajeCampanaCrm = async (messageCampana) => {
     let tipo = SUCCESS;
     let datos = [];
 
-
+    Utility.logs = [];
     for(let i = 0 ; i < messageCampana.length ; i++){
         const respuesta = await MetaApi.enviarWhatsAppPorApiOficial(messageCampana[i].number, TYPE_MESSAGE_META_SEND_TEMPLATE , messageCampana[i].campana_mensaje , null , messageCampana[0].image_url);
         datos.push(respuesta.mensajes);
         // Utility.logs.push(respuesta.mensajes);
     }
-    mensajes.push('Se proceso peticón revisar logs para ver el resultado');
+    mensajes.push('Se proceso petición revisar logs para ver el resultado');
 
     data.mensajes = mensajes;
     data.tipo = tipo;

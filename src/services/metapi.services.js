@@ -153,7 +153,7 @@ class MetaApi {
                 }
                 mensajes.push(mensaje);
             } else {
-                Utility.logs.push(`Mensaje eniado a ${body.to} , http_status ${http_status}`);
+                Utility.logs.push(`Mensaje enviado a ${body.to} , http_status ${http_status}`);
                 mensajes.push("Enviado");
             }
         } catch (e) {
