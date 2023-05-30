@@ -302,7 +302,7 @@ const sendMensajeCampanaCrm = async (messageCampana) => {
         datos.push(respuesta.mensajes);
         // Utility.logs.push(respuesta.mensajes);
     }
-    mensajes.push('Mensaje enviado exitosamente.');
+    mensajes.push('Se proceso peticón revisar logs para ver el resultado');
 
     data.mensajes = mensajes;
     data.tipo = tipo;
