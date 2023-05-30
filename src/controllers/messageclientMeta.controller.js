@@ -318,7 +318,7 @@ const sendRecordatoriosLite = async (recordatorioInfo) => {
     let datos = [];
 
 
-    for(let i = 0 ; i < recordatorioInfo.length ; i++){
+    for(let i = 0 ; i < recordatorioInfo.number.length ; i++){
         const respuesta = await MetaApi.enviarWhatsAppPorApiOficial(recordatorioInfo.number[i], TYPE_MESSAGE_META_SEND_TEMPLATE , null , null , null, recordatorioInfo.url , recordatorioInfo.idTemplate);
         datos.push(respuesta.mensajes);
         // Utility.logs.push(respuesta.mensajes);

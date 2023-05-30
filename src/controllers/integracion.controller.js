@@ -12,6 +12,17 @@ const addCredenciales = async (credenciales) => {
     }
 }
 
+const crearNuevaIntegracion = async (datosIntegracion) => {
+    try{
+        const nuevaIntegracion = await IntegracionService.nuevaIntegracion(datosIntegracion);
+        return nuevaIntegracion
+    }catch(error){
+        console.error(error);
+        throw new Error('Error en el servidor');
+    }
+}
+
 module.exports = {
-    addCredenciales
+    addCredenciales,
+    crearNuevaIntegracion
 }

@@ -1,8 +1,20 @@
 CrendencialesSchema = require('../schemas/credenciales.schema');
+const EstablishmentService = require('./establishment.services');
 
 class IntegracionService {
 
+    static async nuevaIntegracion(datosIntegracion) {
+        const {credenciales , establishment} = datosIntegracion;
+        try {
+            const nuevasCredenciales = await addCredenciales(credenciales);
+            const nuevoLocal = await crearEstablishment(establishment);
+            return {nuevasCredenciales , nuevoLocal}
+        } catch (error) {
+            console.error(error);
+            throw new Error('Error en el servidor');
+        }
 
+    }
 
     static async addCredenciales(credenciales) {
         try {
@@ -30,6 +42,18 @@ class IntegracionService {
     static async getCredenciales() {
         try {
             const result = await CrendencialesSchema.findOne();
+            return result;
+        } catch (error) {
+            console.error(error);
+            throw new Error('Error en el servidor');
+        }
+    }
+
+    static async crearEstablishment(establishment) {
+        try {
+            const local_id = establishment.local_id;
+            const nuevoEstablishment = await EstablishmentService.addEstablishment(establishment);
+            const menuEstablishment = await EstablishmentService.getDataCartaByLocalms(local_id);
             return result;
         } catch (error) {
             console.error(error);

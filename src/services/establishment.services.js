@@ -128,7 +128,42 @@ class Establishment {
       return null;
     }
   }
-  
+
+   static  getDataCartaByLocalms(local_id){
+
+    // $carta = null;
+    
+    // $objEstablishment = Establishment::getByLocal($local_id);
+
+    // if($objEstablishment){
+    //     $objMenuE = Menustablishment::getByEstablishment($objEstablishment->establishment_id);
+
+    //     if($objMenuE){
+    //         $carta = json_decode($objMenuE->getMenuestablishment_menu());
+
+    //     }
+
+    // }
+
+    // return $carta;
+
+}
+
+//  static  getByLocal($local_id){
+
+//   // global $pdo;
+
+//   // $sql = "select * FROM establishment WHERE establishment_localid = '" . $local_id ."' limit 1 ";
+
+//   // $stmt = $pdo->prepare($sql);
+//   // $stmt->execute();
+//   // $stmt->setFetchMode(PDO::FETCH_ASSOC);
+//   // $row = $stmt->fetch();
+//   // if ($row) {
+//   //     return new Establishment($row);
+//   // } else {
+//   //     return null;
+//   }
 
 }
 

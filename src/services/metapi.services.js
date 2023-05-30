@@ -9,7 +9,6 @@ class MetaApi {
 
 
     static async enviarWhatsAppPorApiOficial(telefono, type = "text", texto, buttonActions = "", imageUrl = "", url, idTemplate) {
-        console.log("enviarWhatsAppPorApiOficial", imageUrl)
 
 
         let objEnvio = {
@@ -102,7 +101,7 @@ class MetaApi {
                     {
                         type: "button",
                         sub_type: "url",
-                        index: "1",
+                        index: "0",
                         parameters: [
                             {
                                 "type": "text",
@@ -124,6 +123,7 @@ class MetaApi {
 
 
     static async peticionClientWhatsAppBusiness(body = {}) {
+
         let tipo = SUCCESS;
         let mensajes = [];
         let data = {};
@@ -138,10 +138,8 @@ class MetaApi {
                 body: JSON.stringify(body),
             });
 
-            console.log("status", response.headers)
             const http_status = response.status;
 
-            Utility.logs.push(`Mensaje eniado a ${body.to} , http_status ${http_status}`);
 
             if (http_status !== 200) {
                 tipo = ERROR;
@@ -155,6 +153,7 @@ class MetaApi {
                 }
                 mensajes.push(mensaje);
             } else {
+                Utility.logs.push(`Mensaje eniado a ${body.to} , http_status ${http_status}`);
                 mensajes.push("Enviado");
             }
         } catch (e) {
