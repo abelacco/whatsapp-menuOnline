@@ -37,14 +37,10 @@ class MetaApi {
         }
         // Para templates de crm
         else if (type === "template" && !idTemplate) {
+      
+            let templateName = "crm_con_imagen "
 
-            let templateName;
-
-            if (!idTemplate) {
-                templateName = "crm_con_imagen "
-            }
-
-            else if (!imageUrl) {
+            if (!imageUrl) {
                 templateName = "crm_sin_imagen"
             }
 
@@ -117,7 +113,7 @@ class MetaApi {
 
 
         }
-
+        console.log("objEnvio", objEnvio)
         return await this.peticionClientWhatsAppBusiness(objEnvio);
     }
 
